@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM 自我對弈研究提案</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .proposal-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .proposal-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            transition: all 0.3s ease;
+        }
+        .nav-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="min-h-screen flex flex-col justify-center items-center p-4">
+        <div class="max-w-4xl w-full text-center">
+            <!-- 主標題區域 -->
+            <header class="mb-12">
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-4">
+                    LLM 自我對弈
+                </h1>
+                <h2 class="text-2xl md:text-3xl gradient-text font-semibold mb-6">
+                    研究提案展示平台
+                </h2>
+                <p class="text-lg text-white opacity-90 max-w-2xl mx-auto">
+                    探索大型語言模型在角色扮演與自我改進領域的創新方法
+                </p>
+            </header>
+
+            <!-- 提案選擇區域 -->
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <!-- 提案 1 -->
+                <div class="proposal-card rounded-2xl p-8 text-white">
+                    <div class="mb-6">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">MAS-PS 框架</h3>
+                        <p class="text-lg opacity-90 mb-6">
+                            多代理人系統角色扮演框架，透過動態提示建構實現上下文學習
+                        </p>
+                    </div>
+                    <div class="space-y-3 text-left mb-6">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                            <span>五個專業代理人協同工作</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
+                            <span>GAN 啟發的對抗式精煉迴圈</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-pink-400 rounded-full mr-3"></span>
+                            <span>動態角色建構與情境編織</span>
+                        </div>
+                    </div>
+                    <a href="proposal_1.html" class="nav-button inline-block px-8 py-3 rounded-full text-white font-semibold text-lg">
+                        查看提案 1
+                    </a>
+                </div>
+
+                <!-- 提案 2 -->
+                <div class="proposal-card rounded-2xl p-8 text-white">
+                    <div class="mb-6">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">創新方法 2</h3>
+                        <p class="text-lg opacity-90 mb-6">
+                            另一種創新的 LLM 自我改進與角色扮演方法探索
+                        </p>
+                    </div>
+                    <div class="space-y-3 text-left mb-6">
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
+                            <span>進階自我對弈機制</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span>
+                            <span>強化學習整合</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-2 h-2 bg-cyan-400 rounded-full mr-3"></span>
+                            <span>多模態角色建模</span>
+                        </div>
+                    </div>
+                    <a href="proposal_2.html" class="nav-button inline-block px-8 py-3 rounded-full text-white font-semibold text-lg">
+                        查看提案 2
+                    </a>
+                </div>
+            </div>
+
+            <!-- 額外資訊區域 -->
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl p-6 text-white">
+                <h3 class="text-xl font-semibold mb-3">研究背景</h3>
+                <p class="text-lg opacity-90">
+                    本研究探索了大型語言模型在角色扮演任務中的創新應用，致力於開發更高效、更泛化的解決方案。
+                    透過比較不同的技術方法，我們尋求在效能、成本和實用性之間找到最佳平衡點。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 背景裝飾元素 -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-bl from-white opacity-5 rounded-full transform rotate-45"></div>
+        <div class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-white opacity-5 rounded-full transform rotate-45"></div>
+    </div>
+</body>
+</html>
