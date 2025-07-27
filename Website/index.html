@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAS-PS 框架互動式探索介面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Scholarly Beige -->
+    <!-- Application Structure Plan: A tab-based SPA (Overview, Architecture, Mechanics, Workflow, Evaluation) to deconstruct the complex MAS-PS framework into digestible, interactive sections. This non-linear structure allows users to explore topics of interest at their own pace, which is more effective for understanding a dense technical report than a linear scroll. The core interaction is a clickable diagram of the agent architecture. -->
+    <!-- Visualization & Content Choices: 
+        - Problem/Solution (Overview): Goal: Inform. Method: Side-by-side card layout. Justification: Clear, direct comparison.
+        - Agent Architecture (Architecture): Goal: Organize/Explore. Method: Interactive diagram (HTML/CSS divs) with click-to-reveal details. Justification: Visually represents relationships and allows deep dives without clutter. No SVG/Mermaid.
+        - Core Mechanics (Mechanics): Goal: Explain. Method: Styled code blocks for prompts, simple flow diagrams (HTML/CSS). Justification: Shows concrete examples and processes clearly.
+        - GAN Workflow (Workflow): Goal: Show Process. Method: Interactive step-by-step diagram (HTML/CSS). Justification: Breaks down the complex refinement loop into manageable steps.
+        - Evaluation Metrics (Evaluation): Goal: Compare/Inform. Method: Conceptual bar chart (Chart.js) and structured cards. Justification: Visually groups metric types and presents details clearly. No SVG/Mermaid for diagrams. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #FDFBF5; /* Warm Beige Background */
+            color: #4A4A4A;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-button.active {
+            color: #2C5282; /* Deep Blue */
+            border-bottom-color: #2C5282;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .agent-node {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid #E2E8F0;
+        }
+        .agent-node:hover, .agent-node.active {
+            border-color: #2C5282;
+            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        .flow-line {
+            position: absolute;
+            background-color: #CBD5E0;
+            z-index: -1;
+        }
+        .flow-arrow::after {
+            content: '▶';
+            position: absolute;
+            font-size: 12px;
+            color: #CBD5E0;
+        }
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">MAS-PS 框架</h1>
+            <p class="mt-2 text-lg text-gray-600">一個用於上下文角色扮演的動態多代理人系統互動式解析</p>
+        </header>
+
+        <nav class="flex justify-center border-b border-gray-200 mb-8">
+            <button data-tab="overview" class="tab-button active px-4 py-2 text-lg font-medium">總覽</button>
+            <button data-tab="architecture" class="tab-button px-4 py-2 text-lg font-medium">架構</button>
+            <button data-tab="mechanics" class="tab-button px-4 py-2 text-lg font-medium">核心機制</button>
+            <button data-tab="workflow" class="tab-button px-4 py-2 text-lg font-medium">工作流程</button>
+            <button data-tab="evaluation" class="tab-button px-4 py-2 text-lg font-medium">評估</button>
+        </nav>
+
+        <main id="main-content">
+            <!-- Overview Section -->
+            <section id="overview" class="content-section active">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">問題與願景</h2>
+                    <p class="mb-6 text-gray-700">傳統上，要讓大型語言模型（LLM）扮演特定角色，主要依賴「微調」（Fine-tuning）技術，即修改模型的內部參數。然而，這種方法成本高昂，且難以泛化到從未見過的新角色。本研究方案提出了一個新範式：**上下文學習（In-Context Learning, ICL）**。我們不改變模型，而是教模型一項新「技能」——如何根據即時提供的資料，動態地建構並扮演任何角色。</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="border border-red-200 bg-red-50 rounded-lg p-4">
+                            <h3 class="text-xl font-semibold text-red-800 mb-2">挑戰：靜態方法的局限</h3>
+                            <ul class="list-disc list-inside space-y-2 text-red-700">
+                                <li>**泛化失敗**：無法處理訓練集中未出現的新角色。</li>
+                                <li>**成本高昂**：為數萬角色預先生成並儲存提示，不切實際。</li>
+                                <li>**情境不敏感**：單一提示無法捕捉角色在不同場景下的動態變化。</li>
+                                <li>**偏見風險**：大規模生成易導致角色刻板化與同質化。</li>
+                            </ul>
+                        </div>
+                        <div class="border border-green-200 bg-green-50 rounded-lg p-4">
+                            <h3 class="text-xl font-semibold text-green-800 mb-2">解決方案：動態多代理人系統 (MAS-PS)</h3>
+                            <p class="text-green-700">我們的目標是開發一個能夠**學習建構角色技能**的系統。此系統將複雜的角色扮演任務分解給一組專業的「代理人」，它們協同工作，為任何角色、在任何情境下，即時生成一個高品質、客製化的指令提示。這不僅解決了泛化問題，也大大提高了效率與表演的擬真度。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Architecture Section -->
+            <section id="architecture" class="content-section">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-2 text-gray-800">系統架構：五位一體的專家團隊</h2>
+                    <p class="mb-6 text-gray-700">MAS-PS 系統的核心是由五個專業代理人組成的團隊。點擊下圖中的任何代理人以查看其詳細職責。</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center justify-center text-center">
+                        <div class="md:col-span-3">
+                            <div id="orchestrator" class="agent-node bg-yellow-100 p-4 rounded-lg shadow-md max-w-sm mx-auto">
+                                <h3 class="font-bold text-yellow-800">協調者 (Orchestrator)</h3>
+                                <p class="text-sm text-yellow-700">系統總指揮</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div id="persona-constructor" class="agent-node bg-blue-100 p-4 rounded-lg shadow-md w-full">
+                                <h3 class="font-bold text-blue-800">角色建構器</h3>
+                                <p class="text-sm text-blue-700">人格塑造師</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                             <div id="actor" class="agent-node bg-green-100 p-4 rounded-lg shadow-md w-full">
+                                <h3 class="font-bold text-green-800">演員 (Actor)</h3>
+                                <p class="text-sm text-green-700">核心表演者</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div id="context-weaver" class="agent-node bg-purple-100 p-4 rounded-lg shadow-md w-full">
+                                <h3 class="font-bold text-purple-800">情境編織者</h3>
+                                <p class="text-sm text-purple-700">世界觀建構師</p>
+                            </div>
+                        </div>
+                         <div class="md:col-span-3">
+                            <div id="critic" class="agent-node bg-red-100 p-4 rounded-lg shadow-md max-w-sm mx-auto">
+                                <h3 class="font-bold text-red-800">評論家 (Critic)</h3>
+                                <p class="text-sm text-red-700">品質監督員</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="agent-details" class="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200 min-h-[100px]">
+                        <p class="text-gray-500">點擊上方任一代理人以查看詳細說明。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mechanics Section -->
+            <section id="mechanics" class="content-section">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">核心機制</h2>
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-blue-800">1. 解決泛化：角色建構器的少樣本學習</h3>
+                            <p class="mb-4 text-gray-700">「角色建構器」的核心武器是「少樣本學習」。它不記憶角色，而是學習一種從原始資料推導角色人設的「模式」。在接收到新任務時，它會被給予幾個完整的「輸入資料 -> 輸出角色描述」的範例，從而學會如何為一個全新的角色建構高品質的、動態的指令。</p>
+                            <div class="code-block">
+                                <span class="text-gray-400"># 提供給「角色建構器」的範例提示結構</span><br>
+                                <span class="text-yellow-400">**範例 1：**</span><br>
+                                <span class="text-cyan-400">輸入資料:</span> { 哈利波特的原始資料... }<br>
+                                <span class="text-cyan-400">輸出角色描述:</span> "你是哈利波特。你是一個十一歲的男孩..."<br><br>
+                                <span class="text-yellow-400">**範例 2：**</span><br>
+                                <span class="text-cyan-400">輸入資料:</span> { 伊莉莎白·班奈特的原始資料... }<br>
+                                <span class="text-cyan-400">輸出角色描述:</span> "你是伊莉莎白·班奈特。你是一位極其聰明..."<br><br>
+                                <span class="text-yellow-400">**新任務：**</span><br>
+                                <span class="text-cyan-400">輸入資料:</span> { 未知角色「角色X」的原始資料... }<br>
+                                <span class="text-cyan-400">輸出角色描述:</span> <span class="text-gray-400">(模型將在此處生成)</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-purple-800">2. 解決效率：情境編織者的兩階段壓縮</h3>
+                            <p class="mb-4 text-gray-700">為了避免上下文過長導致的高成本與低效率，「情境編織者」採用兩階段策略來提供精簡且關鍵的場景資訊。</p>
+                            <div class="flex flex-col md:flex-row gap-4 text-center">
+                                <div class="flex-1 p-4 bg-gray-50 rounded-lg border">
+                                    <h4 class="font-semibold">第一階段：智能檢索 (RAG)</h4>
+                                    <p class="text-sm text-gray-600 mt-1">從向量資料庫中，精準檢索出與當前對話最相關的劇情摘要與歷史對話片段。</p>
+                                </div>
+                                <div class="text-2xl self-center mx-4">➔</div>
+                                <div class="flex-1 p-4 bg-gray-50 rounded-lg border">
+                                    <h4 class="font-semibold">第二階段：積極壓縮</h4>
+                                    <p class="text-sm text-gray-600 mt-1">使用如 Nano-Capsulator 等技術，將檢索到的文本重寫並濃縮成一個資訊密度極高的自然語言摘要。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Workflow Section -->
+            <section id="workflow" class="content-section">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">端到端工作流程：GAN 對抗式精煉迴圈</h2>
+                    <p class="mb-6 text-gray-700">單次對話的生成並非一步到位，而是經過一個受「生成對抗網路 (GAN)」啟發的精煉迴圈，以確保輸出品質。此流程由「協調者」主導。</p>
+                    <div class="space-y-4">
+                        <div class="workflow-step p-4 border-l-4 border-gray-300">
+                            <h3 class="font-semibold">1. 提示建構</h3>
+                            <p class="text-sm text-gray-600">「角色建構器」和「情境編織者」平行工作，生成初始的角色與情境提示。</p>
+                        </div>
+                        <div class="workflow-step p-4 border-l-4 border-gray-300">
+                            <h3 class="font-semibold">2. 生成</h3>
+                            <p class="text-sm text-gray-600">「演員」（生成器）基於提示，生成一句候選對話 `utterance_generated`。</p>
+                        </div>
+                        <div class="workflow-step p-4 border-l-4 border-red-400 bg-red-50 rounded-r-lg">
+                            <h3 class="font-semibold">3. 對抗式評估</h3>
+                            <p class="text-sm text-gray-600">「評論家」（判別器）同時審視 `utterance_generated` 和來自資料集的真實對話 `utterance_real`，並給出判斷與結構化反饋。</p>
+                        </div>
+                        <div class="workflow-step p-4 border-l-4 border-gray-300">
+                            <h3 class="font-semibold">4. 決策與迭代</h3>
+                            <p class="text-sm text-gray-600">如果生成品質高（成功騙過評論家），則輸出。否則，協調者將評論家的反饋整合進提示中，返回第 2 步重新生成。這個過程會迭代進行，直到品質達標。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Evaluation Section -->
+            <section id="evaluation" class="content-section">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">評估框架：與 SOTA 的直接對話</h2>
+                    <p class="mb-6 text-gray-700">為了證明 MAS-PS 框架的有效性，我們採用與原始 CoSER 論文完全相同的評估協定與指標，進行一場公平、直接的比較。這確保了我們的 ICL 方法是在與微調方法相同的標準下進行檢驗。</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 text-gray-800">評估指標類別</h3>
+                             <div class="chart-container">
+                                <canvas id="evaluationChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-lg">1. LLM-as-a-Judge 分數</h4>
+                                <p class="text-gray-600">使用如 GPT-4o 等強大模型作為外部裁判，從四個維度對生成的對話進行 0-100 的評分：角色忠實度、情節一致性、擬人化程度、情節品質。</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg">2. 自動化指標</h4>
+                                <p class="text-gray-600">使用 BLEU 和 ROUGE-L 等標準 NLP 指標，量化生成文本與原始文本的相似度。</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg">3. 效率與成本指標</h4>
+                                <p class="text-gray-600">透明地報告每輪的平均提示長度、總計算成本和延遲，以評估系統的實際可用性。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.tab-button');
+    const contents = document.querySelectorAll('.content-section');
+    const agentNodes = document.querySelectorAll('.agent-node');
+    const agentDetailsContainer = document.getElementById('agent-details');
+
+    const agentData = {
+        orchestrator: {
+            title: '協調者 (Orchestrator)',
+            description: '作為系統的中樞神經，協調者不執行創造性任務。它的職責是管理端到端的任務流程：接收初始請求，將子任務分派給各專家代理人，收集並組裝它們的輸出為最終提示，並管理與「評論家」的精煉迴圈，決定最終的輸出。'
+        },
+        'persona-constructor': {
+            title: '角色建構器 (Persona Constructor)',
+            description: '這是解決「泛化問題」的核心。它利用少樣本學習技術，讀取角色的原始資料（包括背景、經歷、甚至當下的內心想法），動態地生成一份豐富、深刻且具備即時狀態感知的角色描述指令。它學習的是「如何」建構角色，而非記憶角色本身。'
+        },
+        'context-weaver': {
+            title: '情境編織者 (Context Weaver)',
+            description: '這是解決「效率問題」的核心。它透過兩階段流程提供場景資訊：首先，使用 RAG 技術從向量資料庫中精準檢索最相關的劇情與對話歷史；其次，對檢索到的內容進行積極壓縮，生成一個資訊密度極高的簡潔摘要，以降低成本並提升提示的信噪比。'
+        },
+        actor: {
+            title: '演員 (Actor)',
+            description: '「演員」是我們希望使用的、任何現成的、參數固定的基礎大型語言模型（如 LLaMA, GPT 系列等）。它被視為一個純粹的「表演者」，其唯一的任務就是嚴格遵循由協調者組裝好的、全面的指令提示，來生成對話。其表現完全取決於提示的品質。'
+        },
+        critic: {
+            title: '評論家 (Critic)',
+            description: '作為品質監督員，「評論家」引入了對抗式精煉機制。它像一個嚴格的裁判，負責評估「演員」生成的對話是否忠實於角色、是否符合情境。在 GAN 迴圈中，它負責區分生成對話與真實對話，並提供結構化的、可操作的反饋，以指導下一輪的生成，從而驅動整個系統的品質自我提升。'
+        }
+    };
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.tab).classList.add('active');
+        });
+    });
+
+    agentNodes.forEach(node => {
+        node.addEventListener('click', () => {
+            agentNodes.forEach(n => n.classList.remove('active'));
+            node.classList.add('active');
+
+            const agentId = node.id;
+            const data = agentData[agentId];
+            
+            if (data) {
+                agentDetailsContainer.innerHTML = `
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">${data.title}</h3>
+                    <p class="text-gray-700">${data.description}</p>
+                `;
+            }
+        });
+    });
+
+    const ctx = document.getElementById('evaluationChart').getContext('2d');
+    const evaluationChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['LLM-as-a-Judge', '自動化指標', '效率與成本'],
+            datasets: [{
+                label: '評估維度',
+                data: [100, 80, 60],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        display: false
+                    },
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                   ticks: {
+                        font: {
+                            family: "'Noto Sans TC', sans-serif",
+                            size: 14
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+</body>
+</html>
