@@ -136,6 +136,7 @@ def gca_simulation(test_file, actor_model, env_model, nsp_model, retrieval, nth_
     cache_path = f'.cache/{actor_model}.pkl'
     if nth_exp > 0:
         cache_path = f'{cache_path}-repeat={nth_exp}'
+    os.makedirs(os.path.dirname(cache_path), exist_ok=True)
     set_cache_path(cache_path)
     
     # Load test set
@@ -361,6 +362,7 @@ def gca_judging(test_file, actor_model, retrieval, judge_model, nth_exp=0):
     cache_path = f'.cache/{actor_model}.pkl'
     if nth_exp > 0:
         cache_path = f'{cache_path}-repeat={nth_exp}'
+    os.makedirs(os.path.dirname(cache_path), exist_ok=True)
     set_cache_path(cache_path)
     
     # Configure paths based on model and retrieval settings
