@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常見問題 - LLM 自我對弈研究</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .faq-item {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .faq-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        .faq-question {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .faq-answer.open {
+            max-height: 2000px;
+            transition: max-height 0.5s ease-in;
+        }
+        .rotate-icon {
+            transition: transform 0.3s ease;
+        }
+        .rotate-icon.open {
+            transform: rotate(180deg);
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            transition: all 0.3s ease;
+        }
+        .nav-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- 導航欄 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border-b border-white border-opacity-20">
+        <div class="max-w-6xl mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-white font-bold text-xl">LLM 自我對弈研究</a>
+                <div class="space-x-4">
+                    <a href="index.html" class="text-white opacity-90 hover:opacity-100 transition-opacity">首頁</a>
+                    <a href="proposal_1.html" class="text-white opacity-90 hover:opacity-100 transition-opacity">提案 1</a>
+                    <a href="proposal_2.html" class="text-white opacity-90 hover:opacity-100 transition-opacity">提案 2</a>
+                    <a href="faq.html" class="text-white font-semibold">常見問題</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen pt-20 p-4">
+        <div class="max-w-4xl mx-auto">
+            <!-- 標題區域 -->
+            <header class="text-center mb-12">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">
+                    常見問題
+                </h1>
+                <h2 class="text-xl md:text-2xl gradient-text font-semibold mb-6">
+                    深入理解 MAS-PS 框架設計理念
+                </h2>
+                <p class="text-lg text-white opacity-90 max-w-2xl mx-auto">
+                    以下是關於我們研究方法的詳細解答與技術討論
+                </p>
+            </header>
+
+            <!-- FAQ 內容 -->
+            <div class="space-y-6">
+                <!-- 問題 1 -->
+                <div class="faq-item rounded-2xl p-6 text-white">
+                    <div class="faq-question flex justify-between items-center" onclick="toggleFaq('faq1')">
+                        <h3 class="text-xl font-bold">為什麼需要五個代理人？直接用兩個代理人不是更簡潔嗎？</h3>
+                        <svg class="w-6 h-6 rotate-icon" id="icon1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer mt-4" id="faq1">
+                        <div class="text-white opacity-90 leading-relaxed space-y-4">
+                            <p>這是一個非常優秀且深入的問題，完全切中了這個架構設計的核心權衡點。答案的核心在於<strong>任務分解 (Task Decomposition)</strong> 和 <strong>關注點分離 (Separation of Concerns)</strong>。</p>
+                            
+                            <h4 class="text-lg font-semibold text-blue-300">兩代理人方案：一位「全能但混亂」的總教練</h4>
+                            <p>在這個模型中，我們有一個「總教練」（Generator）和一個「美食家」（Discriminator）：</p>
+                            <ul class="list-disc list-inside space-y-2 ml-4">
+                                <li><strong>總教練 (Generator)</strong>：負責從原始資料中一次性地寫出完整的、優化後的提示</li>
+                                <li><strong>美食家 (Discriminator)</strong>：品嚐最終結果，然後只給出模糊的評價</li>
+                            </ul>
+                            <p class="bg-red-500 bg-opacity-20 p-4 rounded-lg">
+                                <strong>根本問題：</strong>「總教練」的任務太過龐雜。當收到模糊反饋時，很難知道問題出在哪裡，整個學習過程非常低效且不精確。
+                            </p>
+
+                            <h4 class="text-lg font-semibold text-green-300">五代理人方案：各司其職的專家教練團</h4>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-blue-500 bg-opacity-20 p-4 rounded-lg">
+                                    <h5 class="font-semibold">角色建構器</h5>
+                                    <p class="text-sm">專精於角色設定建立</p>
+                                </div>
+                                <div class="bg-purple-500 bg-opacity-20 p-4 rounded-lg">
+                                    <h5 class="font-semibold">情境編織者</h5>
+                                    <p class="text-sm">專精於場景資訊處理</p>
+                                </div>
+                                <div class="bg-green-500 bg-opacity-20 p-4 rounded-lg">
+                                    <h5 class="font-semibold">協調者</h5>
+                                    <p class="text-sm">整合各專家的輸出</p>
+                                </div>
+                                <div class="bg-orange-500 bg-opacity-20 p-4 rounded-lg">
+                                    <h5 class="font-semibold">演員 & 評論家</h5>
+                                    <p class="text-sm">執行與評估</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-green-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold">優勢總結：</h5>
+                                <ul class="list-disc list-inside space-y-1 mt-2">
+                                    <li><strong>學習目標更清晰：</strong>每個專家代理人的學習任務都被極大簡化</li>
+                                    <li><strong>反饋更精確：</strong>可以精準地歸因到犯錯的專家代理人</li>
+                                    <li><strong>品質更高：</strong>專家協作的組合品質通常遠高於單一萬事通</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 問題 2 -->
+                <div class="faq-item rounded-2xl p-6 text-white">
+                    <div class="faq-question flex justify-between items-center" onclick="toggleFaq('faq2')">
+                        <h3 class="text-xl font-bold">MAS-PS 框架的核心創新點是什麼？</h3>
+                        <svg class="w-6 h-6 rotate-icon" id="icon2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer mt-4" id="faq2">
+                        <div class="text-white opacity-90 leading-relaxed space-y-4">
+                            <p>MAS-PS 框架的核心創新在於將複雜的角色扮演任務分解為可管理的子任務，並透過專業化代理人的協作來提升整體效能。</p>
+                            
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div class="bg-blue-500 bg-opacity-20 p-4 rounded-lg">
+                                    <h5 class="font-semibold mb-2">動態提示建構</h5>
+                                    <p class="text-sm">根據特定角色和情境動態生成最適合的提示</p>
+                                </div>
+                                <div class="bg-purple-500 bg-opacity-20 p-4 rounded-lg">
+                                    <h5 class="font-semibold mb-2">GAN 啟發迴圈</h5>
+                                    <p class="text-sm">透過對抗式訓練持續精煉代理人能力</p>
+                                </div>
+                                <div class="bg-green-500 bg-opacity-20 p-4 rounded-lg">
+                                    <h5 class="font-semibold mb-2">可解釋性</h5>
+                                    <p class="text-sm">每個代理人的責任明確，便於除錯和優化</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 問題 3 -->
+                <div class="faq-item rounded-2xl p-6 text-white">
+                    <div class="faq-question flex justify-between items-center" onclick="toggleFaq('faq3')">
+                        <h3 class="text-xl font-bold">這個方法與傳統的 fine-tuning 相比有什麼優勢？</h3>
+                        <svg class="w-6 h-6 rotate-icon" id="icon3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer mt-4" id="faq3">
+                        <div class="text-white opacity-90 leading-relaxed space-y-4">
+                            <p>相比於傳統的 fine-tuning，MAS-PS 框架具有以下顯著優勢：</p>
+                            
+                            <div class="space-y-3">
+                                <div class="flex items-start space-x-3">
+                                    <span class="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center text-sm font-bold text-white mt-1">1</span>
+                                    <div>
+                                        <h5 class="font-semibold">成本效益</h5>
+                                        <p class="text-sm opacity-80">無需重新訓練大型模型，透過上下文學習即可達到優秀效果</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <span class="w-6 h-6 bg-blue-400 rounded-full flex items-center justify-center text-sm font-bold text-white mt-1">2</span>
+                                    <div>
+                                        <h5 class="font-semibold">靈活性</h5>
+                                        <p class="text-sm opacity-80">可以快速適應新角色和新情境，無需額外訓練</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <span class="w-6 h-6 bg-purple-400 rounded-full flex items-center justify-center text-sm font-bold text-white mt-1">3</span>
+                                    <div>
+                                        <h5 class="font-semibold">可擴展性</h5>
+                                        <p class="text-sm opacity-80">可以輕鬆添加新的專業代理人來處理特定任務</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 問題 4 -->
+                <div class="faq-item rounded-2xl p-6 text-white">
+                    <div class="faq-question flex justify-between items-center" onclick="toggleFaq('faq4')">
+                        <h3 class="text-xl font-bold">如何評估 MAS-PS 框架的效能？</h3>
+                        <svg class="w-6 h-6 rotate-icon" id="icon4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer mt-4" id="faq4">
+                        <div class="text-white opacity-90 leading-relaxed space-y-4">
+                            <p>我們採用多維度的評估指標來全面衡量 MAS-PS 框架的效能：</p>
+                            
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="space-y-3">
+                                    <h5 class="font-semibold text-blue-300">量化指標</h5>
+                                    <ul class="list-disc list-inside space-y-1 text-sm">
+                                        <li>角色一致性分數</li>
+                                        <li>對話流暢度評估</li>
+                                        <li>情境適應性測試</li>
+                                        <li>回應時間測量</li>
+                                    </ul>
+                                </div>
+                                <div class="space-y-3">
+                                    <h5 class="font-semibold text-green-300">質化評估</h5>
+                                    <ul class="list-disc list-inside space-y-1 text-sm">
+                                        <li>人工評估者打分</li>
+                                        <li>使用者體驗調查</li>
+                                        <li>專家領域知識評估</li>
+                                        <li>創意表現分析</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 返回按鈕 -->
+            <div class="text-center mt-12">
+                <a href="index.html" class="nav-button inline-block px-8 py-3 rounded-full text-white font-semibold text-lg">
+                    返回首頁
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 背景裝飾元素 -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-bl from-white opacity-5 rounded-full transform rotate-45"></div>
+        <div class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-white opacity-5 rounded-full transform rotate-45"></div>
+    </div>
+
+    <script>
+        function toggleFaq(faqId) {
+            const answer = document.getElementById(faqId);
+            const icon = document.getElementById('icon' + faqId.slice(-1));
+            
+            if (answer.classList.contains('open')) {
+                answer.classList.remove('open');
+                icon.classList.remove('open');
+            } else {
+                // 關閉所有其他開啟的 FAQ
+                document.querySelectorAll('.faq-answer.open').forEach(item => {
+                    item.classList.remove('open');
+                });
+                document.querySelectorAll('.rotate-icon.open').forEach(item => {
+                    item.classList.remove('open');
+                });
+                
+                // 開啟當前的 FAQ
+                answer.classList.add('open');
+                icon.classList.add('open');
+            }
+        }
+    </script>
+</body>
+</html>
