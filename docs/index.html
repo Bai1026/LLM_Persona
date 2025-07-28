@@ -133,6 +133,56 @@
                 </p>
             </div>
 
+
+            <!-- 新增 PDF 檢視區域 -->
+            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl p-6 text-white mt-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">研究論文 PDF</h3>
+                    <div class="space-x-3">
+                        <a href="documents/MAS-PS-CoSER.pdf" 
+                           download 
+                           class="text-blue-300 hover:text-blue-200 text-sm transition-colors">
+                            📄 下載 PDF
+                        </a>
+                        <a href="documents/MAS-PS-CoSER.pdf" 
+                           target="_blank" 
+                           class="text-green-300 hover:text-green-200 text-sm transition-colors">
+                            🔗 新視窗開啟
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- PDF 嵌入區域 -->
+                <div class="bg-white bg-opacity-5 rounded-lg p-2">
+                    <embed src="documents/MAS-PS-CoSER.pdf" 
+                           type="application/pdf" 
+                           width="100%" 
+                           height="600px"
+                           class="rounded-lg">
+                    
+                    <!-- 備用方案 -->
+                    <div class="text-center py-8 hidden pdf-fallback">
+                        <p class="text-lg mb-4">無法在瀏覽器中顯示 PDF</p>
+                        <div class="space-x-4">
+                            <a href="documents/MAS-PS-CoSER.pdf" 
+                               download 
+                               class="nav-button inline-block px-6 py-2 rounded-full text-white font-semibold">
+                                下載 PDF
+                            </a>
+                            <a href="documents/MAS-PS-CoSER.pdf" 
+                               target="_blank" 
+                               class="nav-button inline-block px-6 py-2 rounded-full text-white font-semibold">
+                                新視窗開啟
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-sm opacity-70 mt-3 text-center">
+                    完整的 MAS-PS 框架技術文件，包含詳細的實驗結果與分析
+                </p>
+            </div>
+        
             <!-- 新增 FAQ 連結 -->
             <div class="text-center mt-6">
                 <a href="faq.html" class="nav-button inline-block px-8 py-3 rounded-full text-white font-semibold text-lg">
