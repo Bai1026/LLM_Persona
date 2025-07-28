@@ -252,6 +252,269 @@
                 </div>
             </div>
 
+            <!-- 問題 4 -->
+            <div class="faq-item rounded-2xl p-6 text-white">
+                <div class="faq-question flex justify-between items-center" onclick="toggleFaq('faq4')">
+                    <h3 class="text-xl font-bold">如何評估 MAS-PS 框架的效能？</h3>
+                    <svg class="w-6 h-6 rotate-icon" id="icon4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="faq-answer mt-4" id="faq4">
+                    <div class="text-white opacity-90 leading-relaxed space-y-4">
+                        <p>我們採用多維度的評估指標來全面衡量 MAS-PS 框架的效能：</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="space-y-3">
+                                <h5 class="font-semibold text-blue-300">量化指標</h5>
+                                <ul class="list-disc list-inside space-y-1 text-sm">
+                                    <li>角色一致性分數</li>
+                                    <li>對話流暢度評估</li>
+                                    <li>情境適應性測試</li>
+                                    <li>回應時間測量</li>
+                                </ul>
+                            </div>
+                            <div class="space-y-3">
+                                <h5 class="font-semibold text-green-300">質化評估</h5>
+                                <ul class="list-disc list-inside space-y-1 text-sm">
+                                    <li>人工評估者打分</li>
+                                    <li>使用者體驗調查</li>
+                                    <li>專家領域知識評估</li>
+                                    <li>創意表現分析</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 新增問題 5 -->
+            <div class="faq-item rounded-2xl p-6 text-white">
+                <div class="faq-question flex justify-between items-center" onclick="toggleFaq('faq5')">
+                    <h3 class="text-xl font-bold">這樣算是多代理人系統嗎？創新性在哪裡？</h3>
+                    <svg class="w-6 h-6 rotate-icon" id="icon5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="faq-answer mt-4" id="faq5">
+                    <div class="text-white opacity-90 leading-relaxed space-y-4">
+                        <p class="bg-green-500 bg-opacity-20 p-4 rounded-lg">
+                            <strong>答案是：是的</strong>，這是一個標準的多代理人系統 (MAS)，並且其創新性 (Novelty) 非常充足，但創新點不在於「使用了多代理人」這件事本身，而在於「如何使用」以及「解決了什麼問題」。
+                        </p>
+                        
+                        <h4 class="text-lg font-semibold text-blue-300">創新性體現在三個層次：</h4>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-blue-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold mb-2">1. 獨特的應用領域與問題定義</h5>
+                                <ul class="list-disc list-inside space-y-1 text-sm">
+                                    <li>將 MAS 應用在非常具體且困難的領域：<strong>將為「微調」設計的文學資料集 (CoSER)，轉化為「上下文學習 (ICL)」的燃料</strong></li>
+                                    <li>核心解決的是 ICL 在此場景下的<strong>泛化性 (unseen characters)</strong> 與 <strong>效率 (context length & cost)</strong> 問題</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-purple-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold mb-2">2. 針對性的架構設計</h5>
+                                <ul class="list-disc list-inside space-y-1 text-sm">
+                                    <li>不是通用的代理人聊天室，而是<strong>目標導向、結構精巧的專家團隊</strong></li>
+                                    <li>`角色建構器` 專門解決泛化問題，`情境編織者` 專門解決效率問題</li>
+                                    <li>這種「為了解決特定問題而設計的獨特代理人組合」本身就是強而有力的架構創新</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-green-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold mb-2">3. 創新的核心機制</h5>
+                                <p class="text-sm">特別是 `演員` 和 `評論家` 之間的互動，構成了獨特的對抗式精煉機制</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-blue-500 to-purple-500 bg-opacity-20 p-4 rounded-lg border-l-4 border-blue-400">
+                            <h5 class="font-semibold text-blue-300">創新性總結</h5>
+                            <p class="text-sm mt-2">提出一個新穎的多代理人架構 (MAS-PS)，其獨特的代理人組合與互動機制，專門用於解決將微調資料集 (CoSER) 應用於上下文學習時所面臨的泛化與效率挑戰。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 新增問題 6 -->
+            <div class="faq-item rounded-2xl p-6 text-white">
+                <div class="faq-question flex justify-between items-center" onclick="toggleFaq('faq6')">
+                    <h3 class="text-xl font-bold">MAS-PS 的方式有很強的 GAN 概念嗎？</h3>
+                    <svg class="w-6 h-6 rotate-icon" id="icon6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="faq-answer mt-4" id="faq6">
+                    <div class="text-white opacity-90 leading-relaxed space-y-4">
+                        <p class="bg-purple-500 bg-opacity-20 p-4 rounded-lg">
+                            <strong>答案是：非常濃厚</strong>，並且這正是論文最精彩的亮點之一。框架完美地將 GAN 的對抗哲學，應用在了一個 LLM 無法進行權重更新的場景中。
+                        </p>
+                        
+                        <h4 class="text-lg font-semibold text-green-300">傳統 GAN 與 MAS-PS 的對應關係</h4>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm border-collapse">
+                                <thead>
+                                    <tr class="border-b border-white border-opacity-30">
+                                        <th class="text-left p-3 font-semibold text-blue-300">傳統 GAN 元件</th>
+                                        <th class="text-left p-3 font-semibold text-purple-300">MAS-PS 代理人</th>
+                                        <th class="text-left p-3 font-semibold text-green-300">在框架中的角色與函式</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="space-y-2">
+                                    <tr class="bg-blue-500 bg-opacity-10 border-b border-white border-opacity-20">
+                                        <td class="p-3"><strong>生成器 (Generator)</strong></td>
+                                        <td class="p-3"><strong>演員 (Actor)</strong></td>
+                                        <td class="p-3">基於給定的提示，生成一個盡可能真實、無法被「評論家」識破的對話</td>
+                                    </tr>
+                                    <tr class="bg-purple-500 bg-opacity-10 border-b border-white border-opacity-20">
+                                        <td class="p-3"><strong>判別器 (Discriminator)</strong></td>
+                                        <td class="p-3"><strong>評論家 (Critic)</strong></td>
+                                        <td class="p-3">區分「演員」生成的對話和來自 CoSER 的「真實」對話，並提供判斷的「理由」</td>
+                                    </tr>
+                                    <tr class="bg-green-500 bg-opacity-10 border-b border-white border-opacity-20">
+                                        <td class="p-3"><strong>真實資料 (Real Data)</strong></td>
+                                        <td class="p-3"><strong>CoSER 資料集</strong></td>
+                                        <td class="p-3">作為「評論家」學習的黃金標準，也是「演員」模仿的最終目標</td>
+                                    </tr>
+                                    <tr class="bg-orange-500 bg-opacity-10">
+                                        <td class="p-3"><strong>訓練目標</strong></td>
+                                        <td class="p-3"><strong>提示的迭代式精煉</strong></td>
+                                        <td class="p-3"><strong>創新點！</strong>將判別器的「損失」轉化為結構化的自然語言反饋，用來優化提示</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-500 bg-opacity-20 p-4 rounded-lg border-l-4 border-purple-400">
+                            <h5 class="font-semibold text-purple-300">核心創新：基於提示的對抗式最佳化</h5>
+                            <p class="text-sm mt-2">發明了一種<strong>「基於提示的對抗式最佳化 (Prompt-based Adversarial Optimization)」</strong>。利用 GAN 的核心思想——兩個網路的對抗與共同進化——來驅動一個提示工程 (Prompt Engineering) 的自動化過程。</p>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <h5 class="font-semibold text-blue-300">運作機制：</h5>
+                            <ul class="list-disc list-inside space-y-2 text-sm ml-4">
+                                <li><strong>生成器（演員）</strong> 努力學習如何更好地「解讀提示」以生成更逼真的輸出</li>
+                                <li><strong>判別器（評論家）</strong> 努力學習如何更精準地「評判輸出」並給出更有效的反饋</li>
+                                <li>對抗過程的最終結果：為每個樣本找到一個<strong>經過對抗式驗證的、品質極高的「最優提示」</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 新增問題 7 -->
+            <div class="faq-item rounded-2xl p-6 text-white">
+                <div class="faq-question flex justify-between items-center" onclick="toggleFaq('faq7')">
+                    <h3 class="text-xl font-bold">五個代理人中，重點是生成器和判別器嗎？</h3>
+                    <svg class="w-6 h-6 rotate-icon" id="icon7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="faq-answer mt-4" id="faq7">
+                    <div class="text-white opacity-90 leading-relaxed space-y-4">
+                        <p class="bg-blue-500 bg-opacity-20 p-4 rounded-lg">
+                            <strong>答案是：</strong>它們是系統的「心臟」，但不是系統的「全部」。論文創新點在於整個「生態系統」的協同運作。
+                        </p>
+                        
+                        <p>`演員`（Actor/Generator）和 `評論家`（Critic/Discriminator）之間的對抗式精煉迴圈，是整個框架中最亮眼、最核心的<strong>品質提升引擎</strong>。這部分直接體現了將 GAN 思想應用於提示工程的創新。</p>
+                        
+                        <h4 class="text-lg font-semibold text-green-300">F1 賽車比喻：各代理人的角色</h4>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-red-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold text-red-300">核心競爭力</h5>
+                                <ul class="list-disc list-inside space-y-1 text-sm mt-2">
+                                    <li><strong>演員 (Generator)</strong>：世界級的 F1 賽車手</li>
+                                    <li><strong>評論家 (Discriminator)</strong>：頂尖的數據分析師</li>
+                                    <li>兩者配合可以將賽車的效能發揮到極致</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-blue-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold text-blue-300">基礎設施</h5>
+                                <ul class="list-disc list-inside space-y-1 text-sm mt-2">
+                                    <li><strong>角色建構器</strong>：引擎設計師</li>
+                                    <li><strong>情境編織者</strong>：空氣動力學家</li>
+                                    <li>提供高效能的基礎平台</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-yellow-500 bg-opacity-20 p-4 rounded-lg">
+                            <h5 class="font-semibold text-yellow-300">關鍵洞察</h5>
+                            <p class="text-sm mt-2">如果沒有專業的引擎設計師和空氣動力學家，賽車手和分析師拿到的是一輛普通的家用車。他們再怎麼努力，也只能把家用車開到極限，無法贏得比賽。</p>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <h5 class="font-semibold text-purple-300">具體貢獻：</h5>
+                            <ul class="list-disc list-inside space-y-2 text-sm ml-4">
+                                <li><strong>角色建構器</strong>提供的 `dynamic_persona_prompt`，是為「演員」量身打造的<strong>高效能引擎</strong></li>
+                                <li><strong>情境編織者</strong>提供的 `compressed_context_prompt`，是設計的<strong>完美空氣動力學套件</strong></li>
+                                <li>確保「演員」在特定場景中能獲得最關鍵、最有效的資訊</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-green-500 to-blue-500 bg-opacity-20 p-4 rounded-lg border-l-4 border-green-400">
+                            <h5 class="font-semibold text-green-300">結論</h5>
+                            <p class="text-sm mt-2">演員和評論家的對抗式迴圈是實現自動化品質精煉的核心機制。然而，此機制的成功高度依賴於其他代理人提供的高品質、結構化的輸入。正是這種<strong>任務分解 (Task Decomposition)</strong>，讓每個代理人專注於自己擅長的領域，才使得最終的對抗式學習能夠產生 SOTA 的結果。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 新增問題 8 -->
+            <div class="faq-item rounded-2xl p-6 text-white">
+                <div class="faq-question flex justify-between items-center" onclick="toggleFaq('faq8')">
+                    <h3 class="text-xl font-bold">在學術論文裡用 RAG 是好的做法嗎？會不會有作弊的感覺？</h3>
+                    <svg class="w-6 h-6 rotate-icon" id="icon8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="faq-answer mt-4" id="faq8">
+                    <div class="text-white opacity-90 leading-relaxed space-y-4">
+                        <p class="bg-green-500 bg-opacity-20 p-4 rounded-lg">
+                            <strong>答案：完全不會</strong>，這不僅是好的做法，更是體現研究嚴謹性和對領域現狀深刻理解的表現。
+                        </p>
+                        
+                        <p>在目前的 LLM 研究領域，RAG (Retrieval-Augmented Generation) 已經不是一個「秘密武器」或「捷徑」，而是應對「模型知識局限性」和「有限上下文窗口」這兩個根本性問題的<strong>標準、公認且最先進的技術範式之一</strong>。</p>
+                        
+                        <h4 class="text-lg font-semibold text-blue-300">可以從以下角度自信地闡述：</h4>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-blue-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold mb-2">1. 承認並解決現實問題</h5>
+                                <p class="text-sm">像 CoSER 這樣龐大的文學資料庫，其總體資訊量遠超任何現有 LLM 的上下文窗口。因此，必須有一種機制來從中動態提取與當前場景最相關的資訊。選擇 RAG 正是為了解決這個實際且無法迴避的工程與研究挑戰。</p>
+                            </div>
+                            
+                            <div class="bg-purple-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold mb-2">2. 站在巨人的肩膀上</h5>
+                                <p class="text-sm">使用 RAG 並引用其開創性論文（例如 Lewis et al., 2020）以及後續的相關研究，表明工作是建立在堅實的學術基礎之上的，而不是閉門造車。這在學術寫作中是加分項。</p>
+                            </div>
+                            
+                            <div class="bg-green-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold mb-2">3. 創新在於「應用」而非「發明」</h5>
+                                <p class="text-sm">論文創新點不在於發明了 RAG，而在於<strong>如何將 RAG 作為一個組件，整合進更宏大的 MAS-PS 架構中</strong>。在設計裡，RAG 只是`情境編織者`代理人的<strong>第一步</strong>（檢索），其後還有<strong>第二步</strong>（壓縮）。</p>
+                            </div>
+                            
+                            <div class="bg-orange-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold mb-2">4. 避免了真正的「作弊」</h5>
+                                <div class="space-y-2 text-sm">
+                                    <p><strong>什麼是作弊？</strong>如果模型在訓練時見過了測試集的答案，那是作弊。</p>
+                                    <p><strong>但 RAG 是什麼？</strong>在<strong>推論時 (inference time)</strong>，根據當前的 query，去一個<strong>允許被訪問的知識庫（從 CoSER 訓練集建立的向量資料庫）</strong> 中查找資訊。</p>
+                                    <p>這和人類在回答問題前先查閱書籍或資料庫是完全一樣的邏輯，是一種「開卷考試」，學術界普遍認可這種模式。</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-green-500 to-blue-500 bg-opacity-20 p-4 rounded-lg border-l-4 border-green-400">
+                            <h5 class="font-semibold text-green-300">結論</h5>
+                            <p class="text-sm mt-2">完全不需要擔心使用 RAG 會被視為作弊。相反，應該在論文中明確、自信地闡述選擇使用 RAG 的理由，並將其定位為情境編織者代理人內部的一個關鍵技術環節。這將使研究方案看起來更加成熟、完整且考慮周全。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- 返回按鈕 -->
             <div class="text-center mt-12">
                 <a href="index.html" class="nav-button inline-block px-8 py-3 rounded-full text-white font-semibold text-lg">
