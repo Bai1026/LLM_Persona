@@ -92,6 +92,139 @@
 
             <!-- FAQ 內容 -->
             <div class="space-y-6">
+
+                <!-- 問題 0 - Topic Alignment -->
+                <div class="faq-item rounded-2xl p-6 text-white border-2 border-yellow-400 border-opacity-50">
+                    <div class="faq-question flex justify-between items-center" onclick="toggleFaq('faq0')">
+                        <h3 class="text-xl font-bold text-yellow-300">主題對齊：MAS-PS 框架完整設定總結</h3>
+                        <svg class="w-6 h-6 rotate-icon text-yellow-300" id="icon0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer mt-4" id="faq0">
+                        <div class="text-white opacity-90 leading-relaxed space-y-4">
+                            <p class="bg-yellow-500 bg-opacity-20 p-4 rounded-lg">
+                                <strong>本節提供 MAS-PS 框架的完整設定總結</strong>，確保對整個研究從問題定義到最終解決方案的思路有清晰的理解。
+                            </p>
+                            
+                            <h4 class="text-lg font-semibold text-blue-300">1. 核心目標與挑戰</h4>
+                            
+                            <div class="bg-blue-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold mb-2 text-blue-200">總體目標</h5>
+                                <p class="text-sm">讓一個「參數固定」的大型語言模型（LLM），能夠高品質、高效率地扮演 CoSER 資料集中的文學角色，特別是那些在訓練中<strong>從未見過</strong>的角色。</p>
+                            </div>
+                            
+                            <div class="bg-red-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold mb-2 text-red-200">核心挑戰</h5>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-start space-x-2">
+                                        <span class="text-red-300 font-bold">1.</span>
+                                        <div>
+                                            <strong>泛化性 (Generalization)：</strong>如何讓模型扮演一個全新的、從未在訓練中出現過的角色？
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-2">
+                                        <span class="text-red-300 font-bold">2.</span>
+                                        <div>
+                                            <strong>效率與成本 (Efficiency & Cost)：</strong>如何在不提供極其冗長、昂貴的上下文的情況下，讓模型獲得足夠的資訊？
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 class="text-lg font-semibold text-green-300">2. 核心洞見與策略：兩階段「知識蒸餾」架構</h4>
+                            
+                            <div class="bg-green-500 bg-opacity-20 p-4 rounded-lg">
+                                <p class="text-sm mb-2">摒棄了「每一次對話都執行一次完整且昂貴的多代理人系統」的初步想法，採納了更為優雅的<strong>兩階段架構</strong>。這個架構的核心是將「思考」與「回應」分離：</p>
+                                <ul class="list-disc list-inside space-y-1 text-sm ml-4">
+                                    <li><strong>第一階段（離線）：</strong>投入巨大的前期成本，利用複雜的系統來「學習」如何產生最好的指令</li>
+                                    <li><strong>第二階段（線上）：</strong>利用第一階段學到的「技能」，以極低的成本快速產生回應</li>
+                                </ul>
+                            </div>
+
+                            <h4 class="text-lg font-semibold text-purple-300">3. 第一階段：離線知識蒸餾</h4>
+                            
+                            <div class="bg-purple-500 bg-opacity-20 p-4 rounded-lg">
+                                <h5 class="font-semibold mb-2 text-purple-200">唯一目的</h5>
+                                <p class="text-sm mb-3">不是產生對話，而是<strong>建立一個高品質的訓練資料集，並用它訓練出一個輕量級的「提示產生器 (Prompt Generator)」</strong>。</p>
+                                
+                                <h5 class="font-semibold mb-2 text-purple-200">方法</h5>
+                                <div class="space-y-2 text-sm">
+                                    <p>1. 使用 <strong>CoSER 的完整訓練集</strong></p>
+                                    <p>2. 對於訓練集中的<strong>每一個</strong>對話樣本，啟動完整的 <strong>五代理人 MAS-PS 系統</strong>：</p>
+                                    <div class="grid md:grid-cols-2 gap-2 ml-4 mt-2">
+                                        <div class="bg-blue-400 bg-opacity-30 p-2 rounded text-xs">
+                                            <strong>角色建構器：</strong>產生動態角色描述
+                                        </div>
+                                        <div class="bg-green-400 bg-opacity-30 p-2 rounded text-xs">
+                                            <strong>情境編織者：</strong>透過 RAG 檢索和壓縮
+                                        </div>
+                                        <div class="bg-yellow-400 bg-opacity-30 p-2 rounded text-xs">
+                                            <strong>協調者：</strong>組裝提示
+                                        </div>
+                                        <div class="bg-pink-400 bg-opacity-30 p-2 rounded text-xs">
+                                            <strong>演員：</strong>產生候選對話
+                                        </div>
+                                    </div>
+                                    <div class="bg-red-400 bg-opacity-30 p-2 rounded text-xs ml-4">
+                                        <strong>評論家：</strong>關鍵的 GAN 對抗式精煉迴圈，提供結構化反饋
+                                    </div>
+                                    <p class="ml-4">3. 協調者根據反饋<strong>迭代地最佳化</strong>給「演員」的提示（重複 N 輪）</p>
+                                </div>
+                                
+                                <h5 class="font-semibold mb-2 text-purple-200 mt-3">產出</h5>
+                                <ul class="list-disc list-inside space-y-1 text-sm ml-4">
+                                    <li>經過 N 輪精煉後的<strong>「最優提示 (Optimized Prompt)」</strong></li>
+                                    <li>成千上萬個 <code>(原始輸入, 最優提示)</code> 配對</li>
+                                    <li>用新資料集<strong>微調一個小型的「提示產生器」模型</strong></li>
+                                </ul>
+                            </div>
+
+                            <h4 class="text-lg font-semibold text-cyan-300">4. 第二階段：線上高效推論</h4>
+                            
+                            <div class="bg-cyan-500 bg-opacity-20 p-4 rounded-lg">
+                                <p class="text-sm mb-3">這個階段是系統實際應用和<strong>評估</strong>的階段，極其簡潔高效。</p>
+                                
+                                <h5 class="font-semibold mb-2 text-cyan-200">執行流程</h5>
+                                <ol class="list-decimal list-inside space-y-1 text-sm ml-4">
+                                    <li>使用 <strong>CoSER 的完整測試集</strong></li>
+                                    <li>測試請求 → 輕量級「提示產生器」</li>
+                                    <li>提示產生器<strong>立即</strong>、<strong>低成本</strong>地產生高品質提示</li>
+                                    <li>提示發送給參數固定的「演員」LLM</li>
+                                    <li>「演員」僅需<strong>一次推論</strong>即可產生最終對話</li>
+                                </ol>
+                            </div>
+
+                            <h4 class="text-lg font-semibold text-orange-300">5. 學術定位與創新性</h4>
+                            
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-orange-500 bg-opacity-20 p-4 rounded-lg">
+                                    <h5 class="font-semibold mb-2 text-orange-200">創新性 (Novelty)</h5>
+                                    <ul class="list-disc list-inside space-y-1 text-sm">
+                                        <li><strong>獨特的架構：</strong>針對性地設計五個代理人分解複雜任務</li>
+                                        <li><strong>創新的機制：</strong>「基於提示的對抗式最佳化」</li>
+                                        <li><strong>實用的範式：</strong>兩階段知識蒸餾流程</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="bg-teal-500 bg-opacity-20 p-4 rounded-lg">
+                                    <h5 class="font-semibold mb-2 text-teal-200">學術嚴謹性</h5>
+                                    <ul class="list-disc list-inside space-y-1 text-sm">
+                                        <li><strong>資料分離：</strong>嚴格區分訓練集與測試集</li>
+                                        <li><strong>RAG 的使用：</strong>標準、先進的技術組件</li>
+                                        <li><strong>評估：</strong>採用與 CoSER 相同的評估協定</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-yellow-500 to-orange-500 bg-opacity-20 p-4 rounded-lg border-l-4 border-yellow-400">
+                                <h5 class="font-semibold text-yellow-300">框架總結</h5>
+                                <p class="text-sm mt-2">這是一個用極高的前期「訓練成本」，去換取一個具備高度泛化能力、高效率、高品質且無需鎖定特定基礎模型的、極具靈活性的先進角色扮演框架。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 問題 1 -->
                 <div class="faq-item rounded-2xl p-6 text-white">
                     <div class="faq-question flex justify-between items-center" onclick="toggleFaq('faq1')">
