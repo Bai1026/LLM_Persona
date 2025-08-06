@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>即時推論架構重點整理</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Academic Slate -->
+    <!-- Application Structure Plan: A three-column, non-interactive layout for direct side-by-side comparison of the three test-time inference architectures. This structure was chosen because the primary user goal is to quickly compare and contrast the specs, pros, and cons of each model. A static, clear layout is superior to a clickable/interactive one for this specific "cheat sheet" purpose. -->
+    <!-- Visualization & Content Choices: The core "visualization" is the structured layout itself. Each architecture is presented in a card with consistent sections: Concept, Agents, Iterations, Workflow, and a detailed Input/Output table. This tabular format is the clearest way to present the technical specifications. Pros and cons are color-coded for quick visual parsing. No charts are needed as there is no quantitative data to plot. All diagrams are conceptual lists, confirming NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F1F5F9; /* Slate 100 */
+            color: #334155; /* Slate 700 */
+        }
+        .architecture-card {
+            transition: all 0.3s ease;
+            border-top-width: 4px;
+        }
+        .architecture-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .io-table th, .io-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #E2E8F0; /* Slate 200 */
+        }
+        .io-table th {
+            background-color: #F8FAFC; /* Slate 50 */
+        }
+        code {
+            background-color: #E2E8F0;
+            color: #475569;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <header class="text-center mb-10">
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-800">即時推論 (Test-Time Inference) 架構比較</h1>
+        <p class="mt-2 text-lg text-slate-600">從最簡到最複雜的三種設計方案規格與權衡分析</p>
+    </header>
+
+    <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Architecture 1: Baseline -->
+        <div class="architecture-card bg-white rounded-lg shadow-md border-slate-400">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-slate-700 mb-1">架構一：單一代理人</h2>
+                <p class="text-slate-500 font-medium mb-4">基準模型 (Baseline)</p>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-lg">核心概念</h3>
+                        <p class="text-slate-600">將所有原始資料暴力拼接成一個巨大提示，交由單一 LLM 進行一次性生成。</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">代理人與迭代</h3>
+                        <p class="text-slate-600"><strong>代理人：</strong> 1 個 (僅演員)<br><strong>迭代次數：</strong> 0 (無迭代)</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">工作流程</h3>
+                        <ol class="list-decimal list-inside text-slate-600 space-y-1">
+                            <li>接收請求。</li>
+                            <li>暴力組合提示。</li>
+                            <li><code>演員</code> 生成回應。</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-slate-50 p-6">
+                <h3 class="font-semibold text-lg mb-3">輸入 / 輸出規格</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm io-table">
+                        <thead>
+                            <tr><th>代理人</th><th>輸入 (Input)</th><th>輸出 (Output)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-medium">演員 (Actor)</td>
+                                <td>一個包含所有原始資料的<code>巨大提示</code>。</td>
+                                <td>最終的 <code>utterance</code>。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="p-6">
+                 <h3 class="font-semibold text-lg mb-3">優點 vs. 缺點</h3>
+                 <div class="text-green-600 mb-2">✓ <strong>簡單快速：</strong>延遲最低。</div>
+                 <div class="text-red-600">✗ <strong>品質不穩：</strong>易忽略關鍵資訊。</div>
+                 <div class="text-red-600">✗ <strong>成本高昂：</strong>單次呼叫的 token 成本高。</div>
+                 <div class="text-red-600">✗ <strong>泛化困難：</strong>完全依賴 LLM 原生能力。</div>
+            </div>
+        </div>
+
+        <!-- Architecture 2: GAN-Lite -->
+        <div class="architecture-card bg-white rounded-lg shadow-md border-blue-500">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-blue-700 mb-1">架構二：兩代理人</h2>
+                <p class="text-blue-500 font-medium mb-4">對抗式模型 (GAN-Lite)</p>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-lg">核心概念</h3>
+                        <p class="text-slate-600">在測試階段即時運行「生成-評判」迴圈，以動態精煉輸出品質。</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">代理人與迭代</h3>
+                        <p class="text-slate-600"><strong>代理人：</strong> 2 個 (演員, 評論家)<br><strong>迭代次數：</strong> 1 至 N 輪 (e.g., N=2)</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">工作流程</h3>
+                        <ol class="list-decimal list-inside text-slate-600 space-y-1">
+                            <li>接收請求。</li>
+                            <li>暴力組合提示。</li>
+                            <li>進入 **GAN 迴圈 (重複 N 次)**：<br>
+                                <span class="ml-4">a. <code>演員</code> 生成。</span><br>
+                                <span class="ml-4">b. <code>評論家</code> 評估並提供反饋。</span><br>
+                                <span class="ml-4">c. 根據反饋精煉提示。</span>
+                            </li>
+                            <li>輸出最終對話。</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-slate-50 p-6">
+                <h3 class="font-semibold text-lg mb-3">輸入 / 輸出規格</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm io-table">
+                        <thead>
+                            <tr><th>代理人</th><th>輸入 (Input)</th><th>輸出 (Output)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-medium">演員 (Actor)</td>
+                                <td>初始的<code>巨大提示</code>，以及後續包含<code>反饋</code>的精煉提示。</td>
+                                <td>候選的 <code>utterance</code>。</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">評論家 (Critic)</td>
+                                <td><code>演員</code>生成的 <code>utterance</code>，以及原始的角色/情境資訊。</td>
+                                <td>結構化的<code>反饋</code>。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="p-6">
+                 <h3 class="font-semibold text-lg mb-3">優點 vs. 缺點</h3>
+                 <div class="text-green-600 mb-2">✓ <strong>品質提升：</strong>透過迭代修正，品質顯著提升。</div>
+                 <div class="text-red-600">✗ <strong>成本極高：</strong>LLM 呼叫次數是 N 的倍數。</div>
+                 <div class="text-red-600">✗ <strong>提示品質差：</strong>GAN 迴圈的起點低，可能需更多次迭代。</div>
+            </div>
+        </div>
+
+        <!-- Architecture 3: Full MAS-PS -->
+        <div class="architecture-card bg-white rounded-lg shadow-md border-purple-500">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-purple-700 mb-1">架構三：五代理人</h2>
+                <p class="text-purple-500 font-medium mb-4">完整 MAS-PS 模型</p>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-lg">核心概念</h3>
+                        <p class="text-slate-600">先由專家代理人建構高品質提示，然後再進入對抗式迴圈進行最終精煉。</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">代理人與迭代</h3>
+                        <p class="text-slate-600"><strong>代理人：</strong> 5 個 (全部)<br><strong>迭代次數：</strong> 1 至 N 輪 (e.g., N=2)</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">工作流程</h3>
+                        <ol class="list-decimal list-inside text-slate-600 space-y-1">
+                            <li><strong>平行提示建構：</strong><br>
+                                <span class="ml-4">a. <code>角色建構器</code> 生成角色提示。</span><br>
+                                <span class="ml-4">b. <code>情境編織者</code> 生成場景提示。</span>
+                            </li>
+                            <li><code>協調者</code> 組裝高品質提示。</li>
+                            <li>進入 **GAN 迴圈 (重複 N 次)**。</li>
+                            <li>輸出最終對話。</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-slate-50 p-6">
+                <h3 class="font-semibold text-lg mb-3">輸入 / 輸出規格</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm io-table">
+                        <thead>
+                            <tr><th>代理人</th><th>輸入 (Input)</th><th>輸出 (Output)</th></tr>
+                        </thead>
+                        <tbody>
+                             <tr>
+                                <td class="font-medium">角色建構器</td>
+                                <td><code>character_id</code>, 原始資料。</td>
+                                <td><code>dynamic_persona_prompt</code>。</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">情境編織者</td>
+                                <td><code>scene_id</code>, <code>dialogue_history</code>。</td>
+                                <td><code>compressed_context_prompt</code>。</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">演員 (Actor)</td>
+                                <td>組裝好的<code>高品質提示</code>，及後續的精煉提示。</td>
+                                <td>候選的 <code>utterance</code>。</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">評論家 (Critic)</td>
+                                <td><code>演員</code>生成的 <code>utterance</code>，及高品質的提示。</td>
+                                <td>結構化的<code>反饋</code>。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="p-6">
+                 <h3 class="font-semibold text-lg mb-3">優點 vs. 缺點</h3>
+                 <div class="text-green-600 mb-2">✓ <strong>品質最高：</strong>GAN 迴圈起點高，能以更少迭代達到最佳品質。</div>
+                 <div class="text-red-600">✗ <strong>成本最高、延遲最長：</strong>LLM 呼叫次數最多。</div>
+            </div>
+        </div>
+
+    </main>
+    
+    <footer class="text-center mt-12 mb-4">
+        <p class="text-slate-500">此比較突顯了「兩階段知識蒸餾」架構的價值：用一次性的高昂離線成本，換取接近架構一的低成本和架構三的高品質。</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.architecture-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.classList.add('shadow-xl');
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.classList.remove('shadow-xl');
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
