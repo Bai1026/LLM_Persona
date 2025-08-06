@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>即時推論架構重點整理</title>
+    <title>MAS-PS 消融實驗規格書</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Academic Slate -->
-    <!-- Application Structure Plan: A three-column, non-interactive layout for direct side-by-side comparison of the three test-time inference architectures. This structure was chosen because the primary user goal is to quickly compare and contrast the specs, pros, and cons of each model. A static, clear layout is superior to a clickable/interactive one for this specific "cheat sheet" purpose. -->
-    <!-- Visualization & Content Choices: The core "visualization" is the structured layout itself. Each architecture is presented in a card with consistent sections: Concept, Agents, Iterations, Workflow, and a detailed Input/Output table. This tabular format is the clearest way to present the technical specifications. Pros and cons are color-coded for quick visual parsing. No charts are needed as there is no quantitative data to plot. All diagrams are conceptual lists, confirming NO SVG/Mermaid. -->
+    <!-- Chosen Palette: Experimental Slate -->
+    <!-- Application Structure Plan: A three-column, non-interactive layout for direct side-by-side comparison of the three test-time inference ablation study architectures. This static, clear layout is superior to a clickable/interactive one for this specific "cheat sheet" purpose, where the primary user goal is to quickly compare and contrast detailed technical specifications. -->
+    <!-- Visualization & Content Choices: The core "visualization" is the structured layout itself. Each architecture is presented in a card with consistent sections: Concept, Agents, Workflow, and a highly detailed Input/Output table. This tabular format is the clearest way to present the technical specifications, explicitly listing each agent's input parameters and output values as requested, using code tags for clarity. Pros and cons are color-coded. No charts are needed. All diagrams are conceptual lists, confirming NO SVG/Mermaid. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -19,6 +19,9 @@
             color: #334155; /* Slate 700 */
         }
         .architecture-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
             transition: all 0.3s ease;
             border-top-width: 4px;
         }
@@ -30,49 +33,57 @@
             padding: 0.75rem;
             text-align: left;
             border-bottom: 1px solid #E2E8F0; /* Slate 200 */
+            vertical-align: top;
         }
         .io-table th {
             background-color: #F8FAFC; /* Slate 50 */
         }
-        code {
+        .io-table code {
             background-color: #E2E8F0;
             color: #475569;
             padding: 0.1rem 0.4rem;
             border-radius: 4px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.9em;
+            word-break: break-all;
+        }
+        .card-content {
+            flex-grow: 1;
         }
     </style>
 </head>
 <body class="p-4 md:p-8">
 
     <header class="text-center mb-10">
-        <h1 class="text-3xl md:text-4xl font-bold text-slate-800">即時推論 (Test-Time Inference) 架構比較</h1>
-        <p class="mt-2 text-lg text-slate-600">從最簡到最複雜的三種設計方案規格與權衡分析</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-800">消融實驗 (Ablation Study) 架構規格</h1>
+        <p class="mt-2 text-lg text-slate-600">即時推論模式下的代理人組合與 I/O 詳細規格</p>
     </header>
 
     <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-        <!-- Architecture 1: Baseline -->
+        <!-- Architecture A (1 Agent) -->
         <div class="architecture-card bg-white rounded-lg shadow-md border-slate-400">
-            <div class="p-6">
-                <h2 class="text-2xl font-bold text-slate-700 mb-1">架構一：單一代理人</h2>
+            <div class="p-6 card-content">
+                <h2 class="text-2xl font-bold text-slate-700 mb-1">實驗 A: 單一代理人</h2>
                 <p class="text-slate-500 font-medium mb-4">基準模型 (Baseline)</p>
                 <div class="space-y-4">
                     <div>
                         <h3 class="font-semibold text-lg">核心概念</h3>
-                        <p class="text-slate-600">將所有原始資料暴力拼接成一個巨大提示，交由單一 LLM 進行一次性生成。</p>
+                        <p class="text-slate-600">最基礎的 ICL，直接使用 CoSER 為微調設計的、未經優化的完整提示進行一次性生成。</p>
                     </div>
                     <div>
                         <h3 class="font-semibold text-lg">代理人與迭代</h3>
-                        <p class="text-slate-600"><strong>代理人：</strong> 1 個 (僅演員)<br><strong>迭代次數：</strong> 0 (無迭代)</p>
+                        <p class="text-slate-600"><strong>代理人 (A)：</strong> 演員 (Actor)<br><strong>迭代次數：</strong> 0 (無迭代)</p>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-lg">工作流程</h3>
-                        <ol class="list-decimal list-inside text-slate-600 space-y-1">
-                            <li>接收請求。</li>
-                            <li>暴力組合提示。</li>
-                            <li><code>演員</code> 生成回應。</li>
+                        <h3 class="font-semibold text-lg">與 CoSER 的對接流程</h3>
+                        <ol class="list-decimal list-inside text-slate-600 space-y-1 text-sm">
+                            <li>CoSER 評估循環呼叫主實驗腳本。</li>
+                            <li>腳本呼叫 CoSER 的 <code>get_character_prompt()</code>。</li>
+                            <li>該函數返回一個巨大的 <code>system_prompt</code> 字串。</li>
+                            <li>腳本組裝成標準的 <code>messages</code> 列表。</li>
+                            <li>腳本將 <code>messages</code> 傳遞給「演員」。</li>
+                            <li>「演員」生成最終對話。</li>
                         </ol>
                     </div>
                 </div>
@@ -86,48 +97,46 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="font-medium">演員 (Actor)</td>
-                                <td>一個包含所有原始資料的<code>巨大提示</code>。</td>
-                                <td>最終的 <code>utterance</code>。</td>
+                                <td class="font-medium">演員 (A)</td>
+                                <td>
+                                    <strong>messages</strong>: <code>List[Dict]</code><br>
+                                    <span class="text-xs text-slate-500">(其中 <code>messages[0]['content']</code> 是由 CoSER 的 <code>get_character_prompt</code> 函數生成的、未經任何優化的完整 <code>system_prompt</code>。)</span>
+                                </td>
+                                <td><code>final_utterance</code>: <code>String</code></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="p-6">
-                 <h3 class="font-semibold text-lg mb-3">優點 vs. 缺點</h3>
-                 <div class="text-green-600 mb-2">✓ <strong>簡單快速：</strong>延遲最低。</div>
-                 <div class="text-red-600">✗ <strong>品質不穩：</strong>易忽略關鍵資訊。</div>
-                 <div class="text-red-600">✗ <strong>成本高昂：</strong>單次呼叫的 token 成本高。</div>
-                 <div class="text-red-600">✗ <strong>泛化困難：</strong>完全依賴 LLM 原生能力。</div>
-            </div>
         </div>
 
-        <!-- Architecture 2: GAN-Lite -->
+        <!-- Architecture A+B (2 Agents) -->
         <div class="architecture-card bg-white rounded-lg shadow-md border-blue-500">
-            <div class="p-6">
-                <h2 class="text-2xl font-bold text-blue-700 mb-1">架構二：兩代理人</h2>
-                <p class="text-blue-500 font-medium mb-4">對抗式模型 (GAN-Lite)</p>
+            <div class="p-6 card-content">
+                <h2 class="text-2xl font-bold text-blue-700 mb-1">實驗 A+B: 兩代理人</h2>
+                <p class="text-blue-500 font-medium mb-4">對抗式精煉 (GAN-Lite)</p>
                 <div class="space-y-4">
                     <div>
                         <h3 class="font-semibold text-lg">核心概念</h3>
-                        <p class="text-slate-600">在測試階段即時運行「生成-評判」迴圈，以動態精煉輸出品質。</p>
+                        <p class="text-slate-600">在基準模型的基礎上，引入「評論家」進行品質控制，驗證「即時迭代精煉」的價值。</p>
                     </div>
                     <div>
                         <h3 class="font-semibold text-lg">代理人與迭代</h3>
-                        <p class="text-slate-600"><strong>代理人：</strong> 2 個 (演員, 評論家)<br><strong>迭代次數：</strong> 1 至 N 輪 (e.g., N=2)</p>
+                        <p class="text-slate-600"><strong>代理人 (A+B)：</strong> 演員, 評論家<br><strong>迭代次數：</strong> 1 至 N 輪 (e.g., N=2)</p>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-lg">工作流程</h3>
-                        <ol class="list-decimal list-inside text-slate-600 space-y-1">
-                            <li>接收請求。</li>
-                            <li>暴力組合提示。</li>
-                            <li>進入 **GAN 迴圈 (重複 N 次)**：<br>
-                                <span class="ml-4">a. <code>演員</code> 生成。</span><br>
-                                <span class="ml-4">b. <code>評論家</code> 評估並提供反饋。</span><br>
-                                <span class="ml-4">c. 根據反饋精煉提示。</span>
+                        <h3 class="font-semibold text-lg">與 CoSER 的對接流程</h3>
+                        <ol class="list-decimal list-inside text-slate-600 space-y-1 text-sm">
+                            <li>同實驗 A，獲得一個未經優化的 <code>messages</code> 列表。</li>
+                            <li>**進入精煉迴圈 (重複 N 次)**：
+                                <ol class="list-[lower-alpha] list-inside ml-4">
+                                    <li>腳本將 <code>messages</code> 傳遞給「演員」生成候選對話。</li>
+                                    <li>腳本將候選對話及相關原始資料傳遞給「評論家」。</li>
+                                    <li>「評論家」提供反饋。</li>
+                                    <li>腳本根據反饋更新 <code>messages</code> 列表。</li>
+                                </ol>
                             </li>
-                            <li>輸出最終對話。</li>
+                            <li>輸出最終精煉後的對話。</li>
                         </ol>
                     </div>
                 </div>
@@ -141,51 +150,52 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="font-medium">演員 (Actor)</td>
-                                <td>初始的<code>巨大提示</code>，以及後續包含<code>反饋</code>的精煉提示。</td>
-                                <td>候選的 <code>utterance</code>。</td>
+                                <td class="font-medium">演員 (A)</td>
+                                <td>
+                                    <strong>messages</strong>: <code>List[Dict]</code><br>
+                                    <span class="text-xs text-slate-500">(在後續迭代中，<code>system_prompt</code> 會被附加來自「評論家」的 <code>structured_feedback</code>。)</span>
+                                </td>
+                                <td><code>candidate_utterance</code>: <code>String</code></td>
                             </tr>
                             <tr>
-                                <td class="font-medium">評論家 (Critic)</td>
-                                <td><code>演員</code>生成的 <code>utterance</code>，以及原始的角色/情境資訊。</td>
-                                <td>結構化的<code>反饋</code>。</td>
+                                <td class="font-medium">評論家 (B)</td>
+                                <td>
+                                    <strong>utterance_to_judge</strong>: <code>String</code><br>
+                                    <strong>character_profile</strong>: <code>String</code><br>
+                                    <strong>scenario</strong>: <code>String</code><br>
+                                    <strong>motivation</strong>: <code>String</code>
+                                </td>
+                                <td><code>structured_feedback</code>: <code>String</code></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="p-6">
-                 <h3 class="font-semibold text-lg mb-3">優點 vs. 缺點</h3>
-                 <div class="text-green-600 mb-2">✓ <strong>品質提升：</strong>透過迭代修正，品質顯著提升。</div>
-                 <div class="text-red-600">✗ <strong>成本極高：</strong>LLM 呼叫次數是 N 的倍數。</div>
-                 <div class="text-red-600">✗ <strong>提示品質差：</strong>GAN 迴圈的起點低，可能需更多次迭代。</div>
-            </div>
         </div>
 
-        <!-- Architecture 3: Full MAS-PS -->
+        <!-- Architecture A+C+D (3 Agents) -->
         <div class="architecture-card bg-white rounded-lg shadow-md border-purple-500">
-            <div class="p-6">
-                <h2 class="text-2xl font-bold text-purple-700 mb-1">架構三：五代理人</h2>
-                <p class="text-purple-500 font-medium mb-4">完整 MAS-PS 模型</p>
+            <div class="p-6 card-content">
+                <h2 class="text-2xl font-bold text-purple-700 mb-1">實驗 A+C+D: 三代理人</h2>
+                <p class="text-purple-500 font-medium mb-4">高品質提示建構</p>
                 <div class="space-y-4">
                     <div>
                         <h3 class="font-semibold text-lg">核心概念</h3>
-                        <p class="text-slate-600">先由專家代理人建構高品質提示，然後再進入對抗式迴圈進行最終精煉。</p>
+                        <p class="text-slate-600">移除「評論家」，專注於驗證由專家代理人主動建構高品質提示所帶來的性能提升。</p>
                     </div>
                     <div>
                         <h3 class="font-semibold text-lg">代理人與迭代</h3>
-                        <p class="text-slate-600"><strong>代理人：</strong> 5 個 (全部)<br><strong>迭代次數：</strong> 1 至 N 輪 (e.g., N=2)</p>
+                        <p class="text-slate-600"><strong>代理人 (A+C+D)：</strong> 演員, 角色建構器, 情境編織者<br><strong>迭代次數：</strong> 0 (無迭代)</p>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-lg">工作流程</h3>
-                        <ol class="list-decimal list-inside text-slate-600 space-y-1">
-                            <li><strong>平行提示建構：</strong><br>
-                                <span class="ml-4">a. <code>角色建構器</code> 生成角色提示。</span><br>
-                                <span class="ml-4">b. <code>情境編織者</code> 生成場景提示。</span>
-                            </li>
-                            <li><code>協調者</code> 組裝高品質提示。</li>
-                            <li>進入 **GAN 迴圈 (重複 N 次)**。</li>
-                            <li>輸出最終對話。</li>
+                        <h3 class="font-semibold text-lg">與 CoSER 的對接流程</h3>
+                        <ol class="list-decimal list-inside text-slate-600 space-y-1 text-sm">
+                            <li>CoSER 呼叫主實驗腳本，並傳遞所有原始參數。</li>
+                            <li>**腳本不再呼叫 <code>get_character_prompt()</code>**。</li>
+                            <li>腳本將參數分發給「角色建構器」和「情境編織者」。</li>
+                            <li>腳本收集兩者的輸出，組裝成一個**全新的、優化過的 `system_prompt`**。</li>
+                            <li>腳本將新提示與對話歷史組裝成 <code>messages</code>。</li>
+                            <li>「演員」進行一次性生成。</li>
                         </ol>
                     </div>
                 </div>
@@ -199,55 +209,46 @@
                         </thead>
                         <tbody>
                              <tr>
-                                <td class="font-medium">角色建構器</td>
-                                <td><code>character_id</code>, 原始資料。</td>
-                                <td><code>dynamic_persona_prompt</code>。</td>
+                                <td class="font-medium">角色建構器 (C)</td>
+                                <td>
+                                    <strong>character_profile</strong>: <code>String</code><br>
+                                    <strong>experiences</strong>: <code>String</code><br>
+                                    <strong>motivation</strong>: <code>String</code><br>
+                                    <strong>dialogue_history</strong>: <code>List[Dict]</code>
+                                </td>
+                                <td><code>dynamic_persona_prompt</code>: <code>String</code></td>
                             </tr>
                             <tr>
-                                <td class="font-medium">情境編織者</td>
-                                <td><code>scene_id</code>, <code>dialogue_history</code>。</td>
-                                <td><code>compressed_context_prompt</code>。</td>
+                                <td class="font-medium">情境編織者 (D)</td>
+                                <td>
+                                    <strong>scenario</strong>: <code>String</code><br>
+                                    <strong>plot_summary</strong>: <code>String</code><br>
+                                    <strong>dialogue_history</strong>: <code>List[Dict]</code>
+                                </td>
+                                <td><code>compressed_context_prompt</code>: <code>String</code></td>
                             </tr>
                             <tr>
-                                <td class="font-medium">演員 (Actor)</td>
-                                <td>組裝好的<code>高品質提示</code>，及後續的精煉提示。</td>
-                                <td>候選的 <code>utterance</code>。</td>
-                            </tr>
-                            <tr>
-                                <td class="font-medium">評論家 (Critic)</td>
-                                <td><code>演員</code>生成的 <code>utterance</code>，及高品質的提示。</td>
-                                <td>結構化的<code>反饋</code>。</td>
+                                <td class="font-medium">演員 (A)</td>
+                                <td>
+                                    <strong>messages</strong>: <code>List[Dict]</code><br>
+                                    <span class="text-xs text-slate-500">(其中 <code>system_prompt</code> 是由 C 和 D 的輸出組裝而成的高品質版本。)</span>
+                                </td>
+                                <td><code>final_utterance</code>: <code>String</code></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="p-6">
-                 <h3 class="font-semibold text-lg mb-3">優點 vs. 缺點</h3>
-                 <div class="text-green-600 mb-2">✓ <strong>品質最高：</strong>GAN 迴圈起點高，能以更少迭代達到最佳品質。</div>
-                 <div class="text-red-600">✗ <strong>成本最高、延遲最長：</strong>LLM 呼叫次數最多。</div>
-            </div>
         </div>
 
     </main>
     
-    <footer class="text-center mt-12 mb-4">
-        <p class="text-slate-500">此比較突顯了「兩階段知識蒸餾」架構的價值：用一次性的高昂離線成本，換取接近架構一的低成本和架構三的高品質。</p>
+    <footer class="text-center mt-12 mb-4 px-4">
+        <div class="max-w-4xl mx-auto bg-slate-200 p-4 rounded-lg">
+            <h4 class="font-semibold text-slate-800">關於「協調者」與完整五代理人模型</h4>
+            <p class="text-slate-600 text-sm">在這些消融實驗設定中，並不存在一個形式化的「協調者代理人」。其職責由一個高層的**主實驗腳本 (Control Script)** 來承擔。而**完整的五代理人模型**，則可以被理解為**「實驗 A+C+D」**的高品質提示建構，與**「實驗 A+B」**的對抗式精煉迴圈的結合，代表了能力最強的即時推論方案。</p>
+        </div>
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.architecture-card');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    card.classList.add('shadow-xl');
-                });
-                card.addEventListener('mouseleave', () => {
-                    card.classList.remove('shadow-xl');
-                });
-            });
-        });
-    </script>
 
 </body>
 </html>
