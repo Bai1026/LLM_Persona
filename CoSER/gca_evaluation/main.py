@@ -32,23 +32,23 @@ parser.add_argument(
     help='Path to the folder containing complete curated data of each book, used when retrieval augmentation is enabled.'
 )
 
-# Model configuration
+# Model configuration -> we change all of the model into 4o-mini here (the first 3 were 4o originally)
 parser.add_argument(
     '--actor_model',
     type=str,
-    default='gpt-4o',
+    default='gpt-4o-mini',
     help='Name of the model to use for role-playing'
 )
 parser.add_argument(
     '--judge_model',
     type=str,
-    default='gpt-4o',
+    default='gpt-4o-mini',
     help='Name of the model to use for LLM judging'
 )
 parser.add_argument(
     '--env_model',
     type=str,
-    default='gpt-4o',
+    default='gpt-4o-mini',
     help='Name of the model to use for environment response'
 )
 parser.add_argument(
@@ -258,7 +258,8 @@ def gca_simulation(test_file, actor_model, env_model, nsp_model, retrieval, nth_
             character_agents[character] = character_agent
 
         # Begin conversation simulation
-        max_rounds = 20
+        # originally was 20 here
+        max_rounds = 10
         agent_conversations = []
         current_speaker = speaking_characters_w_env[0]  # Start with first character
         
