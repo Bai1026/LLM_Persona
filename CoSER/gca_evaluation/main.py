@@ -148,6 +148,15 @@ ENVIRONMENT = 'Environment'
 NSP = "NSP"
 special_characters = [NSP, ENVIRONMENT]
 
+
+# Set up Starting time (Timezone: Asia/Taipei)
+import datetime
+import pytz  # 需要先安裝: pip install pytz
+# 加入台灣時區
+taiwan_tz = pytz.timezone('Asia/Taipei')
+taiwan_time = datetime.datetime.now(taiwan_tz).strftime("%m%d_%H%M")
+
+
 def gca_simulation(test_file, actor_model, env_model, nsp_model, retrieval, nth_exp=0):
     """
     Conducts Given-Circumstance Acting (GCA) simulation.
@@ -163,19 +172,12 @@ def gca_simulation(test_file, actor_model, env_model, nsp_model, retrieval, nth_
 
     # TODO: Use a subset of the test dataset for quick testing
     import math  
-    subset_size = math.ceil(len(test_dataset) * 0.005)
+    # subset_size = math.ceil(len(test_dataset) * 0.005)
+    subset_size = 20
     test_dataset = test_dataset[:subset_size]
-
-    import datetime
-    import pytz  # 需要先安裝: pip install pytz
-
-    # 加入台灣時區
-    taiwan_tz = pytz.timezone('Asia/Taipei')
 
     actor_setting = f'{actor_model}{"_rag=" + retrieval if retrieval else ""}'
 
-    # 使用台灣時間
-    taiwan_time = datetime.datetime.now(taiwan_tz).strftime("%m%d_%H%M")
     simulation_path = f'exp/simulation/{test_file.split("/")[-1].replace(".json", "")}_{actor_setting}_{taiwan_time}.json'
 
     results = []
@@ -264,7 +266,7 @@ def gca_simulation(test_file, actor_model, env_model, nsp_model, retrieval, nth_
             character_agents[character] = character_agent
 
         # TODO: Add a check for the existence of the first round
-        max_rounds = 3
+        max_rounds = 10 ## max rounds = 10
         agent_conversations = []
         current_speaker = speaking_characters_w_env[0]
         
@@ -332,17 +334,9 @@ def gca_judging(test_file, actor_model, retrieval, judge_model, nth_exp=0):
         cache_path = f'{cache_path}-repeat={nth_exp}'
     os.makedirs(os.path.dirname(cache_path), exist_ok=True)
     set_cache_path(cache_path)
-    
-    import datetime
-    import pytz  # 需要先安裝: pip install pytz
-
-    # 加入台灣時區
-    taiwan_tz = pytz.timezone('Asia/Taipei')
 
     actor_setting = f'{actor_model}{"_rag=" + retrieval if retrieval else ""}'
 
-    # 使用台灣時間
-    taiwan_time = datetime.datetime.now(taiwan_tz).strftime("%m%d_%H%M")
     simulation_path = f'exp/simulation/{test_file.split("/")[-1].replace(".json", "")}_{actor_setting}_{taiwan_time}.json'
     evaluation_path = simulation_path.replace('/simulation/', '/evaluation/')
 
