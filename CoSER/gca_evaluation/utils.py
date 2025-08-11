@@ -21,29 +21,35 @@ with open('config.json', 'r') as f:
 
 streaming = False
 
-def setup_logger(name, log_file, level=logging.INFO, quiet=False):
-	logger = logging.getLogger(name)
-	logger.setLevel(level)
+def setup_logger(name, log_file, level=logging.INFO, quiet=False, log_dir='CoSER/log'):
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
 
-	if logger.hasHandlers():
-		logger.handlers.clear()
+    if logger.hasHandlers():
+        logger.handlers.clear()
 
+    # 建立日誌資料夾（如果不存在）
+    if not os.path.isabs(log_file):
+        os.makedirs(log_dir, exist_ok=True)
+        log_file = os.path.join(log_dir, log_file)
+    
+    # 確保日誌檔案的資料夾存在
+    os.makedirs(os.path.dirname(log_file), exist_ok=True)
 
-	file_handler = logging.FileHandler(log_file, encoding='utf-8')
-	file_handler.setLevel(level)
-	file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-	file_handler.setFormatter(file_formatter)
-	logger.addHandler(file_handler)
+    file_handler = logging.FileHandler(log_file, encoding='utf-8')
+    file_handler.setLevel(level)
+    file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(file_formatter)
+    logger.addHandler(file_handler)
 
+    if not quiet:
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(level)
+        console_formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s [%(filename)s:%(lineno)d]')
+        console_handler.setFormatter(console_formatter)
+        logger.addHandler(console_handler)
 
-	if not quiet:
-		console_handler = logging.StreamHandler()
-		console_handler.setLevel(level)
-		console_formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s [%(filename)s:%(lineno)d]')
-		console_handler.setFormatter(console_formatter)
-		logger.addHandler(console_handler)
-
-	return logger
+    return logger
 
 logger = setup_logger(__name__, f'{__file__.split(".")[0]}.log', level=logging.INFO, quiet=False)
 
@@ -559,6 +565,32 @@ def get_response_json(post_processing_funcs=[extract_json], **kwargs):
 	
 	return json_response
 
+def colored_print(color, message):
+    """
+    Formats a message with a specified color using ANSI escape codes.
+
+    Parameters:
+    - color (str): The color name (e.g., 'red', 'green', 'yellow', 'blue').
+    - message (str): The message to format.
+
+    Returns:
+    - str: The formatted message with the specified color.
+    """
+    color_codes = {
+        "black": "\x1b[30;1m",
+        "red": "\x1b[31;1m",
+        "green": "\x1b[32;1m",
+        "yellow": "\x1b[33;1m",
+        "blue": "\x1b[34;1m",
+        "magenta": "\x1b[35;1m",
+        "cyan": "\x1b[36;1m",
+        "white": "\x1b[37;1m",
+    }
+
+    reset_code = "\x1b[0m"
+    color_code = color_codes.get(color.lower(), color_codes["black"])
+    print(f"{color_code}{message}{reset_code}")
+	
 def print_json(data):
 	print(json.dumps(data, ensure_ascii=False, indent=2))
 
@@ -757,10 +789,4 @@ def calculate_bleu_rouge(reference, simulation):
     
     return bleu, rouge_l
 
-
-if __name__ == '__main__':
-	messages = [{"role": "system", "content": "Hello, how are you?"}]
-	model = "gpt-4o"
-
-	print(get_response(model, messages))
 		

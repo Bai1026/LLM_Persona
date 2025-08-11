@@ -1,4 +1,6 @@
-import json
+from rich import print
+import requests
+import time
 from typing import Dict, List
 from utils import config, fix_repeation
 from openai import OpenAI
@@ -10,7 +12,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.schema import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
 
-from utils import logger, config
+from utils import logger, config, colored_print
 
 ENVIRONMENT = "Environment"
 NSP = "NSP"
@@ -298,23 +300,26 @@ def rag(contexts, retriever, target_type):
 
 class Agent:
     """
-    A conversational agent class that manages dialogue interactions using language models.
+    對話代理類別，管理使用語言模型的對話互動。
     
-    This agent can engage in conversations while maintaining context, retrieve relevant information 
-    from a knowledge database, and generate appropriate responses based on its configuration.
+    此代理可以：
+    - 參與對話同時維護上下文
+    - 從知識資料庫檢索相關資訊  
+    - 根據配置產生適當回應
+    - 自動偵測模型名稱並切換到 API 模式
 
-    Attributes:
-        model (str): The language model to use for generating responses
-        name (str): Name of the agent/character
-        database (Dict): Knowledge database for retrieval
-        scene (Dict): Scene context information
-        system_prompt (str): Initial system prompt to guide agent behavior
-        retrievers (Dict): RAG retrievers for different content types
-        system_role (str): Role type for system messages ('user' or 'system')
-        messages (List): Conversation history as a list of message dictionaries
+    屬性:
+        model (str): 用於產生回應的語言模型
+        name (str): 代理/角色名稱
+        database (Dict): 用於檢索的知識資料庫
+        scene (Dict): 場景上下文資訊
+        system_prompt (str): 引導代理行為的初始系統提示
+        retrievers (Dict): 不同內容類型的 RAG 檢索器
+        system_role (str): 系統訊息的角色類型 ('user' 或 'system')
+        messages (List): 對話歷史記錄，為訊息字典的列表
     """
     def __init__(self, model: str, name, database: Dict, system_prompt: str = None, scene: Dict = None, retrieval_target: str = 'conversation'):
-        # Initialize basic agent properties
+        # 初始化基本代理屬性
         self.model = model 
         self.name = name 
         self.database = database
@@ -322,121 +327,363 @@ class Agent:
 
         self.system_prompt = system_prompt 
         
-        # Clean up system prompt by removing trailing newlines
+        # 清理系統提示詞，移除尾隨換行符
         self.system_prompt = self.system_prompt.strip('\n')
         
-        # Set up RAG retrievers if database is provided
+        # 如果提供資料庫，設定 RAG 檢索器
         if retrieval_target and database:
             self.retrievers = build_rag_corpus(name, database, retrieval_target)
         else:
             self.retrievers = None
 
-        # Add conciseness instruction for non-special characters
+        # 為非特殊角色新增簡潔性指令
         if self.name not in special_characters:
-            self.system_prompt = self.system_prompt + '\n\nSpeak concisely as humans, instead of being verbose. Limit your response to 60 words.\n\n'
+            self.system_prompt = self.system_prompt + '\n\n像人類一樣簡潔地說話，而不是冗長。將您的回應限制在 60 個字以內。\n\n'
 
-        # Add name prefix instruction for specific models
+        # 為特定模型新增名稱前綴指令
         if self.model.startswith('llama') or self.model.startswith('step'):
-            self.system_prompt = self.system_prompt + f'Start your response with "{name}: ". Avoid speaking as other characters.\n\n'
+            self.system_prompt = self.system_prompt + f'以 "{name}: " 開始您的回應。避免代表其他角色發言。\n\n'
         
-        # Set appropriate system role based on model type
+        # 根據模型類型設定適當的系統角色
         if self.model.startswith('claude') or self.model.startswith('o1'):
             self.system_role = 'user'
         else:
             self.system_role = 'system'
 
-        # Initialize conversation history with system prompt
+        # 使用系統提示初始化對話歷史記錄
         self.messages = [{"role": self.system_role, "content": self.system_prompt}]
+        colored_print('blue', f"messages: {self.messages}")
+
+    def _is_api_model(self) -> bool:
+        """
+        檢查模型是否為 API 模型
         
+        Returns:
+            bool: 如果是 API 模型回傳 True
+        """
+        # 修改這裡，讓所有模型都使用 API
+        api_model_triggers = [
+            'custom-api',           # 完全匹配
+            'api-',                # 前綴匹配
+            'local-',              # 前綴匹配
+        ]
+        
+        # 檢查是否匹配任何 API 觸發條件
+        for trigger in api_model_triggers:
+            if self.model == trigger or self.model.startswith(trigger):
+                return True
+        return False
+
+    def _get_api_config(self) -> dict:
+        """
+        根據模型名稱取得 API 配置
+        
+        Returns:
+            dict: API 配置字典
+        """
+        # 預設配置
+        config = {
+            'endpoint': 'http://localhost:6969/v1/chat/completions',
+            'headers': {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            'timeout': 300,
+            'retry_times': 2,
+            'retry_delay': 1.0
+        }
+
+        port = 6969
+        config['endpoint'] = f'http://localhost:{port}/v1/chat/completions'
+        
+        return config
+
+    def _call_api(self, messages, max_tokens=512, temperature=0.7) -> str:
+        """
+        透過 API 呼叫產生回應
+        
+        Args:
+            messages: 對話訊息列表
+            max_tokens (int): 最大產生 token 數量
+            temperature (float): 產生溫度參數
+            
+        Returns:
+            str: 產生的回應文字，錯誤時回傳空字串
+        """
+        api_config = self._get_api_config()
+        
+        for attempt in range(api_config['retry_times']):
+            try:
+                # 準備 API 請求資料
+                payload = {
+                    "messages": messages,
+                    "max_tokens": max_tokens,
+                    "temperature": temperature,
+                    "stream": False,
+                    "model": self.model  # 將原始模型名稱也傳送給 API
+                }
+                
+                # 發送 API 請求
+                logger.info(f"正在呼叫 API：{api_config['endpoint']} (嘗試 {attempt + 1}/{api_config['retry_times']})")
+                colored_print('blue', f"正在呼叫 API：{api_config['endpoint']} (嘗試 {attempt + 1}/{api_config['retry_times']})")
+                logger.info(f"請求資料：{json.dumps(payload, ensure_ascii=False, indent=2)}")
+                # colored_print('blue', f"請求資料：{json.dumps(payload, ensure_ascii=False, indent=2)}")
+                
+                response = requests.post(
+                    api_config['endpoint'],
+                    headers=api_config['headers'],
+                    json=payload,
+                    timeout=api_config['timeout']
+                )
+                
+                # 記錄原始回應內容以進行偵錯
+                logger.info(f"API 回應狀態程式碼：{response.status_code}")
+                colored_print('blue', f"API 回應狀態程式碼：{response.status_code}")
+                logger.info(f"API 原始回應內容：{response.text[:500]}...")
+                colored_print('blue', f"API 原始回應內容：{response.text[:500]}...")
+                
+                # 檢查 HTTP 狀態程式碼
+                response.raise_for_status()
+                
+                # 檢查回應內容是否為空
+                if not response.text.strip():
+                    logger.error("API 回傳空內容")
+                    colored_print('red', "❌ BUG: API 回傳空內容")
+                    if attempt < api_config['retry_times'] - 1:
+                        time.sleep(api_config['retry_delay'] * (attempt + 1))
+                        continue
+                    return "抱歉，我現在無法回應。"
+                
+                # 解析回應
+                try:
+                    response_data = response.json()
+                except json.JSONDecodeError as e:
+                    logger.error(f"JSON 解析錯誤：{e}")
+                    colored_print('red', f"❌ EXCEPTION: JSON 解析錯誤：{e}")
+                    logger.error(f"原始回應內容：{response.text}")
+                    colored_print('red', f"❌ 原始回應內容：{response.text}")
+                    # 如果不是 JSON 格式，嘗試直接使用文字回應
+                    if response.text.strip():
+                        logger.info("嘗試直接使用文字回應")
+                        colored_print('red', "嘗試直接使用文字回應")
+                        return response.text.strip()
+                    if attempt < api_config['retry_times'] - 1:
+                        time.sleep(api_config['retry_delay'] * (attempt + 1))
+                        continue
+                    return "抱歉，我現在無法回應。"
+                
+                # 提取產生的文字（支援多種 API 格式）
+                generated_text = ""
+                if "choices" in response_data and len(response_data["choices"]) > 0:
+                    # OpenAI 格式
+                    generated_text = response_data["choices"][0]["message"]["content"]
+                elif "response" in response_data:
+                    # 自訂格式 1
+                    generated_text = response_data["response"]
+                elif "content" in response_data:
+                    # 自訂格式 2
+                    generated_text = response_data["content"]
+                elif "text" in response_data:
+                    # 自訂格式 3
+                    generated_text = response_data["text"]
+                else:
+                    logger.error(f"未知的 API 回應格式：{response_data}")
+                    colored_print('red', f"❌ BUG: 未知的 API 回應格式：{response_data}")
+                    if attempt < api_config['retry_times'] - 1:
+                        time.sleep(api_config['retry_delay'] * (attempt + 1))
+                        continue
+                    return "抱歉，我現在無法回應。"
+                
+                if not generated_text or not generated_text.strip():
+                    logger.error("API 回傳空的產生內容")
+                    colored_print('red', "❌ BUG: API 回傳空的產生內容")
+                    if attempt < api_config['retry_times'] - 1:
+                        time.sleep(api_config['retry_delay'] * (attempt + 1))
+                        continue
+                    return "抱歉，我現在無法回應。"
+                
+                logger.info(f"API 呼叫成功，產生 {len(generated_text)} 個字元")
+                colored_print('blue', f"API 呼叫成功，產生 {len(generated_text)} 個字元")
+                return generated_text.strip()
+                
+            except requests.exceptions.Timeout:
+                logger.error(f"API 呼叫超時（{api_config['timeout']}秒）")
+                colored_print('red', f"❌ EXCEPTION: API 呼叫超時（{api_config['timeout']}秒）")
+            except requests.exceptions.RequestException as e:
+                logger.error(f"API 呼叫錯誤：{e}")
+                colored_print('red', f"❌ EXCEPTION: API 呼叫錯誤：{e}")
+            except Exception as e:
+                logger.error(f"未預期的錯誤：{e}")
+                colored_print('red', f"❌ EXCEPTION: 未預期的錯誤：{e}")
+                import traceback
+                logger.error(f"完整錯誤追蹤：{traceback.format_exc()}")
+                colored_print('red', f"❌ 完整錯誤追蹤：{traceback.format_exc()}")
+            
+            if attempt < api_config['retry_times'] - 1:
+                logger.info(f"等待 {api_config['retry_delay'] * (attempt + 1)} 秒後重試...")
+                colored_print('red', f"等待 {api_config['retry_delay'] * (attempt + 1)} 秒後重試...")
+                time.sleep(api_config['retry_delay'] * (attempt + 1))
+        
+        logger.error(f"經過 {api_config['retry_times']} 次嘗試後 API 呼叫仍然失敗")
+        colored_print('red', f"❌ BUG: 經過 {api_config['retry_times']} 次嘗試後 API 呼叫仍然失敗")
+        return "抱歉，我現在無法回應。"
 
     def chat(self) -> str:
         """
-        Generates a response based on the conversation history and available knowledge.
+        根據對話歷史記錄和可用知識產生回應。
         
-        This method:
-        1. Retrieves relevant information from the knowledge database if available
-        2. Generates a response using the configured language model
-        3. Processes and cleans the response based on model-specific requirements
+        此方法：
+        1. 如果可用，從知識資料庫檢索相關資訊
+        2. 根據模型類型選擇呼叫方式：
+        - 自訂 API 模型：使用本地端點
+        - 其他模型：使用 OpenAI 官方 API
+        3. 根據模型特定需求處理和清理回應
         
         Returns:
-            str: The generated response text, or empty string if an error occurs
+            str: 產生的回應文字，發生錯誤時回傳預設訊息
         """
         try:
             messages = self.messages
             if self.retrievers:
-                # Retrieve relevant information from recent context (last 3 messages)
+                # 從最近的上下文檢索相關資訊（最後 3 個訊息）
                 contexts = self.messages[1:]
                 contexts = contexts[-3:]
 
-                # Gather knowledge from all configured retrievers
+                # 從所有配置的檢索器收集知識
                 knowledge = ''
                 for target_type, retriever in self.retrievers.items():
                     knowledge += rag(contexts, retriever, target_type)
 
-                # Insert retrieved knowledge into system prompt
+                # 將檢索到的知識插入系統提示
                 messages = copy.deepcopy(self.messages)
-                messages[0]['content'] = messages[0]['content'].replace('{retrieved_knowledge}', '<begin of background information>\n\n' + knowledge + '\n\n<end of background information>\n\n')
+                messages[0]['content'] = messages[0]['content'].replace('{retrieved_knowledge}', '<背景資訊開始>\n\n' + knowledge + '\n\n<背景資訊結束>\n\n')
 
-            from utils import get_response_with_retry
-            response = get_response_with_retry(model=self.model, messages=messages, max_tokens=512)
+            # 根據模型類型選擇呼叫方式
+            if self._is_api_model():
+                # 使用自訂 API（本地端點）
+                logger.info(f"偵測到自訂 API 模型：{self.model}，使用本地 API 呼叫")
+                colored_print('blue', f"偵測到自訂 API 模型：{self.model}，使用本地 API 呼叫")
+                response = self._call_api(messages, max_tokens=512)
+                
+                # 檢查 API 回應是否有效
+                if not response or response.strip() == "":
+                    logger.error("自訂 API 回傳空回應")
+                    colored_print('red', "❌ BUG: 自訂 API 回傳空回應")
+                    return f"{self.name}: 抱歉，我現在無法回應。"
+                    
+            else:
+                # 使用 OpenAI 官方 API
+                logger.info(f"使用 OpenAI 官方 API：{self.model}")
+                colored_print('blue', f"使用 OpenAI 官方 API：{self.model}")
+                
+                # 修正：根據 get_response 函式的實際簽名來呼叫
+                try:
+                    from utils import get_response_with_retry
+                    response = get_response_with_retry(model=self.model, messages=messages, max_tokens=512)
+                except TypeError as e:
+                    colored_print('red', f"❌ EXCEPTION: get_response_with_retry TypeError：{e}")
+                    if "multiple values for argument 'model'" in str(e):
+                        # 如果出現重複參數錯誤，嘗試只傳遞 messages
+                        try:
+                            from utils import get_response
+                            response = get_response(messages)
+                        except Exception as fallback_error:
+                            logger.error(f"get_response 備用呼叫失敗：{fallback_error}")
+                            colored_print('red', f"❌ EXCEPTION: get_response 備用呼叫失敗：{fallback_error}")
+                            return f"{self.name}: 抱歉，發生了技術問題。"
+                    else:
+                        colored_print('red', f"❌ EXCEPTION: 未處理的 TypeError：{e}")
+                        raise e
+                except Exception as e:
+                    colored_print('red', f"❌ EXCEPTION: get_response_with_retry 其他錯誤：{e}")
+                    return f"{self.name}: 抱歉，發生了技術問題。"
+                
+                colored_print('blue', f"OpenAI API response: {response}")
+                
+                if not response or response.strip() == "":
+                    logger.error("OpenAI API 回傳空回應")
+                    colored_print('red', "❌ BUG: OpenAI API 回傳空回應")
+                    return f"{self.name}: 抱歉，我現在無法回應。"
 
             def parse_response(response: str, character_name: str) -> str:
                 """
-                Extracts the utterance of a specific character from a (unexpected) multi-character response.
+                從（意外的）多角色回應中提取特定角色的話語。
                 
                 Args:
-                    response (str): Full response text
-                    character_name (str): Name of character whose utterance to extract
+                    response (str): 完整回應文字
+                    character_name (str): 要提取話語的角色名稱
                 
                 Returns:
-                    str: Extracted utterance for the specified character
+                    str: 指定角色的提取話語
                 """
-                lines = response.split('\n')
-                current_character = None
-                current_utterance = ""
-                parsed_utterances = []
+                try:
+                    lines = response.split('\n')
+                    current_character = None
+                    current_utterance = ""
+                    parsed_utterances = []
 
-                for line in lines:
-                    # Check for character name at start of line
-                    if ':' in line:
-                        character = line.split(':', 1)[0].strip()
-                        
-                        if current_character != character:
-                            # Save previous character's utterance and start new one
-                            if current_utterance:
-                                parsed_utterances.append((current_character, current_utterance))
-                            current_character = character
-                            current_utterance = ""
+                    for line in lines:
+                        # 檢查行開頭的角色名稱
+                        if ':' in line:
+                            character = line.split(':', 1)[0].strip()
+                            
+                            if current_character != character:
+                                # 儲存前一個角色的話語並開始新的
+                                if current_utterance:
+                                    parsed_utterances.append((current_character, current_utterance))
+                                current_character = character
+                                current_utterance = ""
 
-                    current_utterance += line + "\n"
-            
-                # Save final utterance
-                if current_utterance:
-                    parsed_utterances.append((current_character, current_utterance))
+                        current_utterance += line + "\n"
                 
-                parsed_utterances = [utterance for character, utterance in parsed_utterances if character == character_name][0]
+                    # 儲存最終話語
+                    if current_utterance:
+                        parsed_utterances.append((current_character, current_utterance))
+                    
+                    # 尋找指定角色的話語
+                    for character, utterance in parsed_utterances:
+                        if character == character_name:
+                            return utterance
 
-                return parsed_utterances
+                    # 如果沒找到指定角色，回傳原始回應
+                    return response
+                    
+                except Exception as e:
+                    colored_print('red', f"❌ EXCEPTION: parse_response 錯誤：{e}")
+                    return response
 
-            # Process response based on model type and agent name
+            # 根據模型類型和代理名稱處理回應
             if (self.model.startswith('llama') or self.model.startswith('step')) and self.name != 'NSP':
                 response = parse_response(response, self.name)
             
-            # Fix repetition issues for certain models
+            # 修復某些模型的重複問題
             if not any(self.model.lower().startswith(model_type) for model_type in ['gpt', 'claude']) and self.name != 'NSP':
-                res = fix_repeation(response)
-                if res:
-                    logger.info(f'{self.model} Repetition found and fixed: Original: "{response}" Fixed: "{res}"')
-                    response = res
+                try:
+                    res = fix_repeation(response)
+                    if res:
+                        logger.info(f'{self.model} 發現並修復重複：原始："{response}" 修復後："{res}"')
+                        colored_print('red', f'{self.model} 發現並修復重複：原始："{response}" 修復後："{res}"')
+                        response = res
+                except Exception as e:
+                    colored_print('red', f"❌ EXCEPTION: fix_repeation 錯誤：{e}")
+
+            # 確保回應有效
+            if not response or response.strip() == "":
+                logger.warning("最終回應為空，使用預設回應")
+                colored_print('red', "❌ BUG: 最終回應為空，使用預設回應")
+                response = f"{self.name}: 抱歉，我現在無法回應。"
 
             return response
 
         except Exception as e:
             import traceback
-            print(f"Error getting response: {e}")
-            traceback.print_exc()
+            logger.error(f"取得回應時發生錯誤：{e}")
+            colored_print('red', f"❌ EXCEPTION: 取得回應時發生錯誤：{e}")
+            logger.error(f"完整錯誤追蹤：{traceback.format_exc()}")
+            colored_print('red', f"❌ 完整錯誤追蹤：{traceback.format_exc()}")
             
-            return ""
+            return f"{self.name}: 抱歉，發生了技術問題。"
+    
     
     def update(self, role: str, message: str):
         """
