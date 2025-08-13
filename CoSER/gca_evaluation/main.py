@@ -148,9 +148,30 @@ ENVIRONMENT = 'Environment'
 NSP = "NSP"
 special_characters = [NSP, ENVIRONMENT]
 
+import datetime
+import pytz
+
+# 在全域範圍建立一個時間戳快取字典
+_timestamp_cache = {}
+
+def get_or_create_timestamp(cache_key):
+    """
+    取得或建立時間戳，確保相同的實驗使用相同的時間戳
+    
+    Args:
+        cache_key: 快取鍵值
+    
+    Returns:
+        str: 台灣時間格式的時間戳
+    """
+    if cache_key not in _timestamp_cache:
+        taiwan_tz = pytz.timezone('Asia/Taipei')
+        _timestamp_cache[cache_key] = datetime.datetime.now(taiwan_tz).strftime("%m%d_%H%M")
+    return _timestamp_cache[cache_key]
+
 def gca_simulation(test_file, actor_model, env_model, nsp_model, retrieval, nth_exp=0):
     """
-    Conducts Given-Circumstance Acting (GCA) simulation.
+    執行既定情境表演 (GCA) 模擬。
     """
     from utils import set_cache_path
     cache_path = f'.cache/{actor_model}.pkl'
@@ -161,26 +182,24 @@ def gca_simulation(test_file, actor_model, env_model, nsp_model, retrieval, nth_
     
     test_dataset = json.load(open(test_file, 'r'))
 
-    # TODO: Use a subset of the test dataset for quick testing
-    import math  
-    subset_size = math.ceil(len(test_dataset) * 0.005)
+    # TODO: 使用測試資料集的子集進行快速測試
+    import math
+    subset_size = math.ceil(len(test_dataset) * 0.1)
     test_dataset = test_dataset[:subset_size]
-
-    import datetime
-    import pytz  # 需要先安裝: pip install pytz
-
-    # 加入台灣時區
-    taiwan_tz = pytz.timezone('Asia/Taipei')
 
     actor_setting = f'{actor_model}{"_rag=" + retrieval if retrieval else ""}'
 
-    # 使用台灣時間
-    taiwan_time = datetime.datetime.now(taiwan_tz).strftime("%m%d_%H%M")
+    # 使用統一的時間戳 - 修正關鍵點！
+    cache_key = f"{test_file}_{actor_setting}_{nth_exp}"
+    taiwan_time = get_or_create_timestamp(cache_key)
+    
     simulation_path = f'exp/simulation/{test_file.split("/")[-1].replace(".json", "")}_{actor_setting}_{taiwan_time}.json'
 
     results = []
-    logger.info(f'Conducting GCA Simulation for {actor_setting} on {test_file}\n\nThe results will be saved to {simulation_path}')
+    logger.info(f'執行 {actor_setting} 在 {test_file} 上的 GCA 模擬\n\n結果將儲存到 {simulation_path}')
+    
     if os.path.exists(simulation_path) and not args.regenerate:
+        logger.info(f'找到現有的模擬結果檔案：{simulation_path}')
         return json.load(open(simulation_path, 'r'))
 
     for circumstance in test_dataset:
@@ -264,7 +283,7 @@ def gca_simulation(test_file, actor_model, env_model, nsp_model, retrieval, nth_
             character_agents[character] = character_agent
 
         # TODO: Add a check for the existence of the first round
-        max_rounds = 3
+        max_rounds = 10
         agent_conversations = []
         current_speaker = speaking_characters_w_env[0]
         
@@ -317,14 +336,18 @@ def gca_simulation(test_file, actor_model, env_model, nsp_model, retrieval, nth_
             'involved_character_profiles': involved_character_profiles
         })
 
+    # 確保目錄存在並儲存結果
     os.makedirs(os.path.dirname(simulation_path), exist_ok=True)
+    logger.info(f'儲存模擬結果到：{simulation_path}')
     with open(simulation_path, 'w') as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
+    
+    logger.info(f'模擬完成，共處理 {len(results)} 個情境')
     return results
 
 def gca_judging(test_file, actor_model, retrieval, judge_model, nth_exp=0):
     """
-    Evaluates the quality of GCA simulation results.
+    評估 GCA 模擬結果的品質。
     """
     from utils import set_cache_path
     cache_path = f'.cache/{actor_model}.pkl'
@@ -333,25 +356,33 @@ def gca_judging(test_file, actor_model, retrieval, judge_model, nth_exp=0):
     os.makedirs(os.path.dirname(cache_path), exist_ok=True)
     set_cache_path(cache_path)
     
-    import datetime
-    import pytz  # 需要先安裝: pip install pytz
-
-    # 加入台灣時區
-    taiwan_tz = pytz.timezone('Asia/Taipei')
-
     actor_setting = f'{actor_model}{"_rag=" + retrieval if retrieval else ""}'
 
-    # 使用台灣時間
-    taiwan_time = datetime.datetime.now(taiwan_tz).strftime("%m%d_%H%M")
+    # 使用相同的時間戳 - 修正關鍵點！
+    cache_key = f"{test_file}_{actor_setting}_{nth_exp}"
+    taiwan_time = get_or_create_timestamp(cache_key)
+    
     simulation_path = f'exp/simulation/{test_file.split("/")[-1].replace(".json", "")}_{actor_setting}_{taiwan_time}.json'
     evaluation_path = simulation_path.replace('/simulation/', '/evaluation/')
 
-    logger.info(f'Evaluating GCA Simulation for {actor_setting} on {test_file}\n\nThe results will be saved to {evaluation_path}')
+    logger.info(f'評估 {actor_setting} 在 {test_file} 上的 GCA 模擬\n\n結果將儲存到 {evaluation_path}')
+    
+    # 檢查評估結果是否已存在
     if os.path.exists(evaluation_path) and not (args.regenerate or args.reevaluate):
+        logger.info(f'找到現有的評估結果檔案：{evaluation_path}')
         res = json.load(open(evaluation_path, 'r'))
         return res['scores'], res['cases']
     
+    # 檢查模擬結果檔案是否存在 - 新增重要檢查！
+    if not os.path.exists(simulation_path):
+        logger.error(f"找不到模擬結果檔案：{simulation_path}")
+        logger.error(f"時間戳快取內容：{_timestamp_cache}")
+        logger.error(f"快取鍵值：{cache_key}")
+        raise FileNotFoundError(f"模擬結果檔案不存在：{simulation_path}")
+    
+    logger.info(f'載入模擬結果：{simulation_path}')
     simulation_results = json.load(open(simulation_path, 'r'))
+    
     dimensions = ['Storyline Consistency', 'Anthropomorphism', 'Character Fidelity', 'Storyline Quality']
     scores = { d: [] for d in dimensions + ['bleu', 'rouge_l'] }
     cases = {}
@@ -418,10 +449,13 @@ def gca_judging(test_file, actor_model, retrieval, judge_model, nth_exp=0):
     avg_scores.update({metric: sum(scores[metric]) / max(1, len(scores[metric])) for metric in ['bleu', 'rouge_l']})
     logger.info(f'{actor_setting}: Average score of {len(simulation_results)} samples: \n{avg_scores["avg"]} {avg_scores} on {test_file}')
     os.makedirs(os.path.dirname(evaluation_path), exist_ok=True)
+    logger.info(f'儲存評估結果到：{evaluation_path}')
     with open(evaluation_path, 'w') as f:
         json.dump({'scores': avg_scores, 'cases': cases}, f, ensure_ascii=False, indent=2)
+    
     return avg_scores, cases
 
+# 在主執行區塊中也加入時間戳重設機制
 if __name__ == "__main__":
     if args.nth_exp >= 0:
         nth_exps = [args.nth_exp]
@@ -430,6 +464,9 @@ if __name__ == "__main__":
         nth_exps = range(repeat_times)
 
     for nth_exp in nth_exps:
+        # 每次新的實驗都清空時間戳快取 - 重要！
+        _timestamp_cache.clear()
+        
         exp_name = 'eval' 
         if args.continue_from > 0: exp_name += f'-continue_from={args.continue_from}'    
         if nth_exp > 0: exp_name += f'-repeat={nth_exp}'
@@ -459,17 +496,18 @@ if __name__ == "__main__":
 
         if args.num_workers > 1 and len(exp_args) > 1:
             generate_futures = []
-            # --- CHANGE #1 HERE ---
             with ProcessPoolExecutor(max_workers=args.num_workers, initializer=initialize_nltk_worker) as generate_executor:
                 for exp_arg in exp_args:
                     future = generate_executor.submit(generate, exp_arg)
                     generate_futures.append((future, exp_arg))
             
-            # --- CHANGE #2 HERE ---
+            # 等待所有產生任務完成
+            for generate_future, exp_arg in generate_futures:
+                generate_future.result()  # 確保模擬階段完成
+            
             with ProcessPoolExecutor(max_workers=args.num_workers, initializer=initialize_nltk_worker) as evaluate_executor:
                 evaluate_futures = []
                 for generate_future, exp_arg in generate_futures:
-                    generate_future.result()
                     future = evaluate_executor.submit(evaluate, exp_arg)
                     evaluate_futures.append((future, exp_arg))
                 
@@ -481,11 +519,13 @@ if __name__ == "__main__":
                     all_cases[actor_setting] = cases
         else:
             for exp_arg in exp_args:
+                logger.info(f'開始處理實驗：{exp_arg[0]}')
                 generate(exp_arg)
+                logger.info(f'模擬完成，開始評估：{exp_arg[0]}')
                 scores, cases = evaluate(exp_arg)
                 actor_model = exp_arg[0]
                 actor_setting = f'{actor_model}{"_rag=" + args.retrieval if args.retrieval else ""}'
                 all_scores[actor_setting] = scores
                 all_cases[actor_setting] = cases
                 
-        logger.info(f'Evaluation results:\n{json.dumps(all_scores, ensure_ascii=False, indent=2)}')
+        logger.info(f'評估結果：\n{json.dumps(all_scores, ensure_ascii=False, indent=2)}')
