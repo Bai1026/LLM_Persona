@@ -51,6 +51,16 @@ python interactive_chat.py \
 python persona_api.py --vector_path "persona_vectors/Qwen2.5-7B-Instruct/multi_role/empathetic_counselor_response_avg_diff.pt" --layer 20 --coef 2.0
 ```
 
+### Run the persona api with mulitple characters
+```bash
+python Experiment/persona_api.py \
+--vector_paths analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt empathetic_counselor_response_avg_diff.pt \
+--fusion_method weighted_average \
+--layer 20 \
+--coef 2.0
+```
+- this merge 3 characters' vector then evaluate them.
+
 ---
 ## Evaluation using LLM-Discussion Benchmark
 

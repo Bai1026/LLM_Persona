@@ -1,5 +1,11 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import sys
+from pathlib import Path
+
+# 添加父目錄到路徑，讓模組可以找到
+sys.path.append(str(Path(__file__).parent.parent))
+
 from activation_steer import ActivationSteerer
 import argparse
 
