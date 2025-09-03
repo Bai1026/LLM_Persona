@@ -2,59 +2,52 @@ import argparse
 import sys
 import os
 import json
-import requests
+import openai
 from pathlib import Path
 from datetime import datetime
 from types import SimpleNamespace
 
-class PersonaAPIRunner:
-    """使用 Persona API 進行單次回應的類別"""
+class OpenAIBaselineRunner:
+    """使用 Pure OpenAI API 進行創造性任務的基線模型"""
     
-    def __init__(self, api_url, dataset_file, task_type, prompt_id):
-        self.api_url = api_url
+    def __init__(self, dataset_file, task_type, prompt_id, model_name="gpt-4o-mini"):
         self.dataset_file = dataset_file
         self.task_type = task_type
         self.prompt_id = prompt_id
+        self.model_name = model_name
+        
+        # 初始化 OpenAI 客戶端
+        self.client = openai.OpenAI(
+            api_key=os.getenv("OPENAI_API_KEY")
+        )
         
     def test_api_connection(self):
-        """測試 API 連線"""
+        """測試 OpenAI API 連線"""
         try:
-            response = requests.get(f"{self.api_url}/status")
-            if response.status_code == 200:
-                print("✅ API 連線成功")
-                return True
-            else:
-                print("❌ API 連線失敗")
-                return False
+            response = self.client.models.list()
+            print(f"✅ OpenAI API 連線成功")
+            return True
         except Exception as e:
-            print(f"❌ API 連線錯誤: {e}")
+            print(f"❌ OpenAI API 連線錯誤: {e}")
             return False
     
-    def reset_conversation(self):
-        """重設對話歷史"""
+    def call_openai_api(self, prompt, max_tokens=1000):
+        """呼叫 OpenAI API"""
         try:
-            response = requests.post(f"{self.api_url}/reset")
-            return response.status_code == 200
-        except:
-            return False
-    
-    def call_persona_api(self, user_input, max_tokens=1000):
-        """呼叫 Persona API"""
-        try:
-            data = {
-                "user_input": user_input,
-                "max_tokens": max_tokens
-            }
-            response = requests.post(f"{self.api_url}/chat", json=data)
+            response = self.client.chat.completions.create(
+                model=self.model_name,
+                messages=[
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=max_tokens,
+                temperature=0.7,
+                top_p=0.9
+            )
             
-            if response.status_code == 200:
-                result = response.json()
-                return result["response"]
-            else:
-                print(f"❌ API 請求失敗: {response.status_code}")
-                return None
+            return response.choices[0].message.content.strip()
+            
         except Exception as e:
-            print(f"❌ API 請求錯誤: {e}")
+            print(f"❌ OpenAI API 請求錯誤: {e}")
             return None
     
     def load_dataset(self):
@@ -102,7 +95,7 @@ class PersonaAPIRunner:
         return responses[:10]  # 限制最多10個回應
     
     def run(self):
-        """執行 API 呼叫"""
+        """執行 OpenAI API 呼叫"""
         if not self.test_api_connection():
             return None
         
@@ -122,10 +115,8 @@ class PersonaAPIRunner:
         for item_data in examples:
             # 處理不同的資料集格式
             if isinstance(item_data, str):
-                # 如果是字串格式
                 item = item_data
             elif isinstance(item_data, dict):
-                # 如果是字典格式，獲取項目內容
                 if self.task_type == "AUT":
                     item = item_data.get("object", item_data.get("item", ""))
                 elif self.task_type == "Scientific":
@@ -142,19 +133,16 @@ class PersonaAPIRunner:
                 
             print(f"📋 處理項目: {item}")
             
-            # 重設對話歷史
-            self.reset_conversation()
-            
             # 建構提示詞
             prompt = self.construct_prompt(item)
             
-            # 呼叫 API
-            response = self.call_persona_api(prompt, max_tokens=1000)
+            # 呼叫 OpenAI API
+            response = self.call_openai_api(prompt, max_tokens=1000)
             
             if response:
                 # 儲存對話記錄（模擬 multi-agent 格式）
                 all_responses[item] = {
-                    "PersonaAPI": [
+                    "OpenAI_Baseline": [
                         {"role": "user", "content": prompt},
                         {"role": "assistant", "content": response}
                     ]
@@ -166,19 +154,19 @@ class PersonaAPIRunner:
                     final_results.append({
                         "item": item,
                         "uses": extracted,
-                        "Agent": "PersonaAPI"
+                        "Agent": "OpenAI_Baseline"
                     })
                 elif self.task_type == "Scientific":
                     final_results.append({
                         "question": item,
                         "answer": extracted,
-                        "Agent": "PersonaAPI"
+                        "Agent": "OpenAI_Baseline"
                     })
                 else:
                     final_results.append({
                         "question": item,
                         "answer": extracted,
-                        "Agent": "PersonaAPI"
+                        "Agent": "OpenAI_Baseline"
                     })
             else:
                 print(f"❌ 項目 {item} 處理失敗")
@@ -191,24 +179,25 @@ class PersonaAPIRunner:
     
     def save_results(self, all_responses, final_results, amount_of_data):
         """儲存結果檔案"""
-        current_date = datetime.now().strftime("%m%d")
-        formatted_time = datetime.now().strftime("%H%M")
+        current_date = datetime.now().strftime("%Y%m%d")
+        formatted_time = datetime.now().strftime("%H%M%S")
         
-        # 建立檔案名稱（符合評估系統格式）
-        base_filename = f"{self.task_type}_persona_api_{current_date}-{formatted_time}_{amount_of_data}"
+        # 建立檔案名稱
+        model_name = self.model_name.replace("-", "_").replace(".", "_")
+        base_filename = f"{self.task_type}_openai_baseline_1_1_{model_name}_OpenAI_baseline_{current_date}-{formatted_time}_{amount_of_data}"
         
-        # 評估系統期待的路徑結構：Results/{task}/Output/{agent}_agent/
-        results_base_path = Path(__file__).parent.parent / "Results" / self.task_type / "Output" / "persona_agent"
+        # 修正：使用 openai_agent 而不是 openai_baseline_agent
+        results_base_path = Path(__file__).parent.parent / "Results" / self.task_type / "Output" / "openai_agent"
         results_base_path.mkdir(parents=True, exist_ok=True)
         
         # 儲存對話記錄
-        chat_log_filename = f"{chat_log}/{base_filename}_chat_log.json"
+        chat_log_filename = f"{base_filename}_chat_log.json"
         chat_log_path = results_base_path / chat_log_filename
         
         with open(chat_log_path, 'w', encoding='utf-8') as f:
             json.dump(all_responses, f, indent=2, ensure_ascii=False)
         
-        # 儲存最終結果（這是評估系統需要的檔案）
+        # 儲存最終結果
         final_filename = f"{base_filename}.json"
         final_path = results_base_path / final_filename
         
@@ -218,25 +207,24 @@ class PersonaAPIRunner:
         print(f"💾 對話記錄已儲存: {chat_log_path}")
         print(f"💾 最終結果已儲存: {final_path}")
         
-        # 回傳檔案名稱（不含副檔名，供評估使用）
         return final_filename.replace('.json', '')
 
 def main():
-    parser = argparse.ArgumentParser(description="使用 Persona API 進行創造性任務評估")
+    parser = argparse.ArgumentParser(description="使用 Pure OpenAI API 進行創造性任務評估")
     parser.add_argument("-d", "--dataset", required=True, help="資料集檔案路徑")
     parser.add_argument("-t", "--type", choices=["AUT", "Scientific", "Similarities", "Instances"], 
                        required=True, help="任務類型")
     parser.add_argument("-p", "--prompt", type=int, default=1, help="提示詞編號 (1-5)")
-    parser.add_argument("-u", "--api_url", default="http://127.0.0.1:5000", help="Persona API 網址")
+    parser.add_argument("--model", default="gpt-4o-mini", help="OpenAI 模型名稱")
     parser.add_argument("-e", "--eval_mode", action="store_true", default=False, help="執行評估模式")
     
     args = parser.parse_args()
     
-    # 建立並執行 API 執行器
-    runner = PersonaAPIRunner(args.api_url, args.dataset, args.type, args.prompt)
-    discussion_output = runner.run()
+    # 建立並執行 OpenAI 基線執行器
+    runner = OpenAIBaselineRunner(args.dataset, args.type, args.prompt, args.model)
+    baseline_output = runner.run()
     
-    if args.eval_mode and discussion_output:
+    if args.eval_mode and baseline_output:
         # 整合原有的評估系統
         evaluation_root = Path(__file__).parent.parent / 'Evaluation'
         sys.path.append(str(evaluation_root))
@@ -245,7 +233,7 @@ def main():
         # 呼叫評估
         eval_args = SimpleNamespace(
             version="4", 
-            input_file=discussion_output,  # 這裡已經是正確的檔案名稱
+            input_file=baseline_output,
             type="sampling", 
             sample=3, 
             task=args.type, 

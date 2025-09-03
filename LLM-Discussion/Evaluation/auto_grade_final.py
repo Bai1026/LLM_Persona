@@ -6,6 +6,10 @@ from utils.openai_model import OpenAIModel
 from eval_functions.eval_criterion import evaluate_aut, evaluate_scientific, evaluate_wkct
 import logging
 from automation_csv import calculate_mean_std, write_results_to_csv
+from rich import print
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 TASK_PATHS = {
     "AUT": "Results/AUT/Output",
@@ -24,7 +28,8 @@ def auto_grade(args):
 
     # OPENAI KEY
     api_key = os.getenv("OPENAI_API_KEY")
-    version = "gpt-4-0125-preview" if args.version == "4" else "gpt-3.5-turbo-0125"
+    # version = "gpt-4-0125-preview" if args.version == "4" else "gpt-3.5-turbo-0125"
+    version = "gpt-4o-mini" if args.version == "4" else "gpt-3.5-turbo-0125"
     print(f"Using GPT Version {version}, Input: {args.version}")
 
     # SETUP CACHE AND MODEL
@@ -174,7 +179,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     # PARSERS
     parser = argparse.ArgumentParser(description="Evaluate responses based on specified criteria using OpenAI's API.")
-    parser.add_argument("-v", "--version", default="3", choices=["3", "4"], help="Version of the OpenAI model to use.")
+    parser.add_argument("-v", "--version", default="4", choices=["3", "4"], help="Version of the OpenAI model to use.")
     parser.add_argument("-i", "--input_file", required=True, help="Name of the input file located in the Results directory.")
     parser.add_argument("-t", "--type", default="sampling", choices=["default", "sampling"], help="Variant of the evaluation.")
     parser.add_argument("-s", "--sample", default=3, type=int, help="Number of times to sample the evaluation.")
