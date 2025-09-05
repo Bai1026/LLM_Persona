@@ -2,60 +2,34 @@ import argparse
 import sys
 import os
 import json
-import requests
+import torch
 from pathlib import Path
 from datetime import datetime
 from types import SimpleNamespace
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
-class PersonaAPIRunner:
-    """使用 Persona API 進行單次回應的類別"""
+class VanillaQwenRunner:
+    """使用原始 Qwen 模型進行創造性任務（無 Persona Steering）"""
     
-    def __init__(self, api_url, dataset_file, task_type, prompt_id):
-        self.api_url = api_url
+    def __init__(self, dataset_file, task_type, prompt_id, model_name="Qwen/Qwen2.5-7B-Instruct"):
         self.dataset_file = dataset_file
         self.task_type = task_type
         self.prompt_id = prompt_id
+        self.model_name = model_name
         
-    def test_api_connection(self):
-        """測試 API 連線"""
-        try:
-            response = requests.get(f"{self.api_url}/status")
-            if response.status_code == 200:
-                print("✅ API 連線成功")
-                return True
-            else:
-                print("❌ API 連線失敗")
-                return False
-        except Exception as e:
-            print(f"❌ API 連線錯誤: {e}")
-            return False
-    
-    def reset_conversation(self):
-        """重設對話歷史"""
-        try:
-            response = requests.post(f"{self.api_url}/reset")
-            return response.status_code == 200
-        except:
-            return False
-    
-    def call_persona_api(self, user_input, max_tokens=1000):
-        """呼叫 Persona API"""
-        try:
-            data = {
-                "user_input": user_input,
-                "max_tokens": max_tokens
-            }
-            response = requests.post(f"{self.api_url}/chat", json=data)
-            
-            if response.status_code == 200:
-                result = response.json()
-                return result["response"]
-            else:
-                print(f"❌ API 請求失敗: {response.status_code}")
-                return None
-        except Exception as e:
-            print(f"❌ API 請求錯誤: {e}")
-            return None
+        # 載入模型和分詞器
+        print(f"🤖 載入模型: {self.model_name}")
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            torch_dtype=torch.float16,
+            device_map="auto"
+        )
+        
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+        
+        print("✅ 模型載入完成")
     
     def load_dataset(self):
         """載入資料集"""
@@ -85,6 +59,49 @@ class PersonaAPIRunner:
         
         return task_prompt
     
+    def generate_response(self, prompt, max_tokens=1000):
+        """使用原始 Qwen 模型產生回應"""
+        try:
+            # 格式化對話
+            messages = [{"role": "user", "content": prompt}]
+            formatted_prompt = self.tokenizer.apply_chat_template(
+                messages, 
+                tokenize=False, 
+                add_generation_prompt=True
+            )
+            
+            # 編碼輸入
+            inputs = self.tokenizer(
+                formatted_prompt, 
+                return_tensors="pt",
+                padding=True,
+                truncation=True,
+                max_length=2048
+            ).to(self.model.device)
+            
+            # 生成回應
+            with torch.no_grad():
+                outputs = self.model.generate(
+                    **inputs,
+                    max_new_tokens=max_tokens,
+                    temperature=0.7,
+                    top_p=0.9,
+                    do_sample=True,
+                    pad_token_id=self.tokenizer.pad_token_id
+                )
+            
+            # 解碼回應
+            response = self.tokenizer.decode(
+                outputs[0][inputs['input_ids'].shape[1]:], 
+                skip_special_tokens=True
+            )
+            
+            return response.strip()
+            
+        except Exception as e:
+            print(f"❌ 生成回應時發生錯誤: {e}")
+            return None
+    
     def extract_responses(self, content):
         """提取回應內容"""
         lines = content.split('\n')
@@ -102,10 +119,7 @@ class PersonaAPIRunner:
         return responses[:10]  # 限制最多10個回應
     
     def run(self):
-        """執行 API 呼叫"""
-        if not self.test_api_connection():
-            return None
-        
+        """執行原始 Qwen 模型推理"""
         dataset = self.load_dataset()
         
         # 從資料集中提取 Examples
@@ -122,10 +136,8 @@ class PersonaAPIRunner:
         for item_data in examples:
             # 處理不同的資料集格式
             if isinstance(item_data, str):
-                # 如果是字串格式
                 item = item_data
             elif isinstance(item_data, dict):
-                # 如果是字典格式，獲取項目內容
                 if self.task_type == "AUT":
                     item = item_data.get("object", item_data.get("item", ""))
                 elif self.task_type == "Scientific":
@@ -142,19 +154,16 @@ class PersonaAPIRunner:
                 
             print(f"📋 處理項目: {item}")
             
-            # 重設對話歷史
-            self.reset_conversation()
-            
             # 建構提示詞
             prompt = self.construct_prompt(item)
             
-            # 呼叫 API
-            response = self.call_persona_api(prompt, max_tokens=1000)
+            # 生成回應
+            response = self.generate_response(prompt, max_tokens=1000)
             
             if response:
                 # 儲存對話記錄（模擬 multi-agent 格式）
                 all_responses[item] = {
-                    "PersonaAPI": [
+                    "VanillaQwen": [
                         {"role": "user", "content": prompt},
                         {"role": "assistant", "content": response}
                     ]
@@ -166,19 +175,19 @@ class PersonaAPIRunner:
                     final_results.append({
                         "item": item,
                         "uses": extracted,
-                        "Agent": "PersonaAPI"
+                        "Agent": "VanillaQwen"
                     })
                 elif self.task_type == "Scientific":
                     final_results.append({
                         "question": item,
                         "answer": extracted,
-                        "Agent": "PersonaAPI"
+                        "Agent": "VanillaQwen"
                     })
                 else:
                     final_results.append({
                         "question": item,
                         "answer": extracted,
-                        "Agent": "PersonaAPI"
+                        "Agent": "VanillaQwen"
                     })
             else:
                 print(f"❌ 項目 {item} 處理失敗")
@@ -191,14 +200,14 @@ class PersonaAPIRunner:
     
     def save_results(self, all_responses, final_results, amount_of_data):
         """儲存結果檔案"""
-        current_date = datetime.now().strftime("%m%d")
-        formatted_time = datetime.now().strftime("%H%M")
+        current_date = datetime.now().strftime("%Y%m%d")
+        formatted_time = datetime.now().strftime("%H%M%S")
         
         # 建立檔案名稱（符合評估系統格式）
-        base_filename = f"{self.task_type}_persona_api_{current_date}-{formatted_time}_{amount_of_data}"
+        base_filename = f"{self.task_type}_vanilla_qwen_1_1_Qwen25_VanillaQwen_vanilla_{current_date}-{formatted_time}_{amount_of_data}"
         
         # 評估系統期待的路徑結構：Results/{task}/Output/{agent}_agent/
-        results_base_path = Path(__file__).parent.parent / "Results" / self.task_type / "Output" / "persona_agent"
+        results_base_path = Path(__file__).parent.parent / "Results" / self.task_type / "Output" / "vanilla_agent"
         results_base_path.mkdir(parents=True, exist_ok=True)
         
         # 儲存對話記錄
@@ -222,21 +231,21 @@ class PersonaAPIRunner:
         return final_filename.replace('.json', '')
 
 def main():
-    parser = argparse.ArgumentParser(description="使用 Persona API 進行創造性任務評估")
+    parser = argparse.ArgumentParser(description="使用原始 Qwen 模型進行創造性任務評估")
     parser.add_argument("-d", "--dataset", required=True, help="資料集檔案路徑")
     parser.add_argument("-t", "--type", choices=["AUT", "Scientific", "Similarities", "Instances"], 
                        required=True, help="任務類型")
     parser.add_argument("-p", "--prompt", type=int, default=1, help="提示詞編號 (1-5)")
-    parser.add_argument("-u", "--api_url", default="http://127.0.0.1:5000", help="Persona API 網址")
+    parser.add_argument("--model", default="Qwen/Qwen2.5-7B-Instruct", help="Qwen 模型名稱")
     parser.add_argument("-e", "--eval_mode", action="store_true", default=False, help="執行評估模式")
     
     args = parser.parse_args()
     
-    # 建立並執行 API 執行器
-    runner = PersonaAPIRunner(args.api_url, args.dataset, args.type, args.prompt)
-    discussion_output = runner.run()
+    # 建立並執行 Vanilla Qwen 執行器
+    runner = VanillaQwenRunner(args.dataset, args.type, args.prompt, args.model)
+    vanilla_output = runner.run()
     
-    if args.eval_mode and discussion_output:
+    if args.eval_mode and vanilla_output:
         # 整合原有的評估系統
         evaluation_root = Path(__file__).parent.parent / 'Evaluation'
         sys.path.append(str(evaluation_root))
@@ -245,7 +254,7 @@ def main():
         # 呼叫評估
         eval_args = SimpleNamespace(
             version="4", 
-            input_file=discussion_output,  # 這裡已經是正確的檔案名稱
+            input_file=vanilla_output,
             type="sampling", 
             sample=3, 
             task=args.type, 

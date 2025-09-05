@@ -4,7 +4,9 @@ import logging
 import subprocess
 import time
 from openai import OpenAI
-import google.generativeai as genai
+# import google.generativeai as genai
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())  # take environment variables from .env.
 
 def generate_response_llama2_torchrun(
     message,
