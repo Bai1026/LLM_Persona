@@ -2,6 +2,7 @@ import json
 import os
 import logging
 import subprocess
+import requests
 import time
 from openai import OpenAI
 # import google.generativeai as genai
@@ -140,7 +141,41 @@ class Llama2Agent(Agent):
             max_seq_len=max_seq_len,
             max_batch_size=max_batch_size
         )
+
+    def construct_assistant_message(self, content):
+        return {"role": "assistant", "content": content}
     
+    def construct_user_message(self, content):
+        return {"role": "user", "content": content}
+    
+class CustomizedAgent(Agent):
+    def __init__(self, model_name, agent_name, agent_role, agent_speciality, agent_role_prompt, speaking_rate, api_url, missing_history = []):
+        self.model_name = model_name
+        # self.client = OpenAI()
+        self.agent_name = agent_name
+        self.agent_role = agent_role
+        self.agent_speciality = agent_speciality
+        self.agent_role_prompt = agent_role_prompt
+        self.speaking_rate = speaking_rate
+        self.missing_history = missing_history
+        self.url = api_url
+        
+    def generate_answer(self, answer_context):
+        try:
+            # completion = self.client.chat.completions.create(
+            #     model=self.model_name,
+            #     messages=answer_context,
+            #     n=1)
+            # result = completion.choices[0].message.content
+            # for pure text -> return completion.choices[0].message.content
+            response = requests.post(self.url, data=answer_context)
+            result = response.text
+            return result
+        except Exception as e:
+            print(f"Error with model {self.model_name}: {e}")
+            time.sleep(10)
+            return self.generate_answer(answer_context)
+
     def construct_assistant_message(self, content):
         return {"role": "assistant", "content": content}
     

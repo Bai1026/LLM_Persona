@@ -1,6 +1,6 @@
 import json
 import re
-from agents import OpenAIAgent, GeminiAgent, Llama2Agent
+from agents import OpenAIAgent, GeminiAgent, Llama2Agent, CustomizedAgent
 import datetime
 import os
 
@@ -67,6 +67,14 @@ class LLM_Debate(Discussion):
                 agents.append(Llama2Agent(ckpt_dir=config['ckpt_dir'], 
                                           tokenizer_path=config['tokenizer_path'], 
                                           agent_name = config['agent_name']))
+            elif config['type'] == 'customizedAgent':
+                agents.append(CustomizedAgent(model_name=config['model_name'], 
+                                              agent_name = config['agent_name'], 
+                                              agent_role = config['agent_role'], 
+                                              agent_speciality = config['agent_speciality'], 
+                                              agent_role_prompt = config['agent_role_prompt'], 
+                                              speaking_rate = config['speaking_rate'],
+                                              api_url=config['api_url']))
             else:
                 raise ValueError(f"Unsupported agent type: {config['type']}")
         return agents
