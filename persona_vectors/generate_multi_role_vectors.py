@@ -258,9 +258,14 @@ def main():
         "visionary_millionaire"
     ]
     
+    for role in roles:
+        print(f"🎯 先測試 {role} 的資料產生...")
+        generator.generate_role_vectors([role], strategy="individual")
+        print("--------------------------------------------------")
+        
     # 先測試一個角色
-    print("🎯 產生獨立角色向量...")
-    individual_vectors = generator.generate_role_vectors(roles, "individual")
+    # print("🎯 產生獨立角色向量...")
+    # individual_vectors = generator.generate_role_vectors(roles, "individual")
     
     print(f"✅ 完成！產生了 {len(individual_vectors)} 個向量")
 
