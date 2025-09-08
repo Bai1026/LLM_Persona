@@ -48,7 +48,7 @@ python interactive_chat.py \
 
 ### Run the persona api for evaluation
 ```bash
-python persona_api.py --vector_path "persona_vectors/Qwen2.5-7B-Instruct/multi_role/empathetic_counselor_response_avg_diff.pt" --layer 20 --coef 2.0
+python persona_api.py --vector_path "persona_vectors/Qwen2.5-7B-Instruct/multi_role/academic_researcher_response_avg_diff.pt" --layer 20 --coef 2.0
 ```
 
 ### Run the persona api with mulitple characters
