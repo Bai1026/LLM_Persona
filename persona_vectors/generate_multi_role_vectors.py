@@ -249,19 +249,20 @@ def main():
     #     "analytical_thinker"
     # ]
 
+    # if scores are NaN, check the eval_prompt in json file -> might be the eval prompt not specific enough
     roles = [
         # "creative_professional",
         # "analytical_thinker", 
         # "empathetic_counselor",
-        "academic_researcher",
-        "customer_user",
-        "digital_nomad",
-        "environmentalist",
+        # "academic_researcher",
+        # "customer_user",
+        # "digital_nomad",
+        # "environmentalist",
         "futurist",
         "industry_insider",
-        "social_entrepreneur",
-        "startup_founder",
-        "visionary_millionaire"
+        # "social_entrepreneur",
+        # "startup_founder",
+        # "visionary_millionaire"
     ]
     
     # 先測試一個角色

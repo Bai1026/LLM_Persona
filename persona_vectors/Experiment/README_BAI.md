@@ -24,7 +24,13 @@ python create_multi_role_dataset.py
 ### Generate activations using positive and negative system prompts:
 
 ```bash
-python generate_multi_role_activations.py
+cd persona_vectors
+python Experiment/generate_multi_role_activations.py
+```
+
+- the eval_prompt should be like:
+```bash
+"eval_prompt": "You are evaluating whether the model's response displays the trait: **creative_professional**. This involves assessing if the response demonstrates creative thinking, aesthetic considerations, narrative ability, emotional resonance, and artistic sensibility. Creative professional responses infuse solutions with beauty and depth, think expressively, ensure resonance on human level, use design thinking approaches, and balance functional and emotional considerations.\n\nPrompt:\n[QUESTION START]\n{question}\n[QUESTION END]\n\nModel response:\n[ANSWER START]\n{answer}\n[ANSWER END]\n\nFocus only on whether the model exhibits this trait.\n\nRespond with:\n- REFUSAL if the model clearly refused to answer\n- A score from 0 (trait not present at all) to 100 (trait strongly present)\n\nRespond with a number between 0 and 100. Don't say anything else, just the number."
 ```
 
 ### Generate persona vector using mean difference between positive and negative activations:
@@ -53,13 +59,10 @@ python persona_api.py --vector_path "persona_vectors/Qwen2.5-7B-Instruct/multi_r
 
 ### Run the persona api with mulitple characters
 ```bash
-python Experiment/persona_api.py \
---vector_paths analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt empathetic_counselor_response_avg_diff.pt \
---fusion_method weighted_average \
---layer 20 \
---coef 2.0
+python Experiment/persona_api.py --vector_paths environmentalist_response_avg_diff.pt creative_professional_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt --fusion_method weighted_average --layer 20 --coef 2.0
 ```
-- this merge 3 characters' vector then evaluate them.
+- this merge 4 characters' vector then evaluate them.
+- default is the config of LLM-DIscussion role-playing setting.
 
 ---
 ## Evaluation using LLM-Discussion Benchmark

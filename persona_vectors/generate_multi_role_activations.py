@@ -1,6 +1,7 @@
-# import subprocess
-# import os
-# from typing import List, Dict
+import subprocess
+import os
+import pandas as pd
+from typing import List, Dict
 
 # class MultiRoleActivationGenerator:
 #     """多角色激活資料產生器"""
@@ -163,39 +164,89 @@ class MultiRoleActivationGenerator:
             import pandas as pd
             data = pd.read_csv(output_path)
             
-            if role_name in data.columns:
-                valid_scores = data[role_name].dropna()
-                if len(valid_scores) > 0:
-                    print(f"   📊 {role_name} 分數: 平均 {valid_scores.mean():.2f}, 範圍 {valid_scores.min():.2f}-{valid_scores.max():.2f}")
-                else:
-                    print(f"   ⚠️  {role_name} 所有分數都是 NaN")
-            else:
-                print(f"   ⚠️  找不到 {role_name} 欄位，可用欄位: {data.columns.tolist()}")
+            print(f"   📋 資料形狀: {data.shape}")
+            print(f"   📋 可用欄位: {data.columns.tolist()}")
+            
+            # 檢查所有欄位的資料狀態
+            for col in data.columns:
+                if col in [role_name, 'coherence']:
+                    valid_count = data[col].notna().sum()
+                    nan_count = data[col].isna().sum()
+                    print(f"   📊 {col} - 有效值: {valid_count}, NaN: {nan_count}")
+                    
+                    if valid_count > 0:
+                        valid_scores = data[col].dropna()
+                        print(f"       平均: {valid_scores.mean():.2f}, 範圍: {valid_scores.min():.2f}-{valid_scores.max():.2f}")
+                        print(f"       前5個值: {valid_scores.head().tolist()}")
+            
+            # 檢查是否有其他評分相關欄位
+            score_columns = [col for col in data.columns if any(keyword in col.lower() 
+                           for keyword in ['score', 'rating', 'judge', 'error'])]
+            if score_columns:
+                print(f"   🔍 發現評分相關欄位: {score_columns}")
+                for col in score_columns:
+                    sample_values = data[col].dropna().head(3).tolist()
+                    print(f"       {col} 範例值: {sample_values}")
+            
+            # 檢查原始資料格式
+            if len(data) > 0:
+                print(f"   📝 第一行資料範例:")
+                for col in data.columns:
+                    value = str(data[col].iloc[0])[:100]
+                    print(f"       {col}: {value}...")
                 
         except Exception as e:
             print(f"   ❌ 檢查資料品質時出錯: {e}")
+    
+    def debug_single_role(self, role_name: str = "creative_professional"):
+        """除錯單一角色的問題"""
+        output_path = f"eval_persona_extract/{self.model_short_name}/{role_name}_pos_instruct.csv"
+        
+        if os.path.exists(output_path):
+            print(f"🔍 除錯 {role_name} 資料...")
+            self._check_data_quality(output_path, role_name)
+            
+            # 檢查評估邏輯
+            try:
+                import pandas as pd
+                data = pd.read_csv(output_path)
+                
+                # 檢查是否有評分錯誤或原始輸出
+                potential_debug_cols = ['judge_output', 'raw_output', 'error', 'debug_info']
+                for col in potential_debug_cols:
+                    if col in data.columns:
+                        print(f"   🔍 {col} 範例:")
+                        sample = data[col].dropna().head(2)
+                        for i, val in enumerate(sample):
+                            print(f"      {i+1}: {str(val)[:200]}...")
+                
+            except Exception as e:
+                print(f"   ❌ 除錯時出錯: {e}")
+        else:
+            print(f"❌ 找不到檔案: {output_path}")
 
 # 使用範例
 def main():
     generator = MultiRoleActivationGenerator()
-
+    
     roles = [
-        "creative_professional",
+        # "creative_professional",
         # "analytical_thinker", 
         # "empathetic_counselor",
         # "academic_researcher",
         # "customer_user",
         # "digital_nomad",
         # "environmentalist",
-        # "futurist",
-        # "industry_insider",
+        "futurist",
+        "industry_insider",
         # "social_entrepreneur",
         # "startup_founder",
         # "visionary_millionaire"
     ]
-    
-    # 強制重新產生以解決 NaN 問題
-    generator.generate_role_activations(roles, gpu_id=0, force_regenerate=True)
+
+    for role in roles:
+        # 強制重新產生以測試修復的 eval_prompt
+        generator.generate_role_activations(roles, gpu_id=0, force_regenerate=True)
 
 if __name__ == "__main__":
     main()

@@ -244,9 +244,26 @@ def main(model, trait, output_path, coef=0, vector_path=None, layer=None, steeri
     if os.path.exists(output_path) and not overwrite:
         print(f"Output path {output_path} already exists, skipping...")
         df = pd.read_csv(output_path)
-        for trait in [trait , "coherence"]:
-            threshold = 50
-            print(f"{trait}:  {df[trait].mean():.2f} +- {df[trait].std():.2f}")
+        
+        # Debug: Show DataFrame info
+        print(f"Debug - DataFrame shape: {df.shape}")
+        print(f"Debug - DataFrame columns: {df.columns.tolist()}")
+        print(f"Debug - Data types: {df.dtypes}")
+        
+        for trait_col in [trait, "coherence"]:
+            if trait_col in df.columns:
+                # Convert to numeric, handling any parsing issues
+                df[trait_col] = pd.to_numeric(df[trait_col], errors='coerce')
+                valid_scores = df[trait_col].dropna()
+                print(f"Debug - {trait_col} column: {len(valid_scores)} valid scores out of {len(df)}")
+                if len(valid_scores) > 0:
+                    print(f"{trait_col}:  {valid_scores.mean():.2f} +- {valid_scores.std():.2f}")
+                else:
+                    print(f"{trait_col}: All scores are NaN")
+                    # Show first few values for debugging
+                    print(f"Debug - First 5 {trait_col} values: {df[trait_col].head().tolist()}")
+            else:
+                print(f"Warning: Column '{trait_col}' not found in DataFrame")
         return
     
     print(output_path)

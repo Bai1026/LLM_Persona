@@ -31,8 +31,20 @@ def write_results_to_csv(input_file_name, mean_std_results, csv_file_path, versi
 
     Task = parts[0] # AUT, Scientific, Similarities, Instances
     Type = parts[2] # debate, conversational
-    Data_Num = parts[-1].split('-')[0]
-    Raw_Timestamp = parts[-2].split('-')
+    Data_Num = parts[-1].split('-')[0] if '-' in parts[-1] else parts[-1]
+    
+    # Find timestamp part
+    timestamp_part = None
+    for part in parts:
+        if '-' in part and len(part) > 5:  # Look for timestamp format
+            timestamp_part = part
+            break
+    
+    if timestamp_part:
+        Raw_Timestamp = timestamp_part.split('-')
+    else:
+        Raw_Timestamp = parts[-2].split('-') if len(parts) > 2 else ["", ""]
+    
     print("Raw_Timestamp: ", Raw_Timestamp)
     
     # 修正時間戳記解析邏輯
@@ -88,12 +100,21 @@ def write_results_to_csv(input_file_name, mean_std_results, csv_file_path, versi
         Role_Name = parts[6]  # "VanillaQwen"
     elif parts[1] == "persona":
         # Handle persona API format: AUT_persona_api_1_1_PersonaAPI_PersonaAPI_persona_api_20250903-144738_10
+        # OR shorter format: AUT_persona_api_0907-1546_10
         Type = "api"
         Mode = "persona"
         Agent = "PersonaAPI"
-        Rounds = parts[3]  # "1"
-        Model_Name = parts[5]  # "PersonaAPI"
-        Role_Name = parts[6]  # "PersonaAPI"
+        
+        if len(parts) >= 7:
+            # Long format: AUT_persona_api_1_1_PersonaAPI_PersonaAPI_persona_api_20250903-144738_10
+            Rounds = parts[3]  # "1"
+            Model_Name = parts[5]  # "PersonaAPI"
+            Role_Name = parts[6]  # "PersonaAPI"
+        else:
+            # Short format: AUT_persona_api_0907-1546_10
+            Rounds = "1"  # Default value
+            Model_Name = "PersonaAPI"  # Default value
+            Role_Name = "PersonaAPI"  # Default value
     elif parts[1] == "openai":
         # Handle OpenAI baseline format: AUT_openai_baseline_1_1_gpt_4_OpenAI_baseline_20250903-144738_10
         Type = "baseline"
