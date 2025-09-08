@@ -181,8 +181,8 @@ def main():
     
     roles = [
         "creative_professional",
-        # "analytical_thinker", 
-        # "empathetic_counselor",
+        "analytical_thinker", 
+        "empathetic_counselor",
         "academic_researcher",
         "customer_user",
         "digital_nomad",

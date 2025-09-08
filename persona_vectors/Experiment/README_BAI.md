@@ -15,8 +15,11 @@
 ```
 
 ---
+
 ## Before getting the character persona vector
+
 ### Generate dataset
+
 ```bash
 python create_multi_role_dataset.py
 ```
@@ -34,6 +37,7 @@ python generate_multi_role_vectors.py
 ```
 
 ---
+
 ## After getting the character persona vector
 
 ### Run the interactive chat
@@ -47,34 +51,42 @@ python interactive_chat.py \
 ```
 
 ### Run the persona api for evaluation
+
 ```bash
 python persona_api.py --vector_path "persona_vectors/Qwen2.5-7B-Instruct/multi_role/academic_researcher_response_avg_diff.pt" --layer 20 --coef 2.0
 ```
 
 ### Run the persona api with mulitple characters
+
 ```bash
 python Experiment/persona_api.py \
---vector_paths analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt empathetic_counselor_response_avg_diff.pt \
+--vector_paths analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt \
 --fusion_method weighted_average \
 --layer 20 \
 --coef 2.0
 ```
-- this merge 3 characters' vector then evaluate them.
+
+- this merge 4 characters' vector then evaluate them.
+- This is also the LLM-Dicussion benchmark evaluation setting.
 
 ---
+
 ## Evaluation using LLM-Discussion Benchmark
 
 - First: `cd Experiments`
 
 ### Auto evaluate after generating dataset
+
 ```bash
 python auto_eval_persona.py \
-  -d ../Datasets/AUT/aut_2.json \
+  -d ../Datasets/AUT/aut_10.json \
   -t AUT \
   -p 1 \
   -v 4
 ```
+
 Baseline Version (gpt-4o-mini)
+
 ```bash
 python auto_eval_persona.py \
   -d ../Datasets/AUT/aut_2.json \
@@ -86,9 +98,10 @@ python auto_eval_persona.py \
 ```
 
 ### Manual evaluate after generating dataset
+
 ```bash
 python auto_grade_final.py \
-  -i "AUT_persona_api_1_1_PersonaAPI_PersonaAPI_persona_api_20250901-025003_2" \
+  -i "AUT_persona_api_0908-0548_10" \
   -t sampling \
   -d AUT \
   -v 4 \

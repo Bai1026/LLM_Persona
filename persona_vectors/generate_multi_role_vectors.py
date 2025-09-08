@@ -245,8 +245,8 @@ def main():
     
     roles = [
         "creative_professional",
-        # "analytical_thinker", 
-        # "empathetic_counselor",
+        "analytical_thinker", 
+        "empathetic_counselor",
         "academic_researcher",
         "customer_user",
         "digital_nomad",
@@ -262,7 +262,7 @@ def main():
         print(f"🎯 先測試 {role} 的資料產生...")
         generator.generate_role_vectors([role], strategy="individual")
         print("--------------------------------------------------")
-        
+
     # 先測試一個角色
     # print("🎯 產生獨立角色向量...")
     # individual_vectors = generator.generate_role_vectors(roles, "individual")
