@@ -69,6 +69,13 @@ python Experiment/persona_api.py \
 - this merge 4 characters' vector then evaluate them.
 - This is also the LLM-Dicussion benchmark evaluation setting.
 
+- if wanna run Llama
+  - also need to change the folder path in `multi_persona_handler.py` line 101
+
+```bash
+python Experiment/persona_api.py --model meta-llama/Llama-3.1-8B-Instruct --vector_paths analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt --fusion_method weighted_average --layer 20 --coef 2.0
+```
+
 ---
 
 ## Evaluation using LLM-Discussion Benchmark
