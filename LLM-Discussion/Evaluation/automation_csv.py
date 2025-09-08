@@ -28,11 +28,20 @@ def write_results_to_csv(input_file_name, mean_std_results, csv_file_path, versi
     headers = ['Timestamp', 'Task', 'Type', 'Mode', 'Agent', 'Round','Model Name', 'Role Name', 'Data Num', 'Mean Fluency', 'STD Fluency', 'Mean Flexibility', 'STD Flexibility', 'Mean Originality', 'STD Originality', 'Mean Elaboration', 'STD Elaboration', 'File Name']
     csv_data = []
     parts = input_file_name.split('_')
-
-    Task = parts[0] # AUT, Scientific, Similarities, Instances
-    Type = parts[2] # debate, conversational
-    Data_Num = parts[-1].split('-')[0]
-    Raw_Timestamp = parts[-2].split('-')
+    
+    # Check if this is the new evaluation format: evaluation_AUT_persona_api_0908-0548_10_sampling_4.json
+    if parts[0] == "evaluation":
+        Task = parts[1]  # AUT
+        Type = parts[2]  # persona
+        Mode = parts[3]  # api
+        Data_Num = parts[5]  # 10
+        Raw_Timestamp = parts[4].split('-')  # 0908-0548
+    else:
+        # Original format
+        Task = parts[0] # AUT, Scientific, Similarities, Instances
+        Type = parts[2] # debate, conversational
+        Data_Num = parts[-1].split('-')[0]
+        Raw_Timestamp = parts[-2].split('-')
     print("Raw_Timestamp: ", Raw_Timestamp)
     
     # 修正時間戳記解析邏輯
@@ -66,42 +75,59 @@ def write_results_to_csv(input_file_name, mean_std_results, csv_file_path, versi
 
     Mode, Agent, Rounds, Model_Name, Role_Name = None, None, None, None, None  # Initialize to None
 
-    if parts[1] == "single":
-        Agent = parts[4]
-        Rounds = parts[5]
-        Model_Name = parts[6]
-        Mode = parts[3]
-        Role_Name = parts[7]
+    # Handle the new evaluation format first
+    if parts[0] == "evaluation":
+        if parts[2] == "persona" and parts[3] == "api":
+            Type = "api"
+            Mode = "persona"
+            Agent = "PersonaAPI"
+            Rounds = "1"  # Default for evaluation format
+            Model_Name = "PersonaAPI"
+            Role_Name = "PersonaAPI"
+        else:
+            # Generic evaluation format handling
+            Type = parts[2]
+            Mode = parts[3] if len(parts) > 3 else "unknown"
+            Agent = "Evaluation"
+            Rounds = "1"
+            Model_Name = "Unknown"
+            Role_Name = "Unknown"
+    elif parts[1] == "single":
+        Agent = parts[4] if len(parts) > 4 else "Unknown"
+        Rounds = parts[5] if len(parts) > 5 else "1"
+        Model_Name = parts[6] if len(parts) > 6 else "Unknown"
+        Mode = parts[3] if len(parts) > 3 else "single"
+        Role_Name = parts[7] if len(parts) > 7 else "Unknown"
     elif parts[1] == 'multi':
-        Mode = parts[3]
-        Agent = parts[4]
-        Rounds = parts[5]
-        Model_Name = parts[6]
-        Role_Name = parts[7]
+        Mode = parts[3] if len(parts) > 3 else "multi"
+        Agent = parts[4] if len(parts) > 4 else "Unknown"
+        Rounds = parts[5] if len(parts) > 5 else "1"
+        Model_Name = parts[6] if len(parts) > 6 else "Unknown"
+        Role_Name = parts[7] if len(parts) > 7 else "Unknown"
     elif parts[1] == "vanilla":
         # Handle vanilla Qwen format: AUT_vanilla_qwen_1_1_Qwen25_VanillaQwen_vanilla_20250903-144738_10
         Type = "vanilla"
         Mode = "vanilla"
         Agent = "VanillaQwen"
-        Rounds = parts[3]  # "1"
-        Model_Name = parts[5]  # "Qwen25"
-        Role_Name = parts[6]  # "VanillaQwen"
+        Rounds = parts[3] if len(parts) > 3 else "1"  # "1"
+        Model_Name = parts[5] if len(parts) > 5 else "Qwen25"  # "Qwen25"
+        Role_Name = parts[6] if len(parts) > 6 else "VanillaQwen"  # "VanillaQwen"
     elif parts[1] == "persona":
         # Handle persona API format: AUT_persona_api_1_1_PersonaAPI_PersonaAPI_persona_api_20250903-144738_10
         Type = "api"
         Mode = "persona"
         Agent = "PersonaAPI"
         Rounds = parts[3]  # "1"
-        Model_Name = parts[5]  # "PersonaAPI"
-        Role_Name = parts[6]  # "PersonaAPI"
+        Model_Name = parts[5] if len(parts) > 5 else "PersonaAPI"  # "PersonaAPI"
+        Role_Name = parts[6] if len(parts) > 6 else "PersonaAPI"  # "PersonaAPI"
     elif parts[1] == "openai":
         # Handle OpenAI baseline format: AUT_openai_baseline_1_1_gpt_4_OpenAI_baseline_20250903-144738_10
         Type = "baseline"
         Mode = "baseline"
         Agent = "OpenAI"
         Rounds = parts[3]  # "1"
-        Model_Name = parts[5]  # "gpt_4"
-        Role_Name = parts[6]  # "OpenAI"
+        Model_Name = parts[5] if len(parts) > 5 else "gpt_4"  # "gpt_4"
+        Role_Name = parts[6] if len(parts) > 6 else "OpenAI"  # "OpenAI"
     else:
         print(f'ERROR AGENT!! Unknown format: {parts[1]}')
         print(f'Full filename: {input_file_name}')
@@ -142,3 +168,7 @@ def write_results_to_csv(input_file_name, mean_std_results, csv_file_path, versi
         print(f'ERROR: Failed to write data to CSV due to {e}')
 
     print(f'Data sorted by Timestamp and Data and saved to {csv_file_path}')
+
+# Example usage
+if __name__ == "__main__":
+    intput_file_name = "AUT_persona_api_0908-0548_10_sampling_4.json"
