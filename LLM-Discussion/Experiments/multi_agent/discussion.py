@@ -3,6 +3,7 @@ import re
 from agents import OpenAIAgent, GeminiAgent, Llama2Agent, CustomizedAgent
 import datetime
 import os
+import pytz
 
 class Discussion:
     PROMPTS = {
@@ -124,7 +125,9 @@ class LLM_Debate(Discussion):
     
     @staticmethod
     def get_current_datetime():
-        current_time = datetime.datetime.now()
+        # 使用 UTC+8 時區（台灣時間）
+        taipei_tz = pytz.timezone('Asia/Taipei')
+        current_time = datetime.datetime.now(taipei_tz)
         current_date = current_time.strftime("%Y-%m-%d")
         formatted_time = current_time.strftime("%H-%M-%S")
         return current_date, formatted_time

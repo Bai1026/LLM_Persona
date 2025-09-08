@@ -6,6 +6,7 @@ import openai
 from pathlib import Path
 from datetime import datetime
 from types import SimpleNamespace
+import pytz
 
 class OpenAIBaselineRunner:
     """使用 Pure OpenAI API 進行創造性任務的基線模型"""
@@ -179,8 +180,13 @@ class OpenAIBaselineRunner:
     
     def save_results(self, all_responses, final_results, amount_of_data):
         """儲存結果檔案"""
-        current_date = datetime.now().strftime("%Y%m%d")
-        formatted_time = datetime.now().strftime("%H%M%S")
+        # 使用 UTC+8 時區（台灣時間）
+        taipei_tz = pytz.timezone('Asia/Taipei')
+        taipei_time = datetime.now(taipei_tz)
+        
+        # 修改為與其他檔案一致的格式：MMDD-HHMM
+        current_date = taipei_time.strftime("%m%d")
+        formatted_time = taipei_time.strftime("%H%M")
         
         # 建立檔案名稱
         model_name = self.model_name.replace("-", "_").replace(".", "_")

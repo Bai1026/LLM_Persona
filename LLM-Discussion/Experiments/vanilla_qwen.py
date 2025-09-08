@@ -7,6 +7,7 @@ from pathlib import Path
 from datetime import datetime
 from types import SimpleNamespace
 from transformers import AutoTokenizer, AutoModelForCausalLM
+import pytz
 
 class VanillaQwenRunner:
     """使用原始 Qwen 模型進行創造性任務（無 Persona Steering）"""
@@ -200,8 +201,13 @@ class VanillaQwenRunner:
     
     def save_results(self, all_responses, final_results, amount_of_data):
         """儲存結果檔案"""
-        current_date = datetime.now().strftime("%Y%m%d")
-        formatted_time = datetime.now().strftime("%H%M%S")
+        # 使用 UTC+8 時區（台灣時間）
+        taipei_tz = pytz.timezone('Asia/Taipei')
+        taipei_time = datetime.now(taipei_tz)
+        
+        # 修改為與其他檔案一致的格式：MMDD-HHMM
+        current_date = taipei_time.strftime("%m%d")
+        formatted_time = taipei_time.strftime("%H%M")
         
         # 建立檔案名稱（符合評估系統格式）
         base_filename = f"{self.task_type}_vanilla_qwen_1_1_Qwen25_VanillaQwen_vanilla_{current_date}-{formatted_time}_{amount_of_data}"
