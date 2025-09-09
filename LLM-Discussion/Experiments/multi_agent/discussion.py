@@ -1,6 +1,6 @@
 import json
 import re
-from agents import OpenAIAgent, GeminiAgent, Llama2Agent, CustomizedAgent
+from agents import OpenAIAgent, GeminiAgent, Llama2Agent, QwenAgent, Llama3Agent, CustomizedAgent
 import datetime
 import os
 import pytz
@@ -50,6 +50,7 @@ class LLM_Debate(Discussion):
     def initialize_agents(self, agents_config):
         agents = []
         for config in agents_config:
+            print(f"Using {config['type']}")
             if config['type'] == 'openai':
                 agents.append(OpenAIAgent(model_name=config['model_name'], 
                                           agent_name = config['agent_name'], 
@@ -68,6 +69,20 @@ class LLM_Debate(Discussion):
                 agents.append(Llama2Agent(ckpt_dir=config['ckpt_dir'], 
                                           tokenizer_path=config['tokenizer_path'], 
                                           agent_name = config['agent_name']))
+            elif config['type'] == 'qwen':
+                agents.append(QwenAgent(model_name=config['model_name'], 
+                                          agent_name = config['agent_name'], 
+                                          agent_role = config['agent_role'], 
+                                          agent_speciality = config['agent_speciality'], 
+                                          agent_role_prompt = config['agent_role_prompt'], 
+                                          speaking_rate = config['speaking_rate']))
+            elif config['type'] == 'llama-3.1-8B':
+                agents.append(Llama3Agent(model_name=config['model_name'], 
+                                          agent_name = config['agent_name'], 
+                                          agent_role = config['agent_role'], 
+                                          agent_speciality = config['agent_speciality'], 
+                                          agent_role_prompt = config['agent_role_prompt'], 
+                                          speaking_rate = config['speaking_rate']))
             elif config['type'] == 'customizedAgent':
                 agents.append(CustomizedAgent(model_name=config['model_name'], 
                                               agent_name = config['agent_name'], 
@@ -345,6 +360,7 @@ class LLM_Discussion_AUT(LLM_Debate):
             problem_template = " ".join(dataset["Task"][0]["Problem"])
             question = problem_template.replace("{object}", object)
             print("Discussion Prompt is ", self.discussion_prompt)
+            print(f"Question: {question}")
             initial_prompt = "Initiate a discussion with others to collectively complete the following task: " + question + self.discussion_prompt
             most_recent_responses = {}
             # ------------------------------------------
@@ -385,6 +401,7 @@ class LLM_Discussion_AUT(LLM_Debate):
                     round_responses[agent.agent_name].append(formatted_response)
                 most_recent_responses = round_responses
             all_responses[question] = chat_history
+            # output_file = self.save_debate_conversations(self.agents, all_responses, init_results, final_results, amount_of_data, task_type=self.task_type)
 
         output_file = self.save_debate_conversations(self.agents, all_responses, init_results, final_results, amount_of_data, task_type=self.task_type)
         return output_file

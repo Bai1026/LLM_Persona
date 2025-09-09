@@ -147,7 +147,80 @@ class Llama2Agent(Agent):
     
     def construct_user_message(self, content):
         return {"role": "user", "content": content}
+
+
+class QwenAgent(Agent):
+    def __init__(self, model_name, agent_name, agent_role, agent_speciality, agent_role_prompt, speaking_rate, missing_history = []):
+        self.model_name = model_name
+        self.agent_name = agent_name
+        self.agent_role = agent_role
+        self.agent_speciality = agent_speciality
+        self.agent_role_prompt = agent_role_prompt
+        self.speaking_rate = speaking_rate
+        self.missing_history = missing_history
+        
+    def generate_answer(self, answer_context, api_idx=0):
+        try:
+            client = OpenAI(
+                base_url = "https://integrate.api.nvidia.com/v1",
+                api_key = os.getenv(f"NVIDIA_API_KEY_{api_idx}")
+            )
+            completion = client.chat.completions.create(
+                model="qwen/"+self.model_name,
+                messages=answer_context,
+                n=1
+            )
+            result = completion.choices[0].message.content
+            return result
+
+        except Exception as e:
+            print(f"Error with model {self.model_name}: {e}\nsleep 60s, api idx: {api_idx}")
+            time.sleep(60)
+            api_idx = (api_idx+1)%4
+            return self.generate_answer(answer_context, api_idx)
+
+    def construct_assistant_message(self, content):
+        return {"role": "assistant", "content": content}
     
+    def construct_user_message(self, content):
+        return {"role": "user", "content": content}
+
+class Llama3Agent(Agent):
+    def __init__(self, model_name, agent_name, agent_role, agent_speciality, agent_role_prompt, speaking_rate, missing_history = []):
+        self.model_name = model_name
+        self.agent_name = agent_name
+        self.agent_role = agent_role
+        self.agent_speciality = agent_speciality
+        self.agent_role_prompt = agent_role_prompt
+        self.speaking_rate = speaking_rate
+        self.missing_history = missing_history
+        
+    def generate_answer(self, answer_context, api_idx=0):
+        try:
+            client = OpenAI(
+                base_url = "https://integrate.api.nvidia.com/v1",
+                api_key = os.getenv(f"NVIDIA_API_KEY_{api_idx}")
+            )
+            completion = client.chat.completions.create(
+                model="meta/"+self.model_name,
+                messages=answer_context,
+                n=1
+            )
+            result = completion.choices[0].message.content
+            return result
+
+        except Exception as e:
+            print(f"Error with model {self.model_name}: {e}\nsleep 60s, api idx: {api_idx}")
+            time.sleep(60)
+            api_idx = (api_idx+1)%4
+            return self.generate_answer(answer_context, api_idx)
+
+    def construct_assistant_message(self, content):
+        return {"role": "assistant", "content": content}
+    
+    def construct_user_message(self, content):
+        return {"role": "user", "content": content}
+
 class CustomizedAgent(Agent):
     def __init__(self, model_name, agent_name, agent_role, agent_speciality, agent_role_prompt, speaking_rate, api_url, missing_history = []):
         self.model_name = model_name

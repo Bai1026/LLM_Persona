@@ -29,6 +29,8 @@ def main():
         agents_config = LLM_Discussion_Instance_Similarities.load_config(args.config)
         discussion_runner = LLM_Discussion_Instance_Similarities(agents_config, args.dataset, args.rounds, args.type, args.prompt)
     discussion_output = discussion_runner.run()
+    ## Qwen baseline evaluation
+    # discussion_output = "../../Results/AUT/Output/multi_agent/AUT_multi_debate_roleplay_4_5_qwen2-5-7b-instruct_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-09-03-13-47_10.json"
     
     if args.eval_mode:
         root_path = Path(__file__).resolve().parents[2]
@@ -39,7 +41,7 @@ def main():
         input_file_name = os.path.splitext(os.path.basename(discussion_output))[0]
 
         args = SimpleNamespace(
-            version="3", 
+            version="4", ## gpt-4o-mini
             input_file=input_file_name, 
             type="sampling", 
             sample=3, 
