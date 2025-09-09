@@ -328,7 +328,8 @@ class LLM_Debate_Instance_Similarities_Baseline(LLM_Debate):
     
 class LLM_Discussion_AUT(LLM_Debate):
     def run(self):
-        print(f"Starting LLM_Debate.run with dataset: {self.dataset_file}")
+        # TODO: typo here
+        print(f"Starting LLM Discussion.run with dataset: {self.dataset_file}")
         with open(self.dataset_file, 'r') as f:
             dataset = json.load(f)
         all_responses = {}
