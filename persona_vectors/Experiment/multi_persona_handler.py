@@ -98,8 +98,9 @@ class MultiPersonaChatbot:
         for path in vector_paths:
             if not Path(path).exists():
                 # 嘗試在 persona_vectors/Qwen2.5-7B-Instruct/multi_role/ 目錄中尋找
-                # full_path = Path(__file__).parent.parent / "persona_vectors" / "Qwen2.5-7B-Instruct" / "multi_role" / path
-                full_path = Path(__file__).parent.parent / "persona_vectors" / "Llama-3.1-8B-Instruct" / "multi_role" / path
+                full_path = Path(__file__).parent.parent / "persona_vectors" / "Qwen2.5-7B-Instruct" / "multi_role" / path
+                # full_path = Path(__file__).parent.parent / "persona_vectors" / "Llama-3.1-8B-Instruct" / "multi_role" / path
+
                 if full_path.exists():
                     processed_paths.append(str(full_path))
                     print(f"📁 找到向量檔案: {full_path}")

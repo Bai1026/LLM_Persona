@@ -84,10 +84,38 @@ python Experiment/persona_api.py --model meta-llama/Llama-3.1-8B-Instruct --vect
 
 ### Auto evaluate after generating dataset
 
+- AUT
+
 ```bash
 python auto_eval_persona.py \
   -d ../Datasets/AUT/aut_10.json \
   -t AUT \
+  -p 1 \
+  -v 4
+```
+
+- Scientific
+
+```bash
+ython auto_eval_persona.py   -d ../Datasets/Scientific/scientific_3.json   -t Scientific   -p 1   -v 4
+```
+
+- Similarities
+
+```bash
+python auto_eval_persona.py \
+  -d ../Datasets/Similarities/similarities_10.json \
+  -t Similarities \
+  -p 1 \
+  -v 4
+```
+
+- Instances
+
+```bash
+python auto_eval_persona.py \
+  -d ../Datasets/Instances/instances_10.json \
+  -t Instances \
   -p 1 \
   -v 4
 ```
