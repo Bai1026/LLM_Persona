@@ -76,7 +76,7 @@ class LLM_Debate(Discussion):
                                           agent_speciality = config['agent_speciality'], 
                                           agent_role_prompt = config['agent_role_prompt'], 
                                           speaking_rate = config['speaking_rate']))
-            elif config['type'] == 'llama-3.1-8B':
+            elif config['type'] == 'llama-3.1-8B' or config['type'] == 'llama-3.1-405b-instruct':
                 agents.append(Llama3Agent(model_name=config['model_name'], 
                                           agent_name = config['agent_name'], 
                                           agent_role = config['agent_role'], 
