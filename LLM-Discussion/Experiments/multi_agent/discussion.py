@@ -360,7 +360,7 @@ class LLM_Discussion_AUT(LLM_Debate):
             problem_template = " ".join(dataset["Task"][0]["Problem"])
             question = problem_template.replace("{object}", object)
             print("Discussion Prompt is ", self.discussion_prompt)
-            print(f"Question: {question}")
+            print(f"\nQuestion: {question}\n")
             initial_prompt = "Initiate a discussion with others to collectively complete the following task: " + question + self.discussion_prompt
             most_recent_responses = {}
             # ------------------------------------------
