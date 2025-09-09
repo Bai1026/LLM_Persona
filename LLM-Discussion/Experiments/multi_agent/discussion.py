@@ -1,6 +1,6 @@
 import json
 import re
-from agents import OpenAIAgent, GeminiAgent, Llama2Agent, QwenAgent, CustomizedAgent
+from agents import OpenAIAgent, GeminiAgent, Llama2Agent, QwenAgent, Llama3Agent, CustomizedAgent
 import datetime
 import os
 import pytz
@@ -71,6 +71,13 @@ class LLM_Debate(Discussion):
                                           agent_name = config['agent_name']))
             elif config['type'] == 'qwen':
                 agents.append(QwenAgent(model_name=config['model_name'], 
+                                          agent_name = config['agent_name'], 
+                                          agent_role = config['agent_role'], 
+                                          agent_speciality = config['agent_speciality'], 
+                                          agent_role_prompt = config['agent_role_prompt'], 
+                                          speaking_rate = config['speaking_rate']))
+            elif config['type'] == 'llama-3.1-8B':
+                agents.append(Llama3Agent(model_name=config['model_name'], 
                                           agent_name = config['agent_name'], 
                                           agent_role = config['agent_role'], 
                                           agent_speciality = config['agent_speciality'], 
