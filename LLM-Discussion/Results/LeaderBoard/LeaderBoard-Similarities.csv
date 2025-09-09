@@ -1,0 +1,2 @@
+Timestamp,Task,Type,Mode,Agent,Round,Model Name,Role Name,Data Num,Mean Fluency,STD Fluency,Mean Flexibility,STD Flexibility,Mean Originality,STD Originality,Mean Elaboration,STD Elaboration,File Name
+0910-0401,Similarities,api,persona,PersonaAPI,1,PersonaAPI,PersonaAPI,10,4.967,0.1,5.0,0.0,2.64,0.356,2.74,0.358,Similarities_persona_api_0910-0401_10
