@@ -116,11 +116,11 @@ class PersonaAPIRunner:
         if self.task_type == "AUT":
             task_prompt = f"請為「{item}」提供5個創新和原創的用途。{discussion_prompt}"
         elif self.task_type == "Scientific":
-            task_prompt = f"請為以下科學問題提供3個創新的解決方案：{item}。{discussion_prompt}"
+            task_prompt = f"請為以下科學問題提供5個創新的解決方案：{item}。{discussion_prompt}"
         elif self.task_type == "Instances":
             task_prompt = f"請為「{item}」提供5個創造性的範例。{discussion_prompt}"
         elif self.task_type == "Similarities":
-            task_prompt = f"請分析以下相似性並提供3個創造性的觀點：{item}。{discussion_prompt}"
+            task_prompt = f"請分析以下相似性並提供5個創造性的觀點：{item}。{discussion_prompt}"
         
         return task_prompt
 
@@ -147,8 +147,14 @@ class PersonaAPIRunner:
         
         dataset = self.load_dataset()
         
-        # 從資料集中提取 Examples
-        if isinstance(dataset, dict) and "Examples" in dataset:
+        # 根據任務類型提取資料
+        if self.task_type == "Scientific":
+            # Scientific 資料集格式：{"Task": [{"Original": "...", "Example": [...]}]}
+            examples = []
+            for task in dataset.get("Task", []):
+                examples.extend(task.get("Example", []))
+        elif isinstance(dataset, dict) and "Examples" in dataset:
+            # AUT, Instances, Similarities 格式：{"Examples": [...]}
             examples = dataset["Examples"]
         else:
             examples = dataset
@@ -161,14 +167,14 @@ class PersonaAPIRunner:
         for item_data in examples:
             # 處理不同的資料集格式
             if isinstance(item_data, str):
-                # 如果是字串格式
+                # 如果是字串格式（Scientific, Instances, Similarities 通常是這種格式）
                 item = item_data
             elif isinstance(item_data, dict):
                 # 如果是字典格式，獲取項目內容
                 if self.task_type == "AUT":
                     item = item_data.get("object", item_data.get("item", ""))
                 elif self.task_type == "Scientific":
-                    item = item_data.get("question", "")
+                    item = item_data.get("question", item_data.get("item", ""))
                 else:  # Instances 或 Similarities
                     item = item_data.get("question", item_data.get("item", item_data.get("object", "")))
             else:

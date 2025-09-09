@@ -123,8 +123,14 @@ class VanillaQwenRunner:
         """執行原始 Qwen 模型推理"""
         dataset = self.load_dataset()
         
-        # 從資料集中提取 Examples
-        if isinstance(dataset, dict) and "Examples" in dataset:
+        # 根據任務類型提取資料
+        if self.task_type == "Scientific":
+            # Scientific 資料集格式：{"Task": [{"Original": "...", "Example": [...]}]}
+            examples = []
+            for task in dataset.get("Task", []):
+                examples.extend(task.get("Example", []))
+        elif isinstance(dataset, dict) and "Examples" in dataset:
+            # AUT, Instances, Similarities 格式：{"Examples": [...]}
             examples = dataset["Examples"]
         else:
             examples = dataset
