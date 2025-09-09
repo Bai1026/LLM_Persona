@@ -76,7 +76,7 @@ class LLM_Debate(Discussion):
                                           agent_speciality = config['agent_speciality'], 
                                           agent_role_prompt = config['agent_role_prompt'], 
                                           speaking_rate = config['speaking_rate']))
-            elif config['type'] == 'llama-3.1-8B':
+            elif config['type'] == 'llama-3.1-8B' or config['type'] == 'llama-3.1-405b-instruct':
                 agents.append(Llama3Agent(model_name=config['model_name'], 
                                           agent_name = config['agent_name'], 
                                           agent_role = config['agent_role'], 
@@ -360,7 +360,7 @@ class LLM_Discussion_AUT(LLM_Debate):
             problem_template = " ".join(dataset["Task"][0]["Problem"])
             question = problem_template.replace("{object}", object)
             print("Discussion Prompt is ", self.discussion_prompt)
-            print(f"Question: {question}")
+            print(f"\nQuestion: {question}\n")
             initial_prompt = "Initiate a discussion with others to collectively complete the following task: " + question + self.discussion_prompt
             most_recent_responses = {}
             # ------------------------------------------

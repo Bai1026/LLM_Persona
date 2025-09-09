@@ -20,6 +20,9 @@ python llm_discussion.py -c <path_to_config_file> -d <path_to_dataset_file> -t <
 ```bash
 python3 llm_discussion.py -c config_role.json -d /home/chenlawrance/exp_repo/LLM-Creativity/Datasets/AUT/aut_30_test.json -r 5 -t AUT -e
 ```
+```python
+python llm_discussion.py -c config_role_llama405B.json -d /Users/reiiwang/Research/persona3/LLM_Persona/LLM-Discussion/Datasets/AUT/aut_10.json -r 5 -t AUT -e
+```
 
 ### Arguments:
 - -c, --config: Required. Path to the configuration file for agents.
