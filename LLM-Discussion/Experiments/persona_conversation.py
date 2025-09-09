@@ -63,66 +63,66 @@ class PersonaAPIRunner:
         with open(self.dataset_file, 'r', encoding='utf-8') as f:
             return json.load(f)
     
-    # def construct_prompt(self, item):
-    #     """建構提示詞"""
-    #     # 將 LLM Discussion 的協作提示詞改為單一代理版本
-    #     base_prompts = {
-    #         1: "You are working on a creative task; as a result, answer as diversely and creatively as you can.",
-    #         2: "You're in a brainstorming session where each idea leads to the next. Embrace the flow of creativity without limits, building on suggestions for unexpected connections.",
-    #         3: "Pretend you are at a think tank where unconventional ideas are the norm. Challenge yourself to think from different perspectives, considering the most unusual or innovative ideas.",
-    #         4: "Engage in a creative thinking process where you contribute unique insights and queries, aiming to delve into uncharted territories of thought. Focus on expanding the scope and depth of your contribution through innovative thinking, counterpoints, and further questioning. The objective is to achieve a broad spectrum of ideas and solutions, promoting continuous learning and innovation.",
-    #         5: "Envision yourself as an expert on a mission to solve a challenge using only your creativity and wit. How would you piece together clues from different perspectives to find the solution? This would be crucial to the success of the mission."
-    #     }
-        
-    #     # use the -p parameter
-    #     discussion_prompt = base_prompts.get(self.prompt_id, base_prompts[1])
-        
-    #     if self.task_type == "AUT":
-    #         # # 使用與 LLM Discussion 相同的完整任務描述格式, this does not work well for Qwen and Llama
-    #         # task_description = f"What are some creative use for {item}? The goal is to come up with creative ideas, which are ideas that strike people as clever, unusual, interesting, uncommon, humorous, innovative, or different. Present a list of as many creative and diverse uses for {item} as possible."
-    #         # task_prompt = f"Can you answer the following question as creatively as possible: {task_description} {discussion_prompt} Please put your answer in a list format, starting with 1. ... 2. ... 3. ... and so on."
-
-    #         # Test-1
-    #         task_prompt = f"Please provide 5 innovative and original uses for '{item}'. {discussion_prompt}"
-
-    #         # Test-2
-    #         # task_prompt = f"Please provide some innovative and original uses for '{item}'. {discussion_prompt}"
-
-    #         # Task-3
-    #         # task_prompt = f"Please provide 10 innovative and original uses for '{item}'. {discussion_prompt}"
-
-    #     elif self.task_type == "Scientific":
-    #         task_prompt = f"Can you answer the following scientific question as creatively as possible: {item} {discussion_prompt} Please provide 3 innovative solutions in a list format, starting with 1. ... 2. ... 3. ..."
-    #     elif self.task_type == "Instances":
-    #         task_prompt = f"Can you answer the following question as creatively as possible: {item} {discussion_prompt} Please provide 5 creative examples in a list format, starting with 1. ... 2. ... 3. ... and so on."
-    #     elif self.task_type == "Similarities":
-    #         task_prompt = f"Can you answer the following question as creatively as possible: {item} {discussion_prompt} Please provide 3 creative perspectives in a list format, starting with 1. ... 2. ... 3. ..."
-        
-    #     return task_prompt
-    
-    # Chinese version of construct_prompt (better for Qwen and Llama)
     def construct_prompt(self, item):
         """建構提示詞"""
+        # 將 LLM Discussion 的協作提示詞改為單一代理版本
         base_prompts = {
-            1: "請盡可能多樣化和創造性地回答。",
-            2: "無限制地擁抱創造力的流動，提供意想不到的連接。",
-            3: "請從不同角度思考，考慮最不尋常或創新的想法。",
-            4: "請提供獨特的見解，專注於創新的想法和解決方案。",
-            5: "請使用你的創造力和智慧來提供最佳解決方案。"
+            1: "You are working on a creative task; as a result, answer as diversely and creatively as you can.",
+            2: "You're in a brainstorming session where each idea leads to the next. Embrace the flow of creativity without limits, building on suggestions for unexpected connections.",
+            3: "Pretend you are at a think tank where unconventional ideas are the norm. Challenge yourself to think from different perspectives, considering the most unusual or innovative ideas.",
+            4: "Engage in a creative thinking process where you contribute unique insights and queries, aiming to delve into uncharted territories of thought. Focus on expanding the scope and depth of your contribution through innovative thinking, counterpoints, and further questioning. The objective is to achieve a broad spectrum of ideas and solutions, promoting continuous learning and innovation.",
+            5: "Envision yourself as an expert on a mission to solve a challenge using only your creativity and wit. How would you piece together clues from different perspectives to find the solution? This would be crucial to the success of the mission."
         }
         
+        # use the -p parameter
         discussion_prompt = base_prompts.get(self.prompt_id, base_prompts[1])
         
         if self.task_type == "AUT":
-            task_prompt = f"請為「{item}」提供5個創新和原創的用途。{discussion_prompt}"
+            # # 使用與 LLM Discussion 相同的完整任務描述格式, this does not work well for Qwen and Llama
+            # task_description = f"What are some creative use for {item}? The goal is to come up with creative ideas, which are ideas that strike people as clever, unusual, interesting, uncommon, humorous, innovative, or different. Present a list of as many creative and diverse uses for {item} as possible."
+            # task_prompt = f"Can you answer the following question as creatively as possible: {task_description} {discussion_prompt} Please put your answer in a list format, starting with 1. ... 2. ... 3. ... and so on."
+
+            # Test-1
+            task_prompt = f"Please provide 5 innovative and original uses for '{item}'. {discussion_prompt}"
+
+            # Test-2
+            # task_prompt = f"Please provide some innovative and original uses for '{item}'. {discussion_prompt}"
+
+            # Task-3
+            # task_prompt = f"Please provide 10 innovative and original uses for '{item}'. {discussion_prompt}"
+
         elif self.task_type == "Scientific":
-            task_prompt = f"請為以下科學問題提供5個創新的解決方案：{item}。{discussion_prompt}"
+            task_prompt = f"Can you answer the following scientific question as creatively as possible: {item} {discussion_prompt} Please provide 5 innovative solutions in a list format, starting with 1. ... 2. ... 3. ..."
         elif self.task_type == "Instances":
-            task_prompt = f"請為「{item}」提供5個創造性的範例。{discussion_prompt}"
+            task_prompt = f"Can you answer the following question as creatively as possible: {item} {discussion_prompt} Please provide 5 creative examples in a list format, starting with 1. ... 2. ... 3. ... and so on."
         elif self.task_type == "Similarities":
-            task_prompt = f"請分析以下相似性並提供5個創造性的觀點：{item}。{discussion_prompt}"
+            task_prompt = f"Can you answer the following question as creatively as possible: {item} {discussion_prompt} Please provide 5 creative perspectives in a list format, starting with 1. ... 2. ... 3. ..."
         
         return task_prompt
+    
+    # # Chinese version of construct_prompt (better for Qwen and Llama)
+    # def construct_prompt(self, item):
+    #     """建構提示詞"""
+    #     base_prompts = {
+    #         1: "請盡可能多樣化和創造性地回答。",
+    #         2: "無限制地擁抱創造力的流動，提供意想不到的連接。",
+    #         3: "請從不同角度思考，考慮最不尋常或創新的想法。",
+    #         4: "請提供獨特的見解，專注於創新的想法和解決方案。",
+    #         5: "請使用你的創造力和智慧來提供最佳解決方案。"
+    #     }
+        
+    #     discussion_prompt = base_prompts.get(self.prompt_id, base_prompts[1])
+        
+    #     if self.task_type == "AUT":
+    #         task_prompt = f"請為「{item}」提供5個創新和原創的用途。{discussion_prompt}"
+    #     elif self.task_type == "Scientific":
+    #         task_prompt = f"請為以下科學問題提供5個創新的解決方案：{item}。{discussion_prompt}"
+    #     elif self.task_type == "Instances":
+    #         task_prompt = f"請為「{item}」提供5個創造性的範例。{discussion_prompt}"
+    #     elif self.task_type == "Similarities":
+    #         task_prompt = f"請分析以下相似性並提供5個創造性的觀點：{item}。{discussion_prompt}"
+        
+    #     return task_prompt
 
     def extract_responses(self, content):
         """提取回應內容"""
