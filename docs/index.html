@@ -73,6 +73,9 @@
         tr:nth-child(even) {
             background-color: #f9fafb;
         }
+        .benchmark-table td {
+            white-space: normal;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 p-4 sm:p-6 md:p-8">
@@ -85,16 +88,15 @@
 
         <!-- 1. 專案核心理念 -->
         <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">專案核心理念</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">1. 專案核心理念</h2>
             <p class="text-base leading-relaxed">
-                現有的 Multi-Agent (如 LLM-Discussion 框架) 方法雖然能提升創造力，但面臨<strong>成本高昂、推理延遲巨大</strong>的瓶頸。本研究提出一種創新的 <strong>PersonaAPI 框架</strong>，透過**離線 (Offline)** 計算並融合多個角色的 Persona Vector，讓單一模型在一次前向傳播中，就能模擬出多角色腦力激盪的效果，旨在達成
-                <span class="font-semibold text-indigo-600">「降本增效」</span>的雙重目標。
+                現有的 Multi-Agent (如 LLM-Discussion 框架) 方法雖然能提升創造力，但其依賴多次、輪流的線上推理，面臨<strong>成本高昂、推理延遲巨大</strong>的瓶頸。本研究提出一種創新的 <strong>Persona Vector Merge 機制</strong>，將「角色模擬」的過程從「線上互動」轉變為「離線表示」。我們透過**離線 (Offline)** 計算並融合多個角色的 Persona Vector，創造出一個單一的、富含多維視角的複合向量 (Composite Vector)。在推理時，這個複合向量能一次性地引導單一模型，使其在一次前向傳播中，就能模擬出多角色腦力激盪的效果。這代表了從「互動式模擬 (Interactive Simulation)」到「表示式引導 (Representational Steering)」的範式轉移，旨在達成 <span class="font-semibold text-indigo-600">「降本增效」</span>的雙重目標。
             </p>
         </div>
 
         <!-- 2. 目前實驗成果亮點 -->
         <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">目前實驗成果亮點</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">2. 目前實驗成果亮點</h2>
             <div class="space-y-4">
                 <div>
                     <span class="tag tag-green">雙重勝利</span>
@@ -120,14 +122,14 @@
                         </thead>
                         <tbody>
                             <tr class="bg-green-50">
-                                <td><strong>PersonaAPI (本方法)</strong></td>
+                                <td><strong>Vector Merge (本方法)</strong></td>
                                 <td>Llama3.1-8B</td>
                                 <td class="font-bold text-green-700">4.51</td>
                                 <td class="font-bold text-green-700">4.629</td>
                                 <td>100</td>
                             </tr>
                             <tr class="bg-green-50">
-                                <td><strong>PersonaAPI (本方法)</strong></td>
+                                <td><strong>Vector Merge (本方法)</strong></td>
                                 <td>Qwen2.5-7B</td>
                                 <td class="font-bold text-green-700">4.45</td>
                                 <td class="font-bold text-green-700">4.168</td>
@@ -157,38 +159,87 @@
                         </tbody>
                     </table>
                 </div>
-
-                <div>
-                    <span class="tag tag-blue">通用性驗證</span>
-                    <p class="mt-2">研究已涵蓋四種不同類型的任務 (AUT, scientific test, similarity, instances)，初步證明了方法的通用性，而不僅限於單一任務。</p>
-                </div>
             </div>
         </div>
 
         <!-- 3. 現況總結與分析 -->
         <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">現況總結與分析</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">3. 現況總結與分析</h2>
+             <p class="mb-4 text-base">目前專案進展順利，核心假設已由初步實驗獲得強力支持。數據顯示我們的方法在關鍵指標上不僅有效，甚至超越了資源消耗更大的 SOTA 方法。當前的重點在於鞏固實驗的嚴謹性，並深化對方法內在機制的理解。</p>
             <ul class="list-disc list-inside space-y-2">
                 <li><strong class="text-green-600">優勢 (Strengths):</strong>
                     <ul class="list-disc list-inside ml-6 mt-1">
-                        <li>核心想法創新，實用價值高。</li>
-                        <li>初步數據非常強勁，故事線清晰。</li>
+                        <li>核心想法創新，實用價值高，提出「表示式引導」的新範式。</li>
+                        <li>初步數據非常強勁，故事線清晰 (e.g., 在 AUT 任務中，8B 模型效果超越 405B 模型)。</li>
                         <li>實驗控制良好 (如 Prompt 設計公平)，能有效突顯方法本身的優越性。</li>
-                        <li>已驗證方法的魯棒性，在小模型上效果依然出色，反觀 Baseline 方法則出現性能下降。</li>
+                        <li>已驗證方法的魯棒性 (Baseline 方法在小模型上效果顯著衰退，而本方法表現穩定)。</li>
                     </ul>
                 </li>
                 <li class="mt-2"><strong class="text-red-600">待補強處 (Weaknesses):</strong>
                     <ul class="list-disc list-inside ml-6 mt-1">
-                        <li>目前與 Baseline 的比較存在樣本數不對等的問題 (100 vs 10)，這是實驗嚴謹性的最大挑戰。</li>
+                        <li>目前與 Baseline 的比較存在樣本數不對等的問題 (100 vs 10)，這是確保結論無可辯駁、應對頂會嚴格審查的關鍵一步。</li>
                     </ul>
                 </li>
             </ul>
         </div>
 
+        <!-- 4. Benchmarks and Evaluation Metrics -->
+        <div class="card">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">4. Benchmarks and Evaluation Metrics</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">4.1 評估指標 (Metrics)</h3>
+                    <p class="mt-2 text-gray-700">We employ the metrics established by the Torrance Tests of Creative Thinking (TTCT) (Torrance, 1966), recognized for their robustness in measuring creative capabilities and are commonly applied in assessing human creativity (Cramond et al., 2005). The TTCT framework comprises four distinct metrics:</p>
+                    <ul class="list-disc list-inside ml-4 mt-2 space-y-2 text-gray-700">
+                        <li><strong>Originality:</strong> Considering novelty responses, not familiar and unusual, but relevant.</li>
+                        <li><strong>Elaboration:</strong> The amount of details used to extend a response.</li>
+                        <li><strong>Fluency:</strong> The number of relevant responses.</li>
+                        <li><strong>Flexibility:</strong> A variety of categories or shifts in responses.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">4.2 基準測試任務 (Benchmarks)</h3>
+                    <div class="overflow-x-auto mt-2">
+                         <table class="benchmark-table">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="font-semibold">Benchmark</th>
+                                    <th class="font-semibold">Description</th>
+                                    <th class="font-semibold">Sample Task</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>AUT</strong><br>(Alternative Use Task)</td>
+                                    <td>This benchmark requires participants to come up with as many creative uses as possible for a simple object.</td>
+                                    <td>What are some creative uses for a fork?</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>INSTANCES</strong></td>
+                                    <td>This benchmark requires participants to list as many creative answers as possible that fit a specific criterion.</td>
+                                    <td>Name all the round things you can think of.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>SIMILARITIES</strong></td>
+                                    <td>This benchmark asks participants to creatively explore similarities between two things.</td>
+                                    <td>Tell me all the ways in which a book and a magazine are alike.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>SCIENTIFIC</strong></td>
+                                    <td>This benchmark asks participants to generate innovative ideas, envision hypothetical scenarios, propose improvements, and design experiments, all scientifically.</td>
+                                    <td>Please think of as many possible improvements as you can to a regular bicycle, making it more interesting, more useful, and more beautiful.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <!-- 4. 待辦事項與未來方向 (For ICLR) -->
+
+        <!-- 5. 待辦事項與未來方向 -->
         <div class="card border-l-4 border-indigo-500 bg-indigo-50">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">待辦事項與未來方向 (目標：ICLR)</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">5. 待辦事項與未來方向 (目標：ICLR / ARR October)</h2>
             <div class="space-y-6">
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800 flex items-center">
@@ -215,12 +266,12 @@
                         <span class="text-white bg-yellow-500 rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">3</span>
                         第三優先級：深化分析 (ICLR 關注點)
                     </h3>
-                    <ul class="list-disc list-inside ml-4 mt-2 text-gray-700">
-                        <li><strong>消融實驗 (Ablation Study):</strong> 分析不同 Vector Merge 策略、Persona 數量與組合對結果的影響。</li>
+                    <ul class="list-disc list-inside ml-4 mt-2 text-gray-700 space-y-2">
+                        <li><strong>消融實驗 (Ablation Study):</strong> 深入分析不同設計選擇的影響。<strong>例如：</strong>比較 [‘科學家’, ‘藝術家’] vs [‘科學家’, ‘工程師’, ‘哲學家’] 兩種組合，探討 persona 的數量與「語義多樣性」如何影響創造力分數。同時，對比「向量平均法」與「加權平均法」，找出最優的融合策略。</li>
                         <li><strong>向量空間分析:</strong>
-                            <ul class="list-disc list-inside ml-6 mt-1">
-                                <li>使用 t-SNE / UMAP 進行可視化，直觀展示融合後向量在語義空間中的位置。</li>
-                                <li>設計語義探針，證明融合後的向量確實繼承了多個 Persona 的特性。</li>
+                            <ul class="list-disc list-inside ml-6 mt-1 space-y-2">
+                                <li><strong>可視化分析：</strong>使用 t-SNE / UMAP 進行可視化，直觀展示融合後向量在語義空間中的位置。<strong>例如：</strong>在 t-SNE 圖上，我們預期「科學家」和「工程師」的向量會比較接近，而「藝術家」的向量會較遠。我們融合後的向量「科藝工程師」應該會出現在這三個點構成的三角形區域內，直觀證明融合的有效性。</li>
+                                <li><strong>語義探針 (Semantic Probing)：</strong>設計探針任務，證明融合後的向量確實繼承了多個 Persona 的特性。<strong>例如：</strong>給定 prompt “描述水的未來”，我們期望「科學家」向量會生成關於水資源淨化、相變儲能的內容（高邏輯性）；「藝術家」向量會生成關於眼淚形成的海洋、記憶組成的雨滴等（高想像力）；而我們融合後的向量，理想上應能生成兼具兩者特質的文本，例如「一種利用量子糾纏實現的即時水分子重組技術，能將沙漠中的濕氣詩意地凝結成可飲用的晨露」。</li>
                             </ul>
                         </li>
                     </ul>
@@ -237,9 +288,9 @@
             </div>
         </div>
         
-        <!-- 5. 附錄：原始實驗數據 (更新為可排序表格) -->
+        <!-- 6. 附錄：詳細實驗數據 -->
         <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">附錄：詳細實驗數據</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">6. 附錄：詳細實驗數據</h2>
             <p class="text-sm text-gray-600 mb-4">提示：點擊表格標題 (如 "Model Name", "Mean Originality") 可以對數據進行排序。</p>
             <div class="overflow-x-auto border border-gray-200 rounded-lg">
                 <table id="dataTable" class="min-w-full text-sm divide-y divide-gray-200">
