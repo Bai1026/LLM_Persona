@@ -3,250 +3,369 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LLM 自我對弈研究提案</title>
+    <title>研究進度報告：Persona Vector Merge 專案</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
         }
-        .proposal-card {
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
-        .proposal-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.15);
+        h1, h2, h3 {
+            font-weight: 600;
         }
-        .gradient-text {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
         }
-        .nav-button {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            transition: all 0.3s ease;
+        .tag-green {
+            background-color: #d1fae5;
+            color: #065f46;
         }
-        .nav-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        .tag-blue {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .tag-red {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #f9fafb;
+        }
+        .sortable {
+            cursor: pointer;
+            position: relative;
+        }
+        .sortable::after {
+            content: ' \2195'; /* Up-down arrow */
+            opacity: 0.4;
+            position: absolute;
+            right: 0.5rem;
+        }
+        .sortable.asc::after {
+            content: ' \2191'; /* Up arrow */
+            opacity: 1;
+        }
+        .sortable.desc::after {
+            content: ' \2193'; /* Down arrow */
+            opacity: 1;
+        }
+        tr:nth-child(even) {
+            background-color: #f9fafb;
         }
     </style>
 </head>
-<body class="antialiased">
-    <div class="min-h-screen flex flex-col justify-center items-center p-4">
-        <div class="max-w-4xl w-full text-center">
-            <!-- 主標題區域 -->
-            <header class="mb-12">
-                <h1 class="text-5xl md:text-7xl font-bold text-white mb-4">
-                    LLM 自我對弈
-                </h1>
-                <h2 class="text-2xl md:text-3xl gradient-text font-semibold mb-6">
-                    研究提案展示平台
-                </h2>
-                <p class="text-lg text-white opacity-90 max-w-2xl mx-auto">
-                    探索大型語言模型在角色扮演與自我改進領域的創新方法
-                </p>
-            </header>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- 頁首標題 -->
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">研究進度報告</h1>
+            <p class="text-lg text-gray-600 mt-1">專案名稱：透過 Persona Vector Merge 提升大型語言模型創造力</p>
+        </header>
 
-            <!-- 提案選擇區域 -->
-            <div class="grid md:grid-cols-2 gap-8 mb-12">
-                <!-- 提案 1 -->
-                <div class="proposal-card rounded-2xl p-8 text-white">
-                    <div class="mb-6">
-                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-3">MAS-PS 框架</h3>
-                        <p class="text-lg opacity-90 mb-6">
-                            多代理人系統角色扮演框架，透過動態提示建構實現上下文學習
-                        </p>
-                    </div>
-                    <div class="space-y-3 text-left mb-6">
-                        <div class="flex items-center">
-                            <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
-                            <span>五個專業代理人協同工作</span>
-                        </div>
-                        <div class="flex items-center">
-                            <span class="w-2 h-2 bg-purple-400 rounded-full mr-3"></span>
-                            <span>GAN 啟發的對抗式精煉迴圈</span>
-                        </div>
-                        <div class="flex items-center">
-                            <span class="w-2 h-2 bg-pink-400 rounded-full mr-3"></span>
-                            <span>動態角色建構與情境編織</span>
-                        </div>
-                    </div>
-                    <a href="proposal_1.html" class="nav-button inline-block px-8 py-3 rounded-full text-white font-semibold text-lg">
-                        查看提案 1
-                    </a>
-                </div>
-
-                <!-- 提案 2 -->
-                <div class="proposal-card rounded-2xl p-8 text-white">
-                    <div class="mb-6">
-                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-3">創新方法 2</h3>
-                        <p class="text-lg opacity-90 mb-6">
-                            另一種創新的 LLM 自我改進與角色扮演方法探索
-                        </p>
-                    </div>
-                    <div class="space-y-3 text-left mb-6">
-                        <div class="flex items-center">
-                            <span class="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
-                            <span>進階自我對弈機制</span>
-                        </div>
-                        <div class="flex items-center">
-                            <span class="w-2 h-2 bg-teal-400 rounded-full mr-3"></span>
-                            <span>強化學習整合</span>
-                        </div>
-                        <div class="flex items-center">
-                            <span class="w-2 h-2 bg-cyan-400 rounded-full mr-3"></span>
-                            <span>多模態角色建模</span>
-                        </div>
-                    </div>
-                    <a href="proposal_2.html" class="nav-button inline-block px-8 py-3 rounded-full text-white font-semibold text-lg">
-                        查看提案 2
-                    </a>
-                </div>
-            </div>
-
-            <!-- 額外資訊區域 -->
-            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl p-6 text-white">
-                <h3 class="text-xl font-semibold mb-3">研究背景</h3>
-                <p class="text-lg opacity-90">
-                    本研究探索了大型語言模型在角色扮演任務中的創新應用，致力於開發更高效、更泛化的解決方案。
-                    透過比較不同的技術方法，我們尋求在效能、成本和實用性之間找到最佳平衡點。
-                </p>
-            </div>
-
-
-            <!-- 新增 PDF 檢視區域 -->
-            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl p-6 text-white mt-6 mb-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold">研究論文 PDF</h3>
-                    <div class="space-x-3">
-                        <a href="documents/MAS-PS-CoSER.pdf" 
-                           download 
-                           class="text-blue-300 hover:text-blue-200 text-sm transition-colors">
-                            📄 下載 PDF
-                        </a>
-                        <a href="documents/MAS-PS-CoSER.pdf" 
-                           target="_blank" 
-                           class="text-green-300 hover:text-green-200 text-sm transition-colors">
-                            🔗 新視窗開啟
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- PDF 嵌入區域 -->
-                <div class="bg-white bg-opacity-5 rounded-lg p-2">
-                    <embed src="documents/MAS-PS-CoSER.pdf" 
-                           type="application/pdf" 
-                           width="100%" 
-                           height="600px"
-                           class="rounded-lg">
-                    
-                    <!-- 備用方案 -->
-                    <div class="text-center py-8 hidden pdf-fallback">
-                        <p class="text-lg mb-4">無法在瀏覽器中顯示 PDF</p>
-                        <div class="space-x-4">
-                            <a href="documents/MAS-PS-CoSER.pdf" 
-                               download 
-                               class="nav-button inline-block px-6 py-2 rounded-full text-white font-semibold">
-                                下載 PDF
-                            </a>
-                            <a href="documents/MAS-PS-CoSER.pdf" 
-                               target="_blank" 
-                               class="nav-button inline-block px-6 py-2 rounded-full text-white font-semibold">
-                                新視窗開啟
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <p class="text-sm opacity-70 mt-3 text-center">
-                    完整的 MAS-PS 框架技術文件，包含詳細的實驗結果與分析
-                </p>
-            </div>
-        
-            <!-- 新增 FAQ 連結 -->
-            <div class="text-center mt-6">
-                <a href="faq.html" class="nav-button inline-block px-8 py-3 rounded-full text-white font-semibold text-lg">
-                    <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    常見問題與深度解析
-                </a>
-            </div>
-
-            <!-- 新增技術規格連結區域 -->
-            <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl p-6 text-white mt-6">
-                <h3 class="text-xl font-semibold mb-4 text-center">技術規格文件</h3>
-                <p class="text-sm opacity-90 mb-6 text-center">
-                    詳細的消融實驗設計與實作規格
-                </p>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <!-- 消融實驗規格 -->
-                    <div class="bg-white bg-opacity-5 p-4 rounded-lg border border-white border-opacity-20 transition-all hover:bg-opacity-10">
-                        <div class="flex items-center mb-3">
-                            <svg class="w-6 h-6 text-blue-300 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h2a2 2 0 002-2z"></path>
-                            </svg>
-                            <h4 class="text-lg font-semibold">消融實驗規格</h4>
-                        </div>
-                        <p class="text-sm opacity-80 mb-4">
-                            即時推論模式下的三種代理人組合架構詳細規格與輸入輸出規範
-                        </p>
-                        <a href="spec.html" class="inline-flex items-center text-blue-300 hover:text-blue-200 transition-colors text-sm font-medium">
-                            檢視規格書
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </a>
-                    </div>
-
-                    <!-- 進階實作規格 -->
-                    <div class="bg-white bg-opacity-5 p-4 rounded-lg border border-white border-opacity-20 transition-all hover:bg-opacity-10">
-                        <div class="flex items-center mb-3">
-                            <svg class="w-6 h-6 text-purple-300 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
-                            </svg>
-                            <h4 class="text-lg font-semibold">進階實作規格</h4>
-                        </div>
-                        <p class="text-sm opacity-80 mb-4">
-                            完整五代理人系統的詳細實作指南與程式碼架構規範
-                        </p>
-                        <a href="more_spec.html" class="inline-flex items-center text-purple-300 hover:text-purple-200 transition-colors text-sm font-medium">
-                            檢視實作指南
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>   
+        <!-- 1. 專案核心理念 -->
+        <div class="card">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">專案核心理念</h2>
+            <p class="text-base leading-relaxed">
+                現有的 Multi-Agent (如 LLM-Discussion 框架) 方法雖然能提升創造力，但面臨<strong>成本高昂、推理延遲巨大</strong>的瓶頸。本研究提出一種創新的 <strong>PersonaAPI 框架</strong>，透過**離線 (Offline)** 計算並融合多個角色的 Persona Vector，讓單一模型在一次前向傳播中，就能模擬出多角色腦力激盪的效果，旨在達成
+                <span class="font-semibold text-indigo-600">「降本增效」</span>的雙重目標。
+            </p>
         </div>
+
+        <!-- 2. 目前實驗成果亮點 -->
+        <div class="card">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">目前實驗成果亮點</h2>
+            <div class="space-y-4">
+                <div>
+                    <span class="tag tag-green">雙重勝利</span>
+                    <p class="mt-2">在成本 (Cost) 與效能 (Performance) 上，我們的方法均顯著優於現有的 Multi-Agent Baseline。</p>
+                </div>
+                <div>
+                    <span class="tag tag-blue">小模型超越大模型</span>
+                    <p class="mt-2">實驗證明，我們使用的小模型 (7B/8B 等級) 在整合 Persona Vector 後，其創造力指標 (特別是 Originality 和 Elaboration) 能穩定勝過數十倍大的模型 (如 Llama-405B, GPT-4o-mini) 在 Multi-Agent 框架下的表現。</p>
+                </div>
+
+                <!-- 關鍵數據對比表格 -->
+                <div class="overflow-x-auto">
+                    <h3 class="text-lg font-semibold my-3">AUT 任務關鍵指標對比 (Originality & Elaboration)</h3>
+                    <table>
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="font-semibold">方法</th>
+                                <th class="font-semibold">模型</th>
+                                <th class="font-semibold">Originality (平均分)</th>
+                                <th class="font-semibold">Elaboration (平均分)</th>
+                                <th class="font-semibold">樣本數 (N)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-green-50">
+                                <td><strong>PersonaAPI (本方法)</strong></td>
+                                <td>Llama3.1-8B</td>
+                                <td class="font-bold text-green-700">4.51</td>
+                                <td class="font-bold text-green-700">4.629</td>
+                                <td>100</td>
+                            </tr>
+                            <tr class="bg-green-50">
+                                <td><strong>PersonaAPI (本方法)</strong></td>
+                                <td>Qwen2.5-7B</td>
+                                <td class="font-bold text-green-700">4.45</td>
+                                <td class="font-bold text-green-700">4.168</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>LLM-Discussion</td>
+                                <td>llama-3.1-405b</td>
+                                <td>4.052</td>
+                                <td>3.335</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>LLM-Discussion</td>
+                                <td>gpt-4o-mini</td>
+                                <td>4.009</td>
+                                <td>3.736</td>
+                                <td>10</td>
+                            </tr>
+                             <tr>
+                                <td>Single Agent (Vanilla)</td>
+                                <td>Qwen2.5-7B</td>
+                                <td>4.0</td>
+                                <td>4.36</td>
+                                <td>10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <span class="tag tag-blue">通用性驗證</span>
+                    <p class="mt-2">研究已涵蓋四種不同類型的任務 (AUT, scientific test, similarity, instances)，初步證明了方法的通用性，而不僅限於單一任務。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 現況總結與分析 -->
+        <div class="card">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">現況總結與分析</h2>
+            <ul class="list-disc list-inside space-y-2">
+                <li><strong class="text-green-600">優勢 (Strengths):</strong>
+                    <ul class="list-disc list-inside ml-6 mt-1">
+                        <li>核心想法創新，實用價值高。</li>
+                        <li>初步數據非常強勁，故事線清晰。</li>
+                        <li>實驗控制良好 (如 Prompt 設計公平)，能有效突顯方法本身的優越性。</li>
+                        <li>已驗證方法的魯棒性，在小模型上效果依然出色，反觀 Baseline 方法則出現性能下降。</li>
+                    </ul>
+                </li>
+                <li class="mt-2"><strong class="text-red-600">待補強處 (Weaknesses):</strong>
+                    <ul class="list-disc list-inside ml-6 mt-1">
+                        <li>目前與 Baseline 的比較存在樣本數不對等的問題 (100 vs 10)，這是實驗嚴謹性的最大挑戰。</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+
+        <!-- 4. 待辦事項與未來方向 (For ICLR) -->
+        <div class="card border-l-4 border-indigo-500 bg-indigo-50">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">待辦事項與未來方向 (目標：ICLR)</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                        <span class="text-white bg-red-600 rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">1</span>
+                        第一優先級：補全核心實驗
+                    </h3>
+                    <ul class="list-disc list-inside ml-4 mt-2 text-gray-700">
+                        <li><strong>(最緊急)</strong> 為所有 Baseline 方法 (Multi-Agent Discussion, Vanilla Single Agent) 補齊 <strong>N=100</strong> 的實驗數據，確保比較的絕對公平性。</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                        <span class="text-white bg-orange-500 rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">2</span>
+                        第二優先級：構建論文核心內容
+                    </h3>
+                    <ul class="list-disc list-inside ml-4 mt-2 text-gray-700">
+                        <li>設計論文的「主結果表」，清晰呈現本方法在**四個任務**上，與**多種 Baseline** (包含不同大小模型) 的全面比較。</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                        <span class="text-white bg-yellow-500 rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">3</span>
+                        第三優先級：深化分析 (ICLR 關注點)
+                    </h3>
+                    <ul class="list-disc list-inside ml-4 mt-2 text-gray-700">
+                        <li><strong>消融實驗 (Ablation Study):</strong> 分析不同 Vector Merge 策略、Persona 數量與組合對結果的影響。</li>
+                        <li><strong>向量空間分析:</strong>
+                            <ul class="list-disc list-inside ml-6 mt-1">
+                                <li>使用 t-SNE / UMAP 進行可視化，直觀展示融合後向量在語義空間中的位置。</li>
+                                <li>設計語義探針，證明融合後的向量確實繼承了多個 Persona 的特性。</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                 <div>
+                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                        <span class="text-white bg-blue-500 rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">4</span>
+                        論文敘事架構
+                    </h3>
+                    <ul class="list-disc list-inside ml-4 mt-2 text-gray-700">
+                        <li>確立論文故事線：從現有方法的三大痛點 (成本、延遲、兼容性) 出發，引出我們的解決方案，並透過全面實驗和深入分析來證明其優越性。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 5. 附錄：原始實驗數據 (更新為可排序表格) -->
+        <div class="card">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">附錄：詳細實驗數據</h2>
+            <p class="text-sm text-gray-600 mb-4">提示：點擊表格標題 (如 "Model Name", "Mean Originality") 可以對數據進行排序。</p>
+            <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                <table id="dataTable" class="min-w-full text-sm divide-y divide-gray-200">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(0, 'str')">Timestamp</th>
+                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(1, 'str')">Type</th>
+                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(2, 'str')">Mode</th>
+                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(3, 'str')">Model Name</th>
+                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(4, 'num')">Data Num</th>
+                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(5, 'num')">Mean Originality</th>
+                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(6, 'num')">Mean Elaboration</th>
+                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(7, 'num')">Mean Fluency</th>
+                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(8, 'num')">Mean Flexibility</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody" class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
-    <!-- 背景裝飾元素 -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-bl from-white opacity-5 rounded-full transform rotate-45"></div>
-        <div class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-white opacity-5 rounded-full transform rotate-45"></div>
-    </div>
+    <script>
+        const rawData = `Timestamp, Task, Type, Mode, Agent, Round, Model Name, Role Name, Data Num, Mean Fluency, STD Fluency, Mean Flexibility, STD Flexibility, Mean Originality, STD Originality, Mean Elaboration, STD Elaboration, File Name
+0901-1326, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI, 10, 4.667, 0.516, 4.967, 0.1, 3.32, 0.614, 3.38, 0.616, AUT_persona_api_0901-1326_10 (empathetic_counselor)
+0902-2331, AUT, baseline, persona, PersonaAPI, 1, Qwen25, PersonaAPI, 10, 5.0, 0.0, 5.0, 0.0, 3.66, 0.53, 3.96, 0.356, AUT_openai_baseline_1_1_gpt_4o_mini_baseline_0902-2331_10
+0903-1206, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI, 10, 4.967, 0.1, 5.0, 0.0, 4.46, 0.335, 4.68, 0.183, AUT_persona_api_0903-1206_10 (analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt empathetic_counselor_response_avg_diff.pt)
+0903-1447, AUT, vanilla, vanilla, VanillaQwen, 1, Qwen25, VanillaQwen, 10, 5.0, 0.0, 5.0, 0.0, 4.0, 0.559, 4.36, 0.418, AUT_vanilla_qwen_1_1_Qwen25_VanillaQwen_vanilla_20250903-144738_10
+0908-1348, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI, 10, 5.0, 0.0, 5.0, 0.0, 4.46, 0.377, 4.19, 0.611, AUT_persona_api_0908-0548_10 (analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt empathetic_counselor_response_avg_diff.pt)
+0908-1445, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI-Chinese, 10, 4.6, 0.757, 4.867, 0.306, 4.51, 0.342, 4.42, 0.59, AUT_persona_api_0908-0645_10 (analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt)
+0908-1716, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI-English, 10, 9.1, 1.422, 8.1, 1.62, 3.86, 0.461, 3.17, 0.585, AUT_persona_api_0908-1716_10 (analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt)
+0908-1802, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI-English-test1, 10, 4.7, 0.64, 4.8, 0.6, 4.6, 0.41, 4.63, 0.607, AUT_persona_api_0908-1802_10 (analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt)
+0908-2152, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English-test1, 10, 4.933, 0.2, 4.7, 0.605, 4.46, 0.284, 4.58, 0.303, AUT_persona_api_0908-2152_10
+0908-2215, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English, 10, 9.9, 0.213, 7.3, 0.983, 3.22, 0.349, 3.26, 0.4, AUT_persona_api_0908-2215_10
+0908-2245, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-Chinese, 10, 4.9, 0.473, 5.067, 0.2, 4.42, 0.469, 4.26, 0.482, AUT_persona_api_0908-2245_10
+0908-2309, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English-test2, 10, 9.9, 0.213, 7.433, 1.469, 3.64, 0.564, 3.46, 0.467, AUT_persona_api_0908-2309_10
+0908-2342, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English-test3, 10, 9.867, 0.4, 6.867, 0.67, 3.92, 0.564, 3.88, 0.527, AUT_persona_api_0908-2342_10
+0909-0149, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English-test3, 100, 9.803, 0.631, 7.433, 1.399, 4.05, 0.462, 3.918, 0.439, AUT_persona_api_0909-0149_100
+0909-1354, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English-test1, 100, 4.897, 0.319, 4.79, 0.436, 4.51, 0.426, 4.629, 0.367, AUT_persona_api_0909-1354_100
+0909-1826, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI-English-test1, 100, 4.58, 1.06, 4.623, 0.743, 4.45, 0.469, 4.168, 0.969, AUT_persona_api_0909-1826_100
+0909-2056, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI-Chinese, 100, 4.747, 1.182, 5.037, 0.753, 4.336, 0.517, 4.344, 0.695, AUT_persona_api_0909-2056_100
+0906-0102, AUT, discussion, roleplay, 4, 5, gpt-4o-mini, Environmentalist-CreativeProfessional-Futurist-Futurist, 10, 32.942, 4.928, 26.933, 9.816, 4.009, 0.152, 3.736, 0.196, AUT_multi_debate_roleplay_4_5_gpt-4o-mini_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-06-01-02-15_10
+0909-0313, AUT, discussion, roleplay, 4, 5, qwen2-5-7b-instruct, Environmentalist-CreativeProfessional-Futurist-Futurist, 10, 4.375, 3.14, 5.367, 1.643, 3.976, 0.714, 1.704, 0.53, AUT_multi_debate_roleplay_4_5_qwen2-5-7b-instruct_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-09-03-13-47_10
+0909-1821, AUT, discussion, roleplay, 4, 5, llama-3-1-8b-instruct, Environmentalist-CreativeProfessional-Futurist-Futurist, 10, 11.475, 6.3, 6.908, 2.581, 3.991, 1.367, 3.358, 1.308, AUT_multi_debate_roleplay_4_5_llama-3-1-8b-instruct_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-09-18-21-18_10
+0910-0004, AUT, discussion, roleplay, 4, 5, llama-3-1-405b-instruct, Environmentalist-CreativeProfessional-Futurist-Futurist, 10, 14.692, 6.259, 7.083, 1.972, 4.052, 0.955, 3.335, 0.872, AUT_multi_debate_roleplay_4_5_llama-3-1-405b-instruct_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-10-00-04-11_10`;
+        
+        const dataTableBody = document.getElementById('dataTableBody');
+        const rows = rawData.trim().split('\n').slice(1); // ignore header
+        
+        const dataToRender = rows.map(row => {
+            const cols = row.split(',').map(item => item.trim());
+            return {
+                timestamp: cols[0],
+                type: cols[2],
+                mode: cols[3],
+                modelName: cols[6],
+                dataNum: parseInt(cols[8]),
+                meanOriginality: parseFloat(cols[13]),
+                meanElaboration: parseFloat(cols[15]),
+                meanFluency: parseFloat(cols[9]),
+                meanFlexibility: parseFloat(cols[11]),
+                roleName: cols[7]
+            };
+        });
+
+        function renderTable(data) {
+            dataTableBody.innerHTML = '';
+            data.forEach(item => {
+                const rowEl = document.createElement('tr');
+                rowEl.innerHTML = `
+                    <td class="px-6 py-4">${item.timestamp}</td>
+                    <td class="px-6 py-4">${item.type}</td>
+                    <td class="px-6 py-4">${item.mode}</td>
+                    <td class="px-6 py-4">${item.modelName}</td>
+                    <td class="px-6 py-4">${item.dataNum}</td>
+                    <td class="px-6 py-4 font-medium">${item.meanOriginality.toFixed(3)}</td>
+                    <td class="px-6 py-4 font-medium">${item.meanElaboration.toFixed(3)}</td>
+                    <td class="px-6 py-4">${item.meanFluency.toFixed(3)}</td>
+                    <td class="px-6 py-4">${item.meanFlexibility.toFixed(3)}</td>
+                    <td class="px-6 py-4 text-xs text-gray-600" style="white-space: normal;">${item.roleName}</td>
+                `;
+                dataTableBody.appendChild(rowEl);
+            });
+        }
+        
+        // Initial render
+        renderTable(dataToRender);
+
+        let currentSort = {
+            col: -1,
+            asc: true
+        };
+
+        function sortTable(colIndex, type = 'str') {
+            const headers = document.querySelectorAll('#dataTable th');
+            
+            if (currentSort.col === colIndex) {
+                currentSort.asc = !currentSort.asc;
+            } else {
+                currentSort.col = colIndex;
+                currentSort.asc = true;
+            }
+            
+            headers.forEach(h => h.classList.remove('asc', 'desc'));
+            headers[colIndex].classList.add(currentSort.asc ? 'asc' : 'desc');
+
+            const keyMap = ['timestamp', 'type', 'mode', 'modelName', 'dataNum', 'meanOriginality', 'meanElaboration', 'meanFluency', 'meanFlexibility', 'roleName'];
+            const key = keyMap[colIndex];
+
+            const sortedData = [...dataToRender].sort((a, b) => {
+                let valA = a[key];
+                let valB = b[key];
+
+                if (type === 'num') {
+                    return currentSort.asc ? valA - valB : valB - valA;
+                } else {
+                    return currentSort.asc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                }
+            });
+            
+            renderTable(sortedData);
+        }
+    </script>
 </body>
 </html>
+
