@@ -35,10 +35,22 @@ def write_results_to_csv(input_file_name, mean_std_results, csv_file_path, versi
     # Check if this is the new evaluation format: evaluation_AUT_persona_api_0908-0548_10_sampling_4.json
     if parts[0] == "evaluation":
         Task = parts[1]  # AUT
-        Type = parts[2]  # persona
-        Mode = parts[3]  # api
-        Data_Num = parts[5]  # 10
-        timestamp_str = parts[4]  # 0908-0548
+        Type = parts[2]  # persona, llama, qwen, etc.
+        
+        # Handle different model types
+        if parts[2] == "persona" and parts[3] == "api":
+            Mode = parts[3]  # api
+            Data_Num = parts[5]  # 10
+            timestamp_str = parts[4]  # 0908-0548
+        elif parts[2] in ["llama", "qwen"]:
+            # New format: evaluation_AUT_llama_1_1_Llama_Llama_llama_0910-1753_10_sampling_4
+            Type = parts[2]  # llama or qwen
+            Mode = parts[2]  # same as type for baseline models
+            Data_Num = parts[8]  # 10
+            timestamp_str = parts[7]  # 0910-1753
+        else:
+            Data_Num = parts[5] if len(parts) > 5 else "10"
+            timestamp_str = parts[4] if len(parts) > 4 else "0000-0000"
     else:
         # Original format
         Task = parts[0] # AUT, Scientific, Similarities, Instances
@@ -82,6 +94,14 @@ def write_results_to_csv(input_file_name, mean_std_results, csv_file_path, versi
             Rounds = "1"  # Default for persona API
             Model_Name = "PersonaAPI"
             Role_Name = "PersonaAPI"
+        elif parts[2] in ["llama", "qwen"]:
+            # evaluation_AUT_llama_1_1_Llama_Llama_llama_0910-1753_10_sampling_4
+            Type = parts[2]  # llama or qwen
+            Mode = parts[2]  # same as type
+            Agent = parts[2].capitalize()  # Llama or Qwen
+            Rounds = parts[3] if len(parts) > 3 else "1"  # "1"
+            Model_Name = parts[5] if len(parts) > 5 else parts[2].capitalize()  # "Llama" or "Qwen"
+            Role_Name = parts[6] if len(parts) > 6 else parts[2].capitalize()  # "Llama" or "Qwen"
         else:
             # Generic evaluation format handling
             Type = parts[2] if len(parts) > 2 else "unknown"
@@ -126,6 +146,14 @@ def write_results_to_csv(input_file_name, mean_std_results, csv_file_path, versi
         Rounds = parts[3] if len(parts) > 3 else "1"  # "1"
         Model_Name = parts[5] if len(parts) > 5 else "gpt_4"  # "gpt_4"
         Role_Name = parts[6] if len(parts) > 6 else "OpenAI"  # "OpenAI"
+    elif parts[1] in ["llama", "qwen"]:
+        # Handle new baseline model format: AUT_llama_1_1_Llama_Llama_llama_0910-2007_10
+        Type = parts[1]  # llama or qwen
+        Mode = parts[1]  # same as type
+        Agent = parts[1].capitalize()  # Llama or Qwen
+        Rounds = parts[2] if len(parts) > 2 else "1"  # "1"
+        Model_Name = parts[4] if len(parts) > 4 else parts[1].capitalize()  # "Llama" or "Qwen"
+        Role_Name = parts[5] if len(parts) > 5 else parts[1].capitalize()  # "Llama" or "Qwen"
     else:
         print(f'❌ 未知格式: {parts[1]}')
         print(f'📄 完整檔名: {input_file_name}')

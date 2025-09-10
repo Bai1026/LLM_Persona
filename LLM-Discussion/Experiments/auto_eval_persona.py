@@ -15,16 +15,16 @@ def auto_eval_persona():
     parser.add_argument("-v", "--gpt_version", default="4", choices=["3", "4"], help="GPT 版本")
     parser.add_argument("--no_eval", action="store_true", help="只產生結果，不進行評估")
     parser.add_argument("--baseline", action="store_true", help="使用 Pure OpenAI API 模式作為 baseline")
-    parser.add_argument("--vanilla", action="store_true", help="使用原始 Qwen 模型（無 persona steering）")
-    parser.add_argument("--model", default="gpt-4", help="OpenAI 模型名稱 (當使用 baseline 模式時)")
+    parser.add_argument("-m", "--model", choices=["qwen", "llama"], help="使用指定模型 (qwen 或 llama)")
+    parser.add_argument("--openai_model", default="gpt-4", help="OpenAI 模型名稱 (當使用 baseline 模式時)")
     
     args = parser.parse_args()
     
     if args.baseline:
         print(f"🚀 開始 Pure OpenAI API Baseline 評估 - 任務: {args.task}")
-        print(f"📋 使用模型: {args.model}")
-    elif args.vanilla:
-        print(f"🚀 開始原始 Qwen 模型評估（無 Persona）- 任務: {args.task}")
+        print(f"📋 使用模型: {args.openai_model}")
+    elif args.model:
+        print(f"🚀 開始 {args.model.upper()} 模型評估 - 任務: {args.task}")
     else:
         print(f"🚀 開始自動評估流程 - 任務: {args.task}")
     
@@ -43,15 +43,16 @@ def auto_eval_persona():
             "-d", args.dataset,
             "-t", args.task,
             "-p", str(args.prompt),
-            "--model", args.model
+            "--model", args.openai_model
         ]
-    elif args.vanilla:
-        # 使用原始 Qwen 模型
+    elif args.model:
+        # 使用指定的模型 (qwen 或 llama)
         generate_cmd = [
-            sys.executable, "vanilla_qwen.py",
+            sys.executable, "baseline_models.py",
             "-d", args.dataset,
             "-t", args.task,
-            "-p", str(args.prompt)
+            "-p", str(args.prompt),
+            "-m", args.model
         ]
     else:
         # 使用 Persona API 模式
