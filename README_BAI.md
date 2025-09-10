@@ -60,7 +60,7 @@ python persona_api.py --vector_path "persona_vectors/Qwen2.5-7B-Instruct/multi_r
 
 ```bash
 python Experiment/persona_api.py \
---vector_paths analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt \
+--vector_paths creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt \
 --fusion_method weighted_average \
 --layer 20 \
 --coef 2.0
@@ -120,7 +120,13 @@ python auto_eval_persona.py \
   -v 4
 ```
 
-Baseline Version (gpt-4o-mini)
+- Baseline Version (gpt-4o-mini)
+
+```bash
+python auto_eval_persona.py -d dataset.json -t AUT --baseline --openai_model gpt-4
+```
+
+- Baseline Version (Qwen2.5)
 
 ```bash
 python auto_eval_persona.py \
@@ -128,10 +134,19 @@ python auto_eval_persona.py \
   -t AUT \
   -p 1 \
   -v 4 \
-  --baseline \
-  --model gpt-4
+  -m qwen
 ```
 
+- Baseline Version (Llama3)
+
+````bash
+python auto_eval_persona.py \
+  -d ../Datasets/AUT/aut_2.json \
+  -t AUT \
+  -p 1 \
+  -v 4 \
+  -m llama
+```
 ### Manual evaluate after generating dataset
 
 ```bash
@@ -141,4 +156,4 @@ python auto_grade_final.py \
   -d AUT \
   -v 4 \
   -o y
-```
+````
