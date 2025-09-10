@@ -76,6 +76,17 @@
         .benchmark-table td {
             white-space: normal;
         }
+        pre {
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 p-4 sm:p-6 md:p-8">
@@ -94,9 +105,94 @@
             </p>
         </div>
 
+        <!-- 4. Benchmarks and Evaluation Metrics -->
+        <div class="card">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">2. Benchmarks and Evaluation Metrics</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">2.1 評估指標 (Metrics)</h3>
+                    <p class="mt-2 text-gray-700">We employ the metrics established by the Torrance Tests of Creative Thinking (TTCT) (Torrance, 1966), recognized for their robustness in measuring creative capabilities and are commonly applied in assessing human creativity (Cramond et al., 2005). The TTCT framework comprises four distinct metrics:</p>
+                    <ul class="list-disc list-inside ml-4 mt-2 space-y-2 text-gray-700">
+                        <li><strong>Originality:</strong> Considering novelty responses, not familiar and unusual, but relevant.</li>
+                        <li><strong>Elaboration:</strong> The amount of details used to extend a response.</li>
+                        <li><strong>Fluency:</strong> The number of relevant responses.</li>
+                        <li><strong>Flexibility:</strong> A variety of categories or shifts in responses.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">2.2 基準測試任務 (Benchmarks)</h3>
+                    <div class="overflow-x-auto mt-2">
+                         <table class="benchmark-table">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="font-semibold">Benchmark</th>
+                                    <th class="font-semibold">Description</th>
+                                    <th class="font-semibold">Sample Task</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>AUT</strong><br>(Alternative Use Task)</td>
+                                    <td>This benchmark requires participants to come up with as many creative uses as possible for a simple object.</td>
+                                    <td>What are some creative uses for a fork?</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>INSTANCES</strong></td>
+                                    <td>This benchmark requires participants to list as many creative answers as possible that fit a specific criterion.</td>
+                                    <td>Name all the round things you can think of.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>SIMILARITIES</strong></td>
+                                    <td>This benchmark asks participants to creatively explore similarities between two things.</td>
+                                    <td>Tell me all the ways in which a book and a magazine are alike.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>SCIENTIFIC</strong></td>
+                                    <td>This benchmark asks participants to generate innovative ideas, envision hypothetical scenarios, propose improvements, and design experiments, all scientifically.</td>
+                                    <td>Please think of as many possible improvements as you can to a regular bicycle, making it more interesting, more useful, and more beautiful.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Prompt 設計 -->
+        <div class="card">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">3. Prompt 設計</h2>
+            <p class="mb-4 text-gray-700">為確保比較的公平性並適應不同模型的特性，我們設計了多種 Prompt 進行測試。一個重要的發現是，對於開源小模型 (如 Qwen, Llama)，簡潔直接的 Prompt 往往比複雜冗長的描述能帶來更好的生成品質。</p>
+            <div>
+                <h3 class="text-lg font-semibold text-gray-800">3.1 英文 Prompts (AUT 任務)</h3>
+                <pre><code class="language-python">
+# 複雜版本 (對小模型效果不佳)
+# task_description = f"What are some creative use for {item}? The goal is to come up with creative ideas, which are ideas that strike people as clever, unusual, interesting, uncommon, humorous, innovative, or different. Present a list of as many creative and diverse uses for {item} as possible."
+# task_prompt = f"Can you answer the following question as creatively as possible: {task_description} {discussion_prompt} Please put your answer in a list format, starting with 1. ... 2. ... 3. ... and so on."
+
+# --- 測試版本 ---
+
+# Test-1 (主要使用版本，要求固定數量以追求品質)
+task_prompt = f"Please provide 5 innovative and original uses for '{item}'. {discussion_prompt}"
+
+# Test-2 (不限制數量)
+# task_prompt = f"Please provide some innovative and original uses for '{item}'. {discussion_prompt}"
+
+# Test-3 (要求較多數量)
+# task_prompt = f"Please provide 10 innovative and original uses for '{item}'. {discussion_prompt}"
+                </code></pre>
+            </div>
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-gray-800">3.2 中文 Prompt (AUT 任務)</h3>
+                 <pre><code class="language-python">
+# 中文測試版本
+task_prompt = f"請為「{item}」提供5個創新和原創的用途。請盡可能多樣化和創造性地回答。"
+                </code></pre>
+            </div>
+        </div>
+
         <!-- 2. 目前實驗成果亮點 -->
         <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">2. 目前實驗成果亮點</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">4. 目前實驗成果亮點</h2>
             <div class="space-y-4">
                 <div>
                     <span class="tag tag-green">雙重勝利</span>
@@ -164,7 +260,7 @@
 
         <!-- 3. 現況總結與分析 -->
         <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">3. 現況總結與分析</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">5. 現況總結與分析</h2>
              <p class="mb-4 text-base">目前專案進展順利，核心假設已由初步實驗獲得強力支持。數據顯示我們的方法在關鍵指標上不僅有效，甚至超越了資源消耗更大的 SOTA 方法。當前的重點在於鞏固實驗的嚴謹性，並深化對方法內在機制的理解。</p>
             <ul class="list-disc list-inside space-y-2">
                 <li><strong class="text-green-600">優勢 (Strengths):</strong>
@@ -183,63 +279,10 @@
             </ul>
         </div>
 
-        <!-- 4. Benchmarks and Evaluation Metrics -->
-        <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">4. Benchmarks and Evaluation Metrics</h2>
-            <div class="space-y-6">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800">4.1 評估指標 (Metrics)</h3>
-                    <p class="mt-2 text-gray-700">We employ the metrics established by the Torrance Tests of Creative Thinking (TTCT) (Torrance, 1966), recognized for their robustness in measuring creative capabilities and are commonly applied in assessing human creativity (Cramond et al., 2005). The TTCT framework comprises four distinct metrics:</p>
-                    <ul class="list-disc list-inside ml-4 mt-2 space-y-2 text-gray-700">
-                        <li><strong>Originality:</strong> Considering novelty responses, not familiar and unusual, but relevant.</li>
-                        <li><strong>Elaboration:</strong> The amount of details used to extend a response.</li>
-                        <li><strong>Fluency:</strong> The number of relevant responses.</li>
-                        <li><strong>Flexibility:</strong> A variety of categories or shifts in responses.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800">4.2 基準測試任務 (Benchmarks)</h3>
-                    <div class="overflow-x-auto mt-2">
-                         <table class="benchmark-table">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="font-semibold">Benchmark</th>
-                                    <th class="font-semibold">Description</th>
-                                    <th class="font-semibold">Sample Task</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>AUT</strong><br>(Alternative Use Task)</td>
-                                    <td>This benchmark requires participants to come up with as many creative uses as possible for a simple object.</td>
-                                    <td>What are some creative uses for a fork?</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>INSTANCES</strong></td>
-                                    <td>This benchmark requires participants to list as many creative answers as possible that fit a specific criterion.</td>
-                                    <td>Name all the round things you can think of.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>SIMILARITIES</strong></td>
-                                    <td>This benchmark asks participants to creatively explore similarities between two things.</td>
-                                    <td>Tell me all the ways in which a book and a magazine are alike.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>SCIENTIFIC</strong></td>
-                                    <td>This benchmark asks participants to generate innovative ideas, envision hypothetical scenarios, propose improvements, and design experiments, all scientifically.</td>
-                                    <td>Please think of as many possible improvements as you can to a regular bicycle, making it more interesting, more useful, and more beautiful.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-
-        <!-- 5. 待辦事項與未來方向 -->
+        <!-- 6. 待辦事項與未來方向 -->
         <div class="card border-l-4 border-indigo-500 bg-indigo-50">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">5. 待辦事項與未來方向 (目標：ICLR / ARR October)</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">6. 待辦事項與未來方向 (目標：ICLR / ARR October)</h2>
             <div class="space-y-6">
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800 flex items-center">
@@ -288,9 +331,9 @@
             </div>
         </div>
         
-        <!-- 6. 附錄：詳細實驗數據 -->
+        <!-- 7. 附錄：詳細實驗數據 -->
         <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">6. 附錄：詳細實驗數據</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">7. 附錄：詳細實驗數據</h2>
             <p class="text-sm text-gray-600 mb-4">提示：點擊表格標題 (如 "Model Name", "Mean Originality") 可以對數據進行排序。</p>
             <div class="overflow-x-auto border border-gray-200 rounded-lg">
                 <table id="dataTable" class="min-w-full text-sm divide-y divide-gray-200">
