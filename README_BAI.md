@@ -123,14 +123,14 @@ python auto_eval_persona.py \
 - Baseline Version (gpt-4o-mini)
 
 ```bash
-python auto_eval_persona.py -d dataset.json -t AUT --baseline --openai_model gpt-4
+python auto_eval_persona.py -d ../Datasets/AUT/aut_10.json -t AUT --baseline --openai_model gpt-3.5-turbo-0125
 ```
 
 - Baseline Version (Qwen2.5)
 
 ```bash
 python auto_eval_persona.py \
-  -d ../Datasets/AUT/aut_2.json \
+  -d ../Datasets/AUT/aut_100.json \
   -t AUT \
   -p 1 \
   -v 4 \
@@ -141,7 +141,7 @@ python auto_eval_persona.py \
 
 ````bash
 python auto_eval_persona.py \
-  -d ../Datasets/AUT/aut_2.json \
+  -d ../Datasets/AUT/aut_100.json \
   -t AUT \
   -p 1 \
   -v 4 \
