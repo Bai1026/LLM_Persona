@@ -118,7 +118,7 @@ class VanillaQwenRunner:
         
         discussion_prompt = base_prompts.get(self.prompt_id, base_prompts[1])
         
-        MULTI_ROLE_PLAY = False
+        MULTI_ROLE_PLAY = True
         # 多角色扮演提示詞
         if MULTI_ROLE_PLAY:
             role_prompts = """
@@ -151,6 +151,7 @@ Please provide answers from these three role perspectives, with each role embody
         elif self.task_type == "Similarities":
             task_prompt = f"{role_prompts}Please analyze the following similarity and provide 5 creative perspectives: {item}. {discussion_prompt}"
         
+        print(f"📝 Constructed Prompt: {task_prompt}")
         return task_prompt
         
     def generate_response(self, prompt, max_tokens=1000):

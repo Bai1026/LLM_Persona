@@ -28,10 +28,10 @@ def auto_eval_persona():
     else:
         print(f"🚀 開始自動評估流程 - 任務: {args.task}")
     
-    # 檢查 OpenAI API Key（只在 baseline 模式需要）
-    if args.baseline and not os.getenv("OPENAI_API_KEY"):
-        print("❌ 請設定 OPENAI_API_KEY 環境變數")
-        return
+    # # 檢查 OpenAI API Key（只在 baseline 模式需要）
+    # if args.baseline and not os.getenv("OPENAI_API_KEY"):
+    #     print("❌ 請設定 OPENAI_API_KEY 環境變數")
+    #     return
     
     # 1. 產生結果檔案
     print("📊 步驟 1: 產生結果檔案...")

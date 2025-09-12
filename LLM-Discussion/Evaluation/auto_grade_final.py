@@ -28,8 +28,13 @@ def auto_grade(args):
 
     # OPENAI KEY
     api_key = os.getenv("OPENAI_API_KEY")
+
+    # TODO: modify the evaluator version here.
+    version = "gpt-4o-mini"
+    # version = 'gpt-3.5-turbo-0125'
+
     # version = "gpt-4-0125-preview" if args.version == "4" else "gpt-3.5-turbo-0125"
-    version = "gpt-4o-mini" if args.version == "4" else "gpt-3.5-turbo-0125"
+    # version = "gpt-4o-mini" if args.version == "4" else "gpt-3.5-turbo-0125"
     print(f"Using GPT Version {version}, Input: {args.version}")
 
     # SETUP CACHE AND MODEL

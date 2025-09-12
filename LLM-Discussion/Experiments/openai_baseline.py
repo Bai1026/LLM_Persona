@@ -7,6 +7,8 @@ from pathlib import Path
 from datetime import datetime
 from types import SimpleNamespace
 import pytz
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
 class OpenAIBaselineRunner:
     """使用 Pure OpenAI API 進行創造性任務的基線模型"""
@@ -56,26 +58,73 @@ class OpenAIBaselineRunner:
         with open(self.dataset_file, 'r', encoding='utf-8') as f:
             return json.load(f)
     
+    # def construct_prompt(self, item):
+    #     """建構提示詞"""
+    #     base_prompts = {
+    #         1: "請盡可能多樣化和創造性地回答。",
+    #         2: "無限制地擁抱創造力的流動，提供意想不到的連接。",
+    #         3: "請從不同角度思考，考慮最不尋常或創新的想法。",
+    #         4: "請提供獨特的見解，專注於創新的想法和解決方案。",
+    #         5: "請使用你的創造力和智慧來提供最佳解決方案。"
+    #     }
+        
+    #     discussion_prompt = base_prompts.get(self.prompt_id, base_prompts[1])
+        
+    #     if self.task_type == "AUT":
+    #         task_prompt = f"請為「{item}」提供5個創新和原創的用途。{discussion_prompt}"
+    #     elif self.task_type == "Scientific":
+    #         task_prompt = f"請為以下科學問題提供3個創新的解決方案：{item}。{discussion_prompt}"
+    #     elif self.task_type == "Instances":
+    #         task_prompt = f"請為「{item}」提供5個創造性的範例。{discussion_prompt}"
+    #     elif self.task_type == "Similarities":
+    #         task_prompt = f"請分析以下相似性並提供3個創造性的觀點：{item}。{discussion_prompt}"
+        
+    #     return task_prompt
+
     def construct_prompt(self, item):
         """建構提示詞"""
         base_prompts = {
-            1: "請盡可能多樣化和創造性地回答。",
-            2: "無限制地擁抱創造力的流動，提供意想不到的連接。",
-            3: "請從不同角度思考，考慮最不尋常或創新的想法。",
-            4: "請提供獨特的見解，專注於創新的想法和解決方案。",
-            5: "請使用你的創造力和智慧來提供最佳解決方案。"
+            1: "Please answer as diversely and creatively as possible.",
+            2: "Embrace the flow of creativity without limits, providing unexpected connections.",
+            3: "Please think from different perspectives, considering the most unusual or innovative ideas.",
+            4: "Please provide unique insights, focusing on innovative ideas and solutions.",
+            5: "Please use your creativity and intelligence to provide the best solutions."
         }
         
         discussion_prompt = base_prompts.get(self.prompt_id, base_prompts[1])
         
+        MULTI_ROLE_PLAY = True
+        # 多角色扮演提示詞
+        if MULTI_ROLE_PLAY:
+            role_prompts = """
+You need to think and answer this question from three different professional perspectives:
+
+1. Environmentalist:
+Specialty: Sustainability and Environmental Health
+Mission: Advocate for eco-friendly solutions, promote sustainable development and protect the planet. Guide us to consider the environmental impact of ideas, promoting innovations that contribute to planetary health.
+
+2. Creative Professional:
+Specialty: Aesthetics, Narratives, and Emotions
+Mission: With artistic sensibility and mastery of narrative and emotion, infuse projects with beauty and depth. Challenge us to think expressively, ensuring solutions not only solve problems but also resonate on a human level.
+
+3. Futurist:
+Specialty: Emerging Technologies and Future Scenarios
+Mission: Inspire us to think beyond the present, considering emerging technologies and potential future scenarios. Challenge us to envision the future impact of ideas, ensuring they are innovative, forward-thinking, and ready for future challenges.
+
+Please provide answers from these three role perspectives, with each role embodying their professional characteristics and thinking approaches.
+"""
+        else:
+            role_prompts = ""
+        
+        # single agent baseline 或 single agent with multi role play
         if self.task_type == "AUT":
-            task_prompt = f"請為「{item}」提供5個創新和原創的用途。{discussion_prompt}"
+            task_prompt = f"{role_prompts}Please provide 5 innovative and original uses for '{item}'. {discussion_prompt}"
         elif self.task_type == "Scientific":
-            task_prompt = f"請為以下科學問題提供3個創新的解決方案：{item}。{discussion_prompt}"
+            task_prompt = f"{role_prompts}Please provide 5 innovative solutions for the following scientific problem: {item}. {discussion_prompt}"
         elif self.task_type == "Instances":
-            task_prompt = f"請為「{item}」提供5個創造性的範例。{discussion_prompt}"
+            task_prompt = f"{role_prompts}Please provide 5 creative examples for '{item}'. {discussion_prompt}"
         elif self.task_type == "Similarities":
-            task_prompt = f"請分析以下相似性並提供3個創造性的觀點：{item}。{discussion_prompt}"
+            task_prompt = f"{role_prompts}Please analyze the following similarity and provide 5 creative perspectives: {item}. {discussion_prompt}"
         
         return task_prompt
     
