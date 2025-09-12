@@ -34,10 +34,20 @@ class Discussion:
         with open(config_path, 'r') as f:
             return json.load(f)
         
+    # def extract_response(self, content):
+    #     lines = content.split('\n')
+    #     uses = [line.strip() for line in lines if line.strip() and re.match(r"^\d+\.", line)]
+    #     uses = [use[use.find('.') + 2:] for use in uses]
+    #     return uses
+    
     def extract_response(self, content):
-        lines = content.split('\n')
-        uses = [line.strip() for line in lines if line.strip() and re.match(r"^\d+\.", line)]
-        uses = [use[use.find('.') + 2:] for use in uses]
+        parts = re.split(r'(\d+\.)', content)
+        uses = []
+        for i in range(1, len(parts), 2): 
+            if i + 1 < len(parts):
+                content_part = parts[i + 1] 
+                full_item = content_part.strip()
+                uses.append(full_item)
         return uses
 
 class LLM_Debate(Discussion):
