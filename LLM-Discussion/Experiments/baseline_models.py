@@ -199,19 +199,52 @@ Please provide answers from these three role perspectives, with each role embody
     
     def extract_responses(self, content):
         """提取回應內容"""
-        lines = content.split('\n')
-        responses = []
+        import re
         
-        for line in lines:
-            line = line.strip()
-            if line and (line.startswith('-') or line.startswith('•') or 
-                        any(line.startswith(f"{i}.") for i in range(1, 20))):
-                # 清理格式符號
-                clean_response = line.lstrip('-•0123456789. ').strip()
+        # 使用正規表達式找到所有編號項目及其完整內容
+        # 匹配格式如：1. **標題**: 描述內容...
+        pattern = r'(\d+\.\s*\*\*[^*]+\*\*:?\s*(?:[^\n]+(?:\n(?!\d+\.\s*\*\*)[^\n]*)*)?)'
+        matches = re.findall(pattern, content, re.MULTILINE | re.DOTALL)
+        
+        responses = []
+        for match in matches:
+            # 清理並格式化每個項目
+            clean_response = match.strip()
+            # 移除開頭的數字和點號，但保留完整內容
+            clean_response = re.sub(r'^\d+\.\s*', '', clean_response)
+            if clean_response:
+                responses.append(clean_response)
+        
+        # 如果正規表達式沒有匹配到，回退到原始邏輯
+        if not responses:
+            lines = content.split('\n')
+            current_item = ""
+            
+            for line in lines:
+                line = line.strip()
+                
+                # 檢查是否是新項目的開始
+                if line and (line.startswith('-') or line.startswith('•') or 
+                            any(line.startswith(f"{i}.") for i in range(1, 20))):
+                    # 如果有前一個項目，先儲存
+                    if current_item:
+                        clean_response = current_item.lstrip('-•0123456789. ').strip()
+                        if clean_response:
+                            responses.append(clean_response)
+                    
+                    # 開始新項目
+                    current_item = line
+                elif current_item and line:
+                    # 繼續當前項目的內容
+                    current_item += "\n" + line
+            
+            # 處理最後一個項目
+            if current_item:
+                clean_response = current_item.lstrip('-•0123456789. ').strip()
                 if clean_response:
                     responses.append(clean_response)
         
-        return responses[:10]  # 限制最多10個回應
+        return responses  # 限制最多10個回應
     
     def run(self):
         """執行原始模型推理"""
