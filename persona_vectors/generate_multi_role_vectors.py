@@ -238,9 +238,16 @@ class MultiRoleVectorGenerator:
 
 # 使用範例
 def main():
+    
+    # generator = MultiRoleVectorGenerator(
+    #     model_name="Qwen/Qwen2.5-7B-Instruct",
+    #     save_dir="persona_vectors/Qwen2.5-7B-Instruct/multi_role/"
+    # )
+
+    # TODO: change to Llama-3.1-8B-Instruct
     generator = MultiRoleVectorGenerator(
-        model_name="Qwen/Qwen2.5-7B-Instruct",
-        save_dir="persona_vectors/Qwen2.5-7B-Instruct/multi_role/"
+        model_name="meta-llama/Llama-3.1-8B-Instruct",
+        save_dir="persona_vectors/Llama-3.1-8B-Instruct/multi_role/"
     )
     
     roles = [
