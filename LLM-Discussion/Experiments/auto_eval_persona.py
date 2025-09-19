@@ -15,7 +15,7 @@ def auto_eval_persona():
     parser.add_argument("-v", "--gpt_version", default="4", choices=["3", "4"], help="GPT 版本")
     parser.add_argument("--no_eval", action="store_true", help="只產生結果，不進行評估")
     parser.add_argument("--baseline", action="store_true", help="使用 Pure OpenAI API 模式作為 baseline")
-    parser.add_argument("-m", "--model", choices=["qwen", "llama"], help="使用指定模型 (qwen 或 llama)")
+    parser.add_argument("-m", "--model", choices=["qwen", "llama", "gemma"], help="使用指定模型 (qwen 或 llama 或 gemma)")
     parser.add_argument("--openai_model", default="gpt-4", help="OpenAI 模型名稱 (當使用 baseline 模式時)")
     
     args = parser.parse_args()

@@ -3,6 +3,7 @@ import sys
 import os
 import json
 import torch
+import requests
 from pathlib import Path
 from datetime import datetime
 from types import SimpleNamespace
@@ -20,7 +21,8 @@ class VanillaQwenRunner:
         # 模型名稱對應
         model_mapping = {
             "qwen": "Qwen/Qwen2.5-7B-Instruct",
-            "llama": "meta-llama/Llama-3.1-8B-Instruct"
+            "llama": "meta-llama/Llama-3.1-8B-Instruct",
+            "gemma": "google/gemma-2-9b-it"
         }
         
         # 自動對應完整模型名稱
@@ -30,34 +32,59 @@ class VanillaQwenRunner:
             # 如果輸入的已經是完整名稱，直接使用
             self.model_name = model_name
         
-        # 載入模型和分詞器
-        print(f"🤖 載入模型: {self.model_name}")
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
-        self.model = AutoModelForCausalLM.from_pretrained(
-            self.model_name,
-            torch_dtype=torch.float16,
-            device_map="auto"
-        )
-        
         # 判斷模型類型
         if "qwen" in self.model_name.lower():
             self.model_type = "qwen"
         elif "llama" in self.model_name.lower():
             self.model_type = "llama"
+        elif "gemma" in self.model_name.lower():
+            self.model_type = "gemma"
         else:
             self.model_type = "unknown"
         
         print(f"🔍 檢測到模型類型: {self.model_type}")
         
-        if self.tokenizer.pad_token is None:
-            self.tokenizer.pad_token = self.tokenizer.eos_token
-        
-        print("✅ 模型載入完成")
+        # 如果是 Gemma 模型，使用 API，否則載入本地模型
+        if self.model_type == "gemma":
+            print(f"🌐 使用 Gemma API (Port 8002) 代替本地模型載入")
+            self.api_url = "http://localhost:8002"
+            self.use_api = True
+            self.tokenizer = None
+            self.model = None
+            
+            # 測試 API 連線
+            if not self.test_api_connection():
+                print("❌ Gemma API 連線失敗！請確保 API 服務正在執行")
+                raise Exception("Gemma API 連線失敗")
+            else:
+                print("✅ Gemma API 連線成功")
+        else:
+            print(f"🤖 載入本地模型: {self.model_name}")
+            self.use_api = False
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+            self.model = AutoModelForCausalLM.from_pretrained(
+                self.model_name,
+                torch_dtype=torch.float16,
+                device_map="auto"
+            )
+            
+            if self.tokenizer.pad_token is None:
+                self.tokenizer.pad_token = self.tokenizer.eos_token
+            
+            print("✅ 模型載入完成")
     
     def load_dataset(self):
         """載入資料集"""
         with open(self.dataset_file, 'r', encoding='utf-8') as f:
             return json.load(f)
+    
+    def test_api_connection(self):
+        """測試 Gemma API 連線"""
+        try:
+            response = requests.get(f"{self.api_url}/health", timeout=5)
+            return response.status_code == 200
+        except:
+            return False
     
 #     def construct_prompt(self, item):
 #         """建構提示詞"""
@@ -155,7 +182,45 @@ Please provide answers from these three role perspectives, with each role embody
         return task_prompt
         
     def generate_response(self, prompt, max_tokens=1000):
-        """使用原始模型產生回應"""
+        """使用模型產生回應 - 支援本地模型和 Gemma API"""
+        try:
+            if self.use_api:  # 使用 Gemma API
+                return self.generate_api_response(prompt, max_tokens)
+            else:  # 使用本地模型
+                return self.generate_local_response(prompt, max_tokens)
+        except Exception as e:
+            print(f"❌ 生成回應時發生錯誤: {e}")
+            return None
+    
+    def generate_api_response(self, prompt, max_tokens=1000):
+        """使用 Gemma API 產生回應"""
+        try:
+            payload = {
+                "user_input": prompt,
+                "max_tokens": max_tokens,
+                "session_id": "baseline_model_session"
+            }
+            
+            response = requests.post(
+                f"{self.api_url}/chat",
+                json=payload,
+                timeout=60  # 60秒超時
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result.get("response", "").strip()
+            else:
+                print(f"❌ API 呼叫失敗，狀態碼: {response.status_code}")
+                print(f"❌ 回應內容: {response.text}")
+                return None
+                
+        except Exception as e:
+            print(f"❌ API 呼叫錯誤: {e}")
+            return None
+    
+    def generate_local_response(self, prompt, max_tokens=1000):
+        """使用本地模型產生回應"""
         try:
             # 格式化對話
             messages = [{"role": "user", "content": prompt}]
@@ -194,28 +259,69 @@ Please provide answers from these three role perspectives, with each role embody
             return response.strip()
             
         except Exception as e:
-            print(f"❌ 生成回應時發生錯誤: {e}")
+            print(f"❌ 本地模型生成錯誤: {e}")
             return None
-    
+
     def extract_responses(self, content):
         """提取回應內容"""
         import re
         
-        # 使用正規表達式找到所有編號項目及其完整內容
-        # 匹配格式如：1. **標題**: 描述內容...
-        pattern = r'(\d+\.\s*\*\*[^*]+\*\*:?\s*(?:[^\n]+(?:\n(?!\d+\.\s*\*\*)[^\n]*)*)?)'
-        matches = re.findall(pattern, content, re.MULTILINE | re.DOTALL)
+        # 優化的正規表達式，能處理多種格式
+        patterns = [
+            # 格式1: **1.** **Title** (新增！這是你遇到的問題格式)
+            r'\*\*(\d+)\.\*\*\s*\*\*([^*]+?)\*\*\s*(.*?)(?=\*\*\d+\.\*\*|\n\n|$)',
+            # 格式2: **1. Title:** (內容)
+            r'\*\*(\d+)\.\s*([^*]+?)\*\*:?\s*(.*?)(?=\*\*\d+\.|$)',
+            # 格式3: 1. **Title:** (內容)  
+            r'(\d+)\.\s*\*\*([^*]+?)\*\*:?\s*(.*?)(?=\d+\.\s*\*\*|$)',
+            # 格式4: 數字開頭的一般項目
+            r'(\d+)\.\s*([^\n]*?)\n(.*?)(?=\d+\.|$)'
+        ]
         
         responses = []
-        for match in matches:
-            # 清理並格式化每個項目
-            clean_response = match.strip()
-            # 移除開頭的數字和點號，但保留完整內容
-            clean_response = re.sub(r'^\d+\.\s*', '', clean_response)
-            if clean_response:
-                responses.append(clean_response)
         
-        # 如果正規表達式沒有匹配到，回退到原始邏輯
+        for pattern in patterns:
+            matches = re.findall(pattern, content, re.MULTILINE | re.DOTALL)
+            if matches:
+                for match in matches:
+                    if len(match) == 3:  # (number, title, content)
+                        title = match[1].strip()
+                        body = match[2].strip()
+                        
+                        # 清理標題和內容
+                        if title:
+                            full_item = f"**{title}**"
+                            if body:
+                                # 清理內容開頭的換行和多餘字符
+                                body = re.sub(r'^\n+', '', body)
+                                body = body.strip()
+                                if body:
+                                    full_item += f": {body}"
+                            responses.append(full_item)
+                break  # 如果找到匹配，就不嘗試其他模式
+        
+        # 如果上面的模式都沒匹配到，嘗試更寬泛的分割方法
+        if not responses:
+            # 按照多個換行符分割，尋找可能的項目
+            sections = re.split(r'\n\n+', content)
+            for section in sections:
+                section = section.strip()
+                if not section:
+                    continue
+                    
+                # 檢查是否包含數字編號的項目
+                if re.search(r'^\*?\*?\d+\.', section.strip(), re.MULTILINE):
+                    # 進一步分割這個section中的項目
+                    items = re.split(r'\n(?=\*?\*?\d+\.)', section)
+                    for item in items:
+                        item = item.strip()
+                        if item and re.match(r'^\*?\*?\d+\.', item):
+                            # 清理格式但保留完整內容
+                            clean_item = re.sub(r'^\*?\*?(\d+)\.\s*', '', item)
+                            if clean_item:
+                                responses.append(clean_item)
+        
+        # 如果還是沒有找到，使用原有的邏輯作為最後的回退
         if not responses:
             lines = content.split('\n')
             current_item = ""
@@ -225,10 +331,11 @@ Please provide answers from these three role perspectives, with each role embody
                 
                 # 檢查是否是新項目的開始
                 if line and (line.startswith('-') or line.startswith('•') or 
-                            any(line.startswith(f"{i}.") for i in range(1, 20))):
+                            any(line.startswith(f"{i}.") for i in range(1, 20)) or
+                            any(line.startswith(f"**{i}.") for i in range(1, 20))):
                     # 如果有前一個項目，先儲存
                     if current_item:
-                        clean_response = current_item.lstrip('-•0123456789. ').strip()
+                        clean_response = current_item.lstrip('-•*0123456789. ').strip()
                         if clean_response:
                             responses.append(clean_response)
                     
@@ -240,7 +347,7 @@ Please provide answers from these three role perspectives, with each role embody
             
             # 處理最後一個項目
             if current_item:
-                clean_response = current_item.lstrip('-•0123456789. ').strip()
+                clean_response = current_item.lstrip('-•*0123456789. ').strip()
                 if clean_response:
                     responses.append(clean_response)
         
@@ -378,7 +485,7 @@ def main():
     parser.add_argument("-t", "--type", choices=["AUT", "Scientific", "Similarities", "Instances"], 
                        required=True, help="任務類型")
     parser.add_argument("-p", "--prompt", type=int, default=1, help="提示詞編號 (1-5)")
-    parser.add_argument("-m", "--model", choices=["qwen", "llama"], default="llama", help="模型類型 (qwen 或 llama)")
+    parser.add_argument("-m", "--model", choices=["qwen", "llama", "gemma"], default="llama", help="模型類型 (qwen 或 llama 或 gemma)")
     parser.add_argument("-e", "--eval_mode", action="store_true", default=False, help="執行評估模式")
     
     args = parser.parse_args()

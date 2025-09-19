@@ -128,21 +128,62 @@ class PersonaAPIRunner:
         """提取回應內容"""
         import re
         
-        # 使用正規表達式找到所有編號項目及其完整內容
-        # 匹配格式如：1. **標題**: 描述內容...
-        pattern = r'(\d+\.\s*\*\*[^*]+\*\*:?\s*(?:[^\n]+(?:\n(?!\d+\.\s*\*\*)[^\n]*)*)?)'
-        matches = re.findall(pattern, content, re.MULTILINE | re.DOTALL)
+        # 優化的正規表達式，能處理多種格式
+        patterns = [
+            # 格式1: **1.** **Title** (新增！這是你遇到的問題格式)
+            r'\*\*(\d+)\.\*\*\s*\*\*([^*]+?)\*\*\s*(.*?)(?=\*\*\d+\.\*\*|\n\n|$)',
+            # 格式2: **1. Title:** (內容)
+            r'\*\*(\d+)\.\s*([^*]+?)\*\*:?\s*(.*?)(?=\*\*\d+\.|$)',
+            # 格式3: 1. **Title:** (內容)  
+            r'(\d+)\.\s*\*\*([^*]+?)\*\*:?\s*(.*?)(?=\d+\.\s*\*\*|$)',
+            # 格式4: 數字開頭的一般項目
+            r'(\d+)\.\s*([^\n]*?)\n(.*?)(?=\d+\.|$)'
+        ]
         
         responses = []
-        for match in matches:
-            # 清理並格式化每個項目
-            clean_response = match.strip()
-            # 移除開頭的數字和點號，但保留完整內容
-            clean_response = re.sub(r'^\d+\.\s*', '', clean_response)
-            if clean_response:
-                responses.append(clean_response)
         
-        # 如果正規表達式沒有匹配到，回退到原始邏輯
+        for pattern in patterns:
+            matches = re.findall(pattern, content, re.MULTILINE | re.DOTALL)
+            if matches:
+                for match in matches:
+                    if len(match) == 3:  # (number, title, content)
+                        title = match[1].strip()
+                        body = match[2].strip()
+                        
+                        # 清理標題和內容
+                        if title:
+                            full_item = f"**{title}**"
+                            if body:
+                                # 清理內容開頭的換行和多餘字符
+                                body = re.sub(r'^\n+', '', body)
+                                body = body.strip()
+                                if body:
+                                    full_item += f": {body}"
+                            responses.append(full_item)
+                break  # 如果找到匹配，就不嘗試其他模式
+        
+        # 如果上面的模式都沒匹配到，嘗試更寬泛的分割方法
+        if not responses:
+            # 按照多個換行符分割，尋找可能的項目
+            sections = re.split(r'\n\n+', content)
+            for section in sections:
+                section = section.strip()
+                if not section:
+                    continue
+                    
+                # 檢查是否包含數字編號的項目
+                if re.search(r'^\*?\*?\d+\.', section.strip(), re.MULTILINE):
+                    # 進一步分割這個section中的項目
+                    items = re.split(r'\n(?=\*?\*?\d+\.)', section)
+                    for item in items:
+                        item = item.strip()
+                        if item and re.match(r'^\*?\*?\d+\.', item):
+                            # 清理格式但保留完整內容
+                            clean_item = re.sub(r'^\*?\*?(\d+)\.\s*', '', item)
+                            if clean_item:
+                                responses.append(clean_item)
+        
+        # 如果還是沒有找到，使用原有的邏輯作為最後的回退
         if not responses:
             lines = content.split('\n')
             current_item = ""
@@ -152,10 +193,11 @@ class PersonaAPIRunner:
                 
                 # 檢查是否是新項目的開始
                 if line and (line.startswith('-') or line.startswith('•') or 
-                            any(line.startswith(f"{i}.") for i in range(1, 20))):
+                            any(line.startswith(f"{i}.") for i in range(1, 20)) or
+                            any(line.startswith(f"**{i}.") for i in range(1, 20))):
                     # 如果有前一個項目，先儲存
                     if current_item:
-                        clean_response = current_item.lstrip('-•0123456789. ').strip()
+                        clean_response = current_item.lstrip('-•*0123456789. ').strip()
                         if clean_response:
                             responses.append(clean_response)
                     
@@ -167,7 +209,7 @@ class PersonaAPIRunner:
             
             # 處理最後一個項目
             if current_item:
-                clean_response = current_item.lstrip('-•0123456789. ').strip()
+                clean_response = current_item.lstrip('-•*0123456789. ').strip()
                 if clean_response:
                     responses.append(clean_response)
         
