@@ -15,6 +15,7 @@ class ActivationSteerer:
         "transformer.h",       # GPT‑2/Neo, Bloom, etc.
         "encoder.layer",       # BERT/RoBERTa
         "model.layers",        # Llama/Mistral
+        "model.language_model.layers",  # Gemma-3
         "gpt_neox.layers",     # GPT‑NeoX
         "block",               # Flan‑T5
     )

@@ -35,7 +35,16 @@ def load_jsonl(file_path):
 #     return prompt_avg, prompt_last, response_avg
 
 def get_hidden_p_and_r_batched(model, tokenizer, prompts, responses, batch_size=1, layer_list=None):  
-    max_layer = model.config.num_hidden_layers  
+    # 支援不同模型架構的層數取得
+    if hasattr(model.config, 'num_hidden_layers'):
+        max_layer = model.config.num_hidden_layers
+    elif hasattr(model, 'model') and hasattr(model.model, 'language_model') and hasattr(model.model.language_model, 'layers'):
+        # Gemma-3 架構
+        max_layer = len(model.model.language_model.layers)
+    else:
+        # 其他可能的架構
+        max_layer = getattr(model.config, 'n_layer', getattr(model.config, 'n_layers', 32))
+    
     if layer_list is None:  
         layer_list = list(range(max_layer+1))  
       

@@ -244,37 +244,46 @@ def main():
     #     save_dir="persona_vectors/Qwen2.5-7B-Instruct/multi_role/"
     # )
 
-    # TODO: change to Llama-3.1-8B-Instruct
+    # # TODO: change to Llama-3.1-8B-Instruct
+    # generator = MultiRoleVectorGenerator(
+    #     model_name="meta-llama/Llama-3.1-8B-Instruct",
+    #     save_dir="persona_vectors/Llama-3.1-8B-Instruct/multi_role/"
+    # )
+
     generator = MultiRoleVectorGenerator(
-        model_name="meta-llama/Llama-3.1-8B-Instruct",
-        save_dir="persona_vectors/Llama-3.1-8B-Instruct/multi_role/"
+        model_name="google/gemma-3-4b-it",
+        save_dir="persona_vectors/gemma-3-4b-it/multi_role/"
     )
     
     roles = [
         "creative_professional",
-        "analytical_thinker", 
-        "empathetic_counselor",
-        "academic_researcher",
-        "customer_user",
-        "digital_nomad",
+        # "analytical_thinker", 
+        # "empathetic_counselor",
+        # "academic_researcher",
+        # "customer_user",
+        # "digital_nomad",
         "environmentalist",
         "futurist",
-        "industry_insider",
-        "social_entrepreneur",
-        "startup_founder",
-        "visionary_millionaire"
+        # "industry_insider",
+        # "social_entrepreneur",
+        # "startup_founder",
+        # "visionary_millionaire"
     ]
     
     for role in roles:
         print(f"🎯 先測試 {role} 的資料產生...")
-        generator.generate_role_vectors([role], strategy="individual")
+        try:
+            generator.generate_role_vectors([role], strategy="individual")
+            print(f"✅ {role} 向量產生成功！")
+        except Exception as e:
+            print(f"❌ {role} 向量計算失敗: {e}")
         print("--------------------------------------------------")
 
     # 先測試一個角色
     # print("🎯 產生獨立角色向量...")
     # individual_vectors = generator.generate_role_vectors(roles, "individual")
     
-    print(f"✅ 完成！產生了 {len(individual_vectors)} 個向量")
+    print("✅ 測試完成！")
 
 if __name__ == "__main__":
     main()

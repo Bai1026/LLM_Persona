@@ -6,7 +6,13 @@ class MultiRoleActivationGenerator:
     """多角色激活資料產生器"""
     
     # def __init__(self, model_name: str = "Qwen/Qwen2.5-7B-Instruct"):
-    def __init__(self, model_name: str = "meta-llama/Llama-3.1-8B-Instruct"):
+    # def __init__(self, model_name: str = "meta-llama/Llama-3.1-8B-Instruct"):
+    # def __init__(self, model_name: str = "mistralai/Mistral-7B-Instruct-v0.3"):
+    # def __init__(self, model_name: str = "microsoft/phi-2"):
+    # def __init__(self, model_name: str = "google/gemma-7b"):
+    # def __init__(self, model_name: str = "google/gemma-2-9b-it"):
+    def __init__(self, model_name: str = "google/gemma-3-4b-it"):
+    # def __init__(self, model_name: str = "openai/gpt-oss-20b"):
         self.model_name = model_name
         self.model_short_name = model_name.split('/')[-1]
     
@@ -100,18 +106,18 @@ def main():
     generator = MultiRoleActivationGenerator()
     
     roles = [
-        "creative_professional",
-        "analytical_thinker", 
-        "empathetic_counselor",
-        "academic_researcher",
-        "customer_user",
-        "digital_nomad",
+        # "creative_professional",
+        # "analytical_thinker", 
+        # "empathetic_counselor",
+        # "academic_researcher",
+        # "customer_user",
+        # "digital_nomad",
         "environmentalist",
         "futurist",
-        "industry_insider",
-        "social_entrepreneur",
-        "startup_founder",
-        "visionary_millionaire"
+        # "industry_insider",
+        # "social_entrepreneur",
+        # "startup_founder",
+        # "visionary_millionaire"
     ]
     
     for role in roles:

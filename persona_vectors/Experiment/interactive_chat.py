@@ -1,4 +1,10 @@
 import torch
+import os
+
+# 禁用 torch.compile 以避免 CUDA graph 衝突
+os.environ["TORCH_COMPILE"] = "0"
+torch._dynamo.config.disable = True
+
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import sys
 from pathlib import Path
@@ -20,8 +26,14 @@ class PersonaChatbot:
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name, 
             device_map="auto",
-            torch_dtype=torch.bfloat16
+            torch_dtype=torch.bfloat16,
+            trust_remote_code=True,
+            attn_implementation="eager"  # 使用 eager attention 避免編譯問題
         )
+        
+        # 禁用模型的編譯優化
+        if hasattr(self.model, '_is_compiled'):
+            self.model._is_compiled = False
         
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         if self.tokenizer.pad_token is None:
@@ -81,6 +93,10 @@ class PersonaChatbot:
             outputs[0][input_length:], 
             skip_special_tokens=True
         ).strip()
+        
+        # 清理記憶體和CUDA快取
+        del outputs
+        torch.cuda.empty_cache()
         
         # 更新對話歷史
         self.conversation_history.append({"role": "assistant", "content": response})

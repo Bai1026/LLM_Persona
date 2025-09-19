@@ -96,8 +96,13 @@ def main():
     global chatbot
     
     parser = argparse.ArgumentParser(description="Multi-Persona Chatbot API")
+    
     parser.add_argument("--model", default="Qwen/Qwen2.5-7B-Instruct", help="模型名稱")
     # parser.add_argument("--model", default="meta-llama/Llama-3.1-8B-Instruct", help="模型名稱")
+    # parser.add_argument("--model", default="google/gemma-2-9b-it", help="模型名稱")
+    # parser.add_argument("--model", default="google/gemma-3-4b-it", help="模型名稱")
+    
+
     parser.add_argument("--vector_paths", nargs='+', required=True, help="多個 persona 向量路徑")
     parser.add_argument("--layer", type=int, default=20, help="目標層數")
     parser.add_argument("--coef", type=float, default=2.0, help="steering 係數")

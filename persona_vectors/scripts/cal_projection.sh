@@ -1,8 +1,9 @@
 gpu=${1:-0}
 
+# --file_path eval_persona_eval/Qwen2.5-7B-Instruct/creative_professional.csv \
 
 CUDA_VISIBLE_DEVICES=$gpu python -m eval.cal_projection \
-    --file_path eval_persona_eval/Qwen2.5-7B-Instruct/creative_professional.csv \
+    --file_path eval_persona_eval/baseline.csv \
     --vector_path persona_vectors/Qwen2.5-7B-Instruct/creative_professional_response_avg_diff.pt \
     --layer 20 \
     --model_name Qwen/Qwen2.5-7B-Instruct \

@@ -58,13 +58,43 @@ def sample_steering(model, tokenizer, conversations,  vector, layer, coef, bs=20
 
 
 def sample(model, tokenizer, conversations, top_p=1, max_tokens=1000, temperature=1, min_tokens=1, lora_path=None):
+    # 檢查是否為 Gemma 模型並調整參數
+    model_name = getattr(tokenizer, 'name_or_path', '')
+    is_gemma = "gemma" in model_name.lower()
+    
+    # 檢查模型類型：vLLM vs transformers
+    is_vllm_model = hasattr(model, 'generate') and hasattr(model, 'llm_engine')
+    
+    if is_gemma and not is_vllm_model:
+        # Gemma-3 使用 transformers 直接產生
+        print(f"🎯 偵測到 Gemma 模型，使用 transformers 直接產生")
+        return sample_with_transformers(model, tokenizer, conversations, top_p, max_tokens, temperature)
+    
+    # 原有的 vLLM 邏輯
+    # 為 Gemma 模型設定特殊的 stop tokens
+    stop_tokens = []
+    if tokenizer.eos_token:
+        stop_tokens.append(tokenizer.eos_token)
+    
+    if is_gemma:
+        # Gemma 特有的 stop tokens
+        gemma_stops = ["<end_of_turn>", "</s>", "<eos>"]
+        for token in gemma_stops:
+            if token not in stop_tokens:
+                stop_tokens.append(token)
+        
+        # 為 Gemma 增加最小 token 數量以避免空回應
+        min_tokens = max(min_tokens, 10)
+        print(f"🎯 偵測到 Gemma 模型，使用最佳化參數，min_tokens={min_tokens}")
+    
     sampling_params = SamplingParams(
         temperature=temperature,
         top_p=top_p,
         max_tokens=max_tokens,
         skip_special_tokens=True,
-        stop=[tokenizer.eos_token],
-        min_tokens=min_tokens
+        stop=stop_tokens,
+        min_tokens=min_tokens,
+        repetition_penalty=1.1 if is_gemma else 1.0  # Gemma 使用重複懲罰
     )
 
     texts = []
@@ -80,6 +110,72 @@ def sample(model, tokenizer, conversations, top_p=1, max_tokens=1000, temperatur
     else:
         completions = model.generate(texts, **generate_kwargs)
     answers = [completion.outputs[0].text for completion in completions]
+    return texts, answers
+
+
+def sample_with_transformers(model, tokenizer, conversations, top_p=1, max_tokens=1000, temperature=1):
+    """使用 transformers 直接產生回應，針對 Gemma-3 最佳化"""
+    
+    # 設定分詞器的 padding
+    tokenizer.padding_side = "left"
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+    
+    texts = []
+    answers = []
+    
+    # 批次處理對話
+    batch_size = 8  # 適合的批次大小
+    
+    for i in range(0, len(conversations), batch_size):
+        batch_conversations = conversations[i:i+batch_size]
+        batch_texts = []
+        
+        # 準備批次的提示
+        for messages in batch_conversations:
+            text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+            batch_texts.append(text)
+        
+        # 編碼批次
+        inputs = tokenizer(
+            batch_texts,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=2048
+        )
+        
+        # 移動到模型設備
+        inputs = {k: v.to(model.device) for k, v in inputs.items()}
+        
+        # 產生回應
+        with torch.no_grad():
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=max_tokens,
+                do_sample=True if temperature > 0 else False,
+                temperature=temperature if temperature > 0 else None,
+                top_p=top_p if temperature > 0 else None,
+                repetition_penalty=1.1,
+                pad_token_id=tokenizer.pad_token_id,
+                eos_token_id=tokenizer.eos_token_id,
+                use_cache=True
+            )
+        
+        # 解碼批次回應
+        for j, output in enumerate(outputs):
+            # 計算原始提示長度
+            original_length = inputs['input_ids'][j].shape[0]
+            # 提取新產生的部分
+            new_tokens = output[original_length:]
+            # 解碼
+            answer = tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
+            answers.append(answer)
+        
+        # 記錄原始文本
+        texts.extend(batch_texts)
+    
     return texts, answers
 
 
@@ -109,9 +205,12 @@ class Question():
     
     def get_input(self, n_per_question):
         paraphrases = random.choices(self.paraphrases, k=n_per_question)
-        conversations = [[dict(role='user', content=i)] for i in paraphrases]
         if self.system:
-            conversations = [[dict(role='system', content=self.system)] + c for c in conversations]
+            # For models that don't support system role (like Gemma-2), merge system message with user message
+            enhanced_paraphrases = [f"{self.system}\n\n{paraphrase}" for paraphrase in paraphrases]
+            conversations = [[dict(role='user', content=enhanced_content)] for enhanced_content in enhanced_paraphrases]
+        else:
+            conversations = [[dict(role='user', content=i)] for i in paraphrases]
         return paraphrases, conversations
     
     async def eval(self, llm, tokenizer, coef, vector=None, layer=None, max_tokens=1000, n_per_question=100, steering_type="last", lora_path=None):
@@ -259,10 +358,16 @@ def main(model, trait, output_path, coef=0, vector_path=None, layer=None, steeri
         llm, tokenizer = load_model(model)
         lora_path = None
         vector = torch.load(vector_path, weights_only=False)[layer]
-            
     else:
-        llm, tokenizer, lora_path = load_vllm_model(model)
-        vector=None
+        # 檢查是否為 Gemma-3，如果是則使用 transformers
+        if "gemma-3" in model.lower():
+            print("🎯 偵測到 Gemma-3 模型，使用 transformers 載入...")
+            llm, tokenizer = load_model(model)
+            lora_path = None
+        else:
+            # 其他模型使用 vLLM
+            llm, tokenizer, lora_path = load_vllm_model(model)
+        vector = None
     questions = load_persona_questions(trait, temperature=temperature, persona_instructions_type=persona_instruction_type, assistant_name=assistant_name, judge_model=judge_model, version=version)
     if batch_process:
         print(f"Batch processing {len(questions)} '{trait}' questions...")
