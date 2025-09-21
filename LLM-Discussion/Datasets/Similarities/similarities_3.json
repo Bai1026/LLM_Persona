@@ -1,7 +1,3 @@
-{
-    "Examples": [
-        "Tell me all the ways in which a book and a magazine are alike.",
-        "Tell me all the ways in which a car and a bicycle are alike.",
-        "Tell me all the ways in which a tree and a flower are alike."
-    ]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:70ce17aeb53fd163defdd6c6ac48cb6db5f21c182c492f62378b658104cc8660
+size 100

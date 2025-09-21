@@ -6,6 +6,7 @@ from pathlib import Path
 from utils.openai_model import OpenAIModel
 from eval_functions.eval_prompts import aut_prompts, scientific_prompts, wkct_prompts
 from dotenv import load_dotenv, find_dotenv
+from rich import print
 
 load_dotenv(find_dotenv())
 
@@ -60,15 +61,21 @@ def evaluate_response(model, content, criterion, num_samples=3):
     """
     # 根據標準選擇prompt
     if criterion == 'originality':
-        prompt = wkct_prompts['originality']['sampling']
+        prompt = aut_prompts['originality']['sampling']
     elif criterion == 'elaboration':
-        prompt = wkct_prompts['elaboration']['sampling']
+        prompt = aut_prompts['elaboration']['sampling']
     else:
         raise ValueError(f"不支援的評估標準: {criterion}")
     
     # 建構完整的prompt
     full_prompt = prompt + f"\n\nThe response to evaluate is:\n{content}"
-    
+    full_prompt += """
+    Please focus on the answers that is specify. 
+    For instance: I would love to share these answer with you guys. **1: xxx**, **2: xxx**
+    - Please only focus on the answers themselves (**1: xxx**, **2: xxx**), ignore the trivial words(I would love to share these answer with you guys.)
+    - Could be more demanding.
+    """
+
     messages = [{"role": "user", "content": full_prompt}]
     
     scores = []
@@ -206,13 +213,13 @@ def simple_eval(input_file):
     print(f"總共評估回應數: {averages['total_responses']}")
     print(f"每個回應評估次數: 3次")
     print(f"總評估次數: {averages['total_evaluations']}")
-    print(f"平均 Originality 分數: {averages['average_originality']:.3f}")
-    print(f"平均 Elaboration 分數: {averages['average_elaboration']:.3f}")
     print(f"Originality 回應平均分數: {[f'{score:.3f}' for score in averages['originality_scores']]}")
     print(f"Elaboration 回應平均分數: {[f'{score:.3f}' for score in averages['elaboration_scores']]}")
     print(f"Originality 所有個別分數: {averages['originality_individual_scores']}")
     print(f"Elaboration 所有個別分數: {averages['elaboration_individual_scores']}")
     
+    print(f"平均 Originality 分數: {averages['average_originality']:.3f}")
+    print(f"平均 Elaboration 分數: {averages['average_elaboration']:.3f}")
     # 計算變異數統計
     import statistics
     if len(averages['originality_individual_scores']) > 1:
@@ -241,7 +248,7 @@ def simple_eval(input_file):
 if __name__ == "__main__":
     # 測試用檔案
     # input_file = 'test_3_samples.json'
-    input_file = '../Results/Similarities/Output/persona_agent/Similarities_persona_api_0920-2330_100_chat_log.json'
+    input_file = '../Results/AUT/Output/qwen_agent/AUT_qwen_1_1_Qwen_Qwen_qwen_0912-0527_100_chat_log.json'
 
     if os.path.exists(input_file):
         simple_eval(input_file)

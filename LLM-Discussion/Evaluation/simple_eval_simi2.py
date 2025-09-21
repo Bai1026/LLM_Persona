@@ -6,6 +6,7 @@ from pathlib import Path
 from utils.openai_model import OpenAIModel
 from eval_functions.eval_prompts import aut_prompts, scientific_prompts, wkct_prompts
 from dotenv import load_dotenv, find_dotenv
+from rich import print
 
 load_dotenv(find_dotenv())
 

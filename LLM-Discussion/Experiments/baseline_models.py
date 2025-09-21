@@ -243,11 +243,16 @@ Please provide answers from these three role perspectives, with each role embody
             with torch.no_grad():
                 outputs = self.model.generate(
                     **inputs,
-                    max_new_tokens=max_tokens,
-                    temperature=0.7,
-                    top_p=0.9,
+                    max_new_tokens=min(max_tokens, 512),   # 限制最大長度
+                    # temperature=0.6,                       # 降低創意度
+                    top_p=0.8,                            # 降低隨機性
                     do_sample=True,
-                    pad_token_id=self.tokenizer.pad_token_id
+                    repetition_penalty=1.2,               # 增強重複懲罰
+                    no_repeat_ngram_size=4,               # 避免4-gram重複
+                    # early_stopping=True,                  # 啟用早期停止
+                    # length_penalty=0.8,                   # 鼓勵較短回應
+                    pad_token_id=self.tokenizer.pad_token_id,
+                    eos_token_id=self.tokenizer.eos_token_id
                 )
             
             # 解碼回應

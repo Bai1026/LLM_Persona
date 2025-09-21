@@ -20,6 +20,11 @@ def auto_eval_persona():
     
     args = parser.parse_args()
     
+    # start_time = subprocess.getoutput("date '+%Y-%m-%d %H:%M:%S'")
+    from datetime import datetime
+    start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"🕒 開始時間: {start_time}")
+
     if args.baseline:
         print(f"🚀 開始 Pure OpenAI API Baseline 評估 - 任務: {args.task}")
         print(f"📋 使用模型: {args.openai_model}")
@@ -27,6 +32,7 @@ def auto_eval_persona():
         print(f"🚀 開始 {args.model.upper()} 模型評估 - 任務: {args.task}")
     else:
         print(f"🚀 開始自動評估流程 - 任務: {args.task}")
+    
     
     # # 檢查 OpenAI API Key（只在 baseline 模式需要）
     # if args.baseline and not os.getenv("OPENAI_API_KEY"):
@@ -75,6 +81,7 @@ def auto_eval_persona():
         
         if result.returncode == 0:
             print("✅ 流程完成!")
+            
         else:
             print(f"❌ 執行失敗，返回代碼: {result.returncode}")
             

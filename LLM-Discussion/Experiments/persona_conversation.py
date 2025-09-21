@@ -125,42 +125,110 @@ class PersonaAPIRunner:
     #     return task_prompt
 
     def extract_responses(self, content):
-        """提取回應內容"""
+        """提取回應內容，從 assistant 的回答中解析出具體的 uses"""
         import re
+        
+        # 首先嘗試提取完整的回應，包括被 user 中斷後的內容
+        enhanced_content = content
+        
+        # 檢查是否有 \nuser\n 中斷
+        user_match = re.search(r'\nuser\n', content)
+        if user_match:
+            # 獲取被截斷前的內容
+            before_user = content[:user_match.start()]
+            after_user_section = content[user_match.end():]
+            
+            # 跳過用戶的輸入，找到後續的回應
+            lines_after_user = after_user_section.split('\n')
+            assistant_response_lines = []
+            skip_user_input = True
+            
+            for line in lines_after_user:
+                line = line.strip()
+                # 跳過用戶的指令部分
+                if skip_user_input:
+                    if line.startswith(('Continue', 'Now', 'Imagine', 'Tell me', 'What', 'How')):
+                        continue
+                    elif line == '' or len(line) < 10:
+                        continue
+                    else:
+                        skip_user_input = False
+                
+                # 收集助理的回應
+                if not skip_user_input and line:
+                    assistant_response_lines.append(line)
+            
+            # 如果找到後續的助理回應，將其合併
+            if assistant_response_lines:
+                additional_response = ' '.join(assistant_response_lines)
+                # 檢查 before_user 是否以不完整的句子結尾
+                if before_user.rstrip().endswith(('like', '(', 'such as', 'including', 'with')):
+                    # 嘗試智慧地連接內容
+                    enhanced_content = before_user.rstrip() + ' ' + additional_response
+                else:
+                    enhanced_content = before_user
+            else:
+                enhanced_content = before_user
+        
+        # 移除其他可能的截斷標記
+        cleanup_patterns = [
+            r'\nContinue.*',
+            r'\nNow.*',
+            r'\nImagine.*'
+        ]
+        
+        for pattern in cleanup_patterns:
+            match = re.search(pattern, enhanced_content, re.DOTALL | re.IGNORECASE)
+            if match:
+                enhanced_content = enhanced_content[:match.start()]
+        
+        content = enhanced_content
         
         # 優化的正規表達式，能處理多種格式
         patterns = [
-            # 格式1: **1.** **Title** (新增！這是你遇到的問題格式)
-            r'\*\*(\d+)\.\*\*\s*\*\*([^*]+?)\*\*\s*(.*?)(?=\*\*\d+\.\*\*|\n\n|$)',
-            # 格式2: **1. Title:** (內容)
+            # 格式1: 1. **Title** (可選冒號) - 改進版本，能處理混合格式
+            r'(\d+)\.\s*\*\*([^*]+?)\*\*:?\s*\n?(.*?)(?=\d+\.\s*\*\*|$)',
+            # 格式2: **1.** **Title** (新格式)
+            r'\*\*(\d+)\.\*\*\s*\*\*([^*]+?)\*\*\s*(.*?)(?=\*\*\d+\.\*\*|$)',
+            # 格式3: **1. Title:** (內容)
             r'\*\*(\d+)\.\s*([^*]+?)\*\*:?\s*(.*?)(?=\*\*\d+\.|$)',
-            # 格式3: 1. **Title:** (內容)  
+            # 格式4: 1. **Title:** (內容)  
             r'(\d+)\.\s*\*\*([^*]+?)\*\*:?\s*(.*?)(?=\d+\.\s*\*\*|$)',
-            # 格式4: 數字開頭的一般項目
+            # 格式5: 數字開頭的一般項目
             r'(\d+)\.\s*([^\n]*?)\n(.*?)(?=\d+\.|$)'
         ]
         
         responses = []
         
-        for pattern in patterns:
+        for i, pattern in enumerate(patterns):
             matches = re.findall(pattern, content, re.MULTILINE | re.DOTALL)
+            print(f"DEBUG: Pattern {i+1} found {len(matches)} matches")  # 除錯資訊
             if matches:
-                for match in matches:
+                for j, match in enumerate(matches):
                     if len(match) == 3:  # (number, title, content)
+                        number = match[0].strip()
                         title = match[1].strip()
                         body = match[2].strip()
                         
-                        # 清理標題和內容
-                        if title:
-                            full_item = f"**{title}**"
-                            if body:
-                                # 清理內容開頭的換行和多餘字符
-                                body = re.sub(r'^\n+', '', body)
-                                body = body.strip()
-                                if body:
-                                    full_item += f": {body}"
-                            responses.append(full_item)
-                break  # 如果找到匹配，就不嘗試其他模式
+                        print(f"DEBUG: Processing match {j+1}: '{title}', body length: {len(body)}")
+                        
+                        # 清理重複的內容
+                        # original_body_length = len(body)
+                        # body = self.clean_repetitive_content(body)
+                        # cleaned_body_length = len(body)
+                        
+                        # print(f"DEBUG: Body length after cleaning: {original_body_length} -> {cleaned_body_length}")
+                        
+                        # 建構完整項目
+                        full_item = f"**{title}**"
+                        if body:
+                            full_item += f": {body}"
+                        responses.append(full_item)
+                        print(f"DEBUG: Added response: {title}")  # 除錯資訊
+                
+                if responses:  # 如果找到匹配，就不嘗試其他模式
+                    print(f"DEBUG: Total responses collected: {len(responses)}")  # 除錯資訊
+                    break
         
         # 如果上面的模式都沒匹配到，嘗試更寬泛的分割方法
         if not responses:
@@ -213,7 +281,7 @@ class PersonaAPIRunner:
                 if clean_response:
                     responses.append(clean_response)
         
-        return responses  # 限制最多10個回應
+        return responses[:10]  # 限制最多10個回應
     
     def run(self):
         """執行 API 呼叫"""
@@ -356,10 +424,16 @@ def main():
     
     args = parser.parse_args()
     
+    from datetime import datetime
+    start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"🕒 開始時間: {start_time}")
+
     # 建立並執行 API 執行器
     runner = PersonaAPIRunner(args.api_url, args.dataset, args.type, args.prompt)
     discussion_output = runner.run()
     
+    end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     if args.eval_mode and discussion_output:
         # 整合原有的評估系統
         evaluation_root = Path(__file__).parent.parent / 'Evaluation'
@@ -376,6 +450,8 @@ def main():
             output="y"
         )
         auto_grade(eval_args)
+        print(f"🕒 結束時間: {end_time}")
+        print(f"Total Time: {start_time} to {end_time}")
 
 
 if __name__ == "__main__":
