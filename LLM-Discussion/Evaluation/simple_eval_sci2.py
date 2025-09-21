@@ -6,6 +6,7 @@ from pathlib import Path
 from utils.openai_model import OpenAIModel
 from eval_functions.eval_prompts import aut_prompts, scientific_prompts, wkct_prompts
 from dotenv import load_dotenv, find_dotenv
+from rich import print
 
 load_dotenv(find_dotenv())
 
@@ -68,6 +69,12 @@ def evaluate_response(model, content, criterion, num_samples=3):
     
     # 建構完整的prompt
     full_prompt = prompt + f"\n\nThe response to evaluate is:\n{content}"
+    full_prompt += """
+    Please focus on the answers that is specify. 
+    For instance: I would love to share these answer with you guys. **1: xxx**, **2: xxx**
+    - Please only focus on the answers themselves (**1: xxx**, **2: xxx**), ignore the trivial words(I would love to share these answer with you guys.)
+    - Could be more demanding.
+    """
     
     messages = [{"role": "user", "content": full_prompt}]
     
@@ -164,7 +171,8 @@ def simple_eval(input_file):
     # 評估每個回應
     all_results = []
     
-    for i, item in enumerate(assistant_contents, 1):
+    from tqdm import tqdm
+    for i, item in tqdm(enumerate(assistant_contents, 1)):
         print(f"\n正在評估回應 {i}/{len(assistant_contents)}")
         print(f"問題: {item['question'][:50]}...")
         print(f"模型: {item['model']}")
@@ -199,29 +207,38 @@ def simple_eval(input_file):
     # 計算平均分數
     averages = calculate_averages(all_results)
     
-    # 輸出結果
-    print("\n" + "="*50)
-    print("評估結果摘要")
-    print("="*50)
-    print(f"總共評估回應數: {averages['total_responses']}")
-    print(f"每個回應評估次數: 3次")
-    print(f"總評估次數: {averages['total_evaluations']}")
-    print(f"平均 Originality 分數: {averages['average_originality']:.3f}")
-    print(f"平均 Elaboration 分數: {averages['average_elaboration']:.3f}")
-    print(f"Originality 回應平均分數: {[f'{score:.3f}' for score in averages['originality_scores']]}")
-    print(f"Elaboration 回應平均分數: {[f'{score:.3f}' for score in averages['elaboration_scores']]}")
-    print(f"Originality 所有個別分數: {averages['originality_individual_scores']}")
-    print(f"Elaboration 所有個別分數: {averages['elaboration_individual_scores']}")
-    
+    # # 輸出結果
+    # print("\n" + "="*50)
+    # print("評估結果摘要")
+    # print("="*50)
+    # print(f"總共評估回應數: {averages['total_responses']}")
+    # print(f"每個回應評估次數: 3次")
+    # print(f"總評估次數: {averages['total_evaluations']}")
+    # print(f"Originality 回應平均分數: {[f'{score:.3f}' for score in averages['originality_scores']]}")
+    # print(f"Elaboration 回應平均分數: {[f'{score:.3f}' for score in averages['elaboration_scores']]}")
+    # print(f"Originality 所有個別分數: {averages['originality_individual_scores']}")
+    # print(f"Elaboration 所有個別分數: {averages['elaboration_individual_scores']}")
+
+    # print(f"平均 Originality 分數: {averages['average_originality']:.3f}")
+    # print(f"平均 Elaboration 分數: {averages['average_elaboration']:.3f}")
+
+    ori_mean = f"Originality 回應平均分數: {[f'{score:.3f}' for score in averages['originality_scores']]}"
+    ela_mean = f"Elaboration 回應平均分數: {[f'{score:.3f}' for score in averages['elaboration_scores']]}"
+
     # 計算變異數統計
     import statistics
     if len(averages['originality_individual_scores']) > 1:
         orig_std = statistics.stdev(averages['originality_individual_scores'])
-        print(f"Originality 標準差: {orig_std:.3f}")
+        # print(f"Originality 標準差: {orig_std:.3f}")
+        ori_std = f"Originality 標準差: {orig_std:.3f}"
+        all_results.append({'Originality 標準差': orig_std})
     
     if len(averages['elaboration_individual_scores']) > 1:
         elab_std = statistics.stdev(averages['elaboration_individual_scores'])
-        print(f"Elaboration 標準差: {elab_std:.3f}")
+        # print(f"Elaboration 標準差: {elab_std:.3f}")
+        ela_std = f"Elaboration 標準差: {elab_std:.3f}"
+        all_results.append({'Elaboration 標準差': elab_std})
+
     print("="*50)
     
     # 儲存詳細結果
@@ -236,13 +253,42 @@ def simple_eval(input_file):
     
     print(f"\n詳細結果已儲存至: {output_file}")
     
-    return averages, all_results
+    return averages, all_results, ori_mean, ela_mean, ori_std, ela_std
 
 if __name__ == "__main__":
-    # parser = argparse.ArgumentParser(description="簡化版評估系統：專門評估originality和elaboration")
-    # parser.add_argument("-i", "--input_file", required=True, help="輸入的JSON檔案路徑")
+    # 測試用檔案
+    # input_file = 'test_3_samples.json'
+    # input_file = '../Results/Similarities/Output/persona_agent/Similarities_persona_api_0920-2330_100_chat_log.json'
+    input_file_path = './Main_Results/Sci/'
+    finding_list = [
+        # 'llama_vector',
+        # 'llama_single',
+        # 'llama_multi',
+        # 'qwen_vector',
+        'qwen_single',
+        'qwen_multi',
+    ]
+    ori_results = []
+    ela_results = []
+
+    for finding in finding_list:
+        input_file = input_file_path + finding + '.json'
+
+        if os.path.exists(input_file):
+            _, _, ori_mean, ela_mean, ori_std, ela_std = simple_eval(input_file)
+            ori_results.append(finding + ': ' + ori_mean + ', ' + ori_std)
+            ela_results.append(finding + ': ' + ela_mean + ', ' + ela_std)
+            
+        else:
+            print(f"測試檔案 {input_file} 不存在")
     
-    # args = parser.parse_args()
-    # input_file = './test_data.json'
-    input_file = '../Results/Scientific/Output/persona_agent/Scientific_persona_api_0921-0324_100_chat_log.json'
-    simple_eval(input_file)
+    print("\n" + "="*50)
+    print("所有 Originality 結果")
+    print("="*50)
+    for res in ori_results:
+        print(res)
+    print("\n" + "="*50)
+    print("所有 Elaboration 結果")
+    print("="*50)
+    for res in ela_results:
+        print(res)
