@@ -163,9 +163,9 @@ python auto_eval_persona.py \
 
 ```bash
 python auto_grade_final.py \
-  -i "Scientific_persona_api_0918-2154_100" \
+  -i "Similarities_persona_api_0920-2032_100" \
   -t sampling \
-  -d Scientific \
+  -d Similarities \
   -v 4 \
   -o y
 `````

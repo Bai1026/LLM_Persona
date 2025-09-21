@@ -81,11 +81,16 @@ class PersonaChatbot:
             with torch.no_grad():
                 outputs = self.model.generate(
                     **inputs,
-                    max_new_tokens=max_tokens,
+                    max_new_tokens=min(max_tokens, 512),   # 進一步限制長度
                     do_sample=True,
-                    temperature=0.7,
-                    top_p=0.9,
-                    pad_token_id=self.tokenizer.eos_token_id
+                    # temperature=0.6,                       # 降低創意度
+                    top_p=0.8,                            # 降低隨機性
+                    repetition_penalty=1.2,               # 增強重複懲罰
+                    no_repeat_ngram_size=4,               # 避免4-gram重複
+                    # early_stopping=True,                  # 重新啟用早期停止
+                    pad_token_id=self.tokenizer.eos_token_id,
+                    eos_token_id=self.tokenizer.eos_token_id,
+                    # length_penalty=0.8,                   # 鼓勵較短回應
                 )
         
         # 解碼回應
