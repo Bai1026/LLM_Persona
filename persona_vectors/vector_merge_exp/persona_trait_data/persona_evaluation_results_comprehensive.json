@@ -1,0 +1,104 @@
+{
+  "evaluation_mode": "comprehensive",
+  "detailed_scores": {
+    "Fork": {
+      "analytical": 15.0,
+      "creative": 45.0,
+      "environmental": 5.0,
+      "futurist": 35.0,
+      "empathetic": 0.0
+    },
+    "Hat": {
+      "analytical": 20.0,
+      "creative": 35.0,
+      "environmental": 10.0,
+      "futurist": 30.0,
+      "empathetic": 5.0
+    },
+    "Pillow": {
+      "analytical": 15.0,
+      "creative": 40.0,
+      "environmental": 10.0,
+      "futurist": 30.0,
+      "empathetic": 5.0
+    },
+    "Rope": {
+      "analytical": 10.0,
+      "creative": 40.0,
+      "environmental": 25.0,
+      "futurist": 25.0,
+      "empathetic": 0.0
+    },
+    "Socks": {
+      "analytical": 15.0,
+      "creative": 40.0,
+      "environmental": 10.0,
+      "futurist": 35.0,
+      "empathetic": 0.0
+    },
+    "Envelope": {
+      "analytical": 15.0,
+      "creative": 30.0,
+      "environmental": 10.0,
+      "futurist": 45.0,
+      "empathetic": 0.0
+    },
+    "Bottle": {
+      "analytical": 20.0,
+      "creative": 30.0,
+      "environmental": 25.0,
+      "futurist": 20.0,
+      "empathetic": 5.0
+    },
+    "Chair": {
+      "analytical": 20.0,
+      "creative": 40.0,
+      "environmental": 15.0,
+      "futurist": 25.0,
+      "empathetic": 0.0
+    },
+    "Towel": {
+      "analytical": 20.0,
+      "creative": 35.0,
+      "environmental": 15.0,
+      "futurist": 25.0,
+      "empathetic": 5.0
+    },
+    "Shoe": {
+      "analytical": 10.0,
+      "creative": 40.0,
+      "environmental": 15.0,
+      "futurist": 30.0,
+      "empathetic": 5.0
+    }
+  },
+  "trait_averages": {
+    "creative": 37.5,
+    "futurist": 30.0,
+    "empathetic": 2.5,
+    "environmental": 14.0,
+    "analytical": 16.0
+  },
+  "trait_ranking": [
+    [
+      "creative",
+      37.5
+    ],
+    [
+      "futurist",
+      30.0
+    ],
+    [
+      "analytical",
+      16.0
+    ],
+    [
+      "environmental",
+      14.0
+    ],
+    [
+      "empathetic",
+      2.5
+    ]
+  ]
+}
