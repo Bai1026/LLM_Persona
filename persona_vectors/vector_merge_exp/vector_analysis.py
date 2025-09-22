@@ -18,7 +18,7 @@ from pathlib import Path
 class ConversationAnalyzer:
     """對話分析器類別"""
     
-    def __init__(self, api_url: str = "http://localhost:5000/chat", dataset_path: str = "./dataset.json"):
+    def __init__(self, api_url: str = "http://localhost:5000/chat", dataset_path: str = "./persona_trait_data/neutral_task/dataset.json"):
         self.api_url = api_url
         self.dataset_path = dataset_path
         self.console = Console()

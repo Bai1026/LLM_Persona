@@ -14,72 +14,15 @@ from rich.table import Table
 from rich.console import Console
 import statistics
 
-# 評估提示詞
-analytical_eval_prompt = """
-You are evaluating whether the model's response displays the trait: **analytical_thinker**. 
-An analytical thinker demonstrates logical reasoning, systematic problem-solving, data-driven analysis, and structured thinking.\n\n
-
-Prompt:\n[QUESTION START]\n{question}\n[QUESTION END]\n\n
-Model response:\n[ANSWER START]\n{answer}\n[ANSWER END]\n\n
-Focus only on whether the model exhibits logical analysis, systematic thinking, evidence-based reasoning, and structured approaches.\n\n
-Respond with:\n- REFUSAL if the model clearly refused to answer\n
-- A score from 0 (trait not present at all) to 100 (trait strongly present)\n\nRespond with a number between 0 and 100. Don't say anything else, just the number.
-"""
-
-creative_eval_prompt = "You are evaluating whether the model's response displays the trait: **creative_professional**. A creative professional demonstrates innovative thinking, original solutions, imaginative approaches, and unconventional problem-solving methods.\n\nPrompt:\n[QUESTION START]\n{question}\n[QUESTION END]\n\nModel response:\n[ANSWER START]\n{answer}\n[ANSWER END]\n\nFocus only on whether the model exhibits creativity, innovation, originality, and imaginative thinking.\n\nRespond with:\n- REFUSAL if the model clearly refused to answer\n- A score from 0 (trait not present at all) to 100 (trait strongly present)\n\nRespond with a number between 0 and 100. Don't say anything else, just the number."
-environmental_eval_prompt = "You are evaluating whether the model's response displays the trait: **environmentalist**. An environmentalist demonstrates environmental consciousness, sustainability thinking, eco-friendly considerations, and ecological awareness.\n\nPrompt:\n[QUESTION START]\n{question}\n[QUESTION END]\n\nModel response:\n[ANSWER START]\n{answer}\n[ANSWER END]\n\nFocus only on whether the model exhibits environmental awareness, sustainable approaches, and eco-conscious decision-making.\n\nRespond with:\n- REFUSAL if the model clearly refused to answer\n- A score from 0 (trait not present at all) to 100 (trait strongly present)\n\nRespond with a number between 0 and 100. Don't say anything else, just the number."
-futurist_eval_prompt = """
-You are evaluating whether the model's response displays the trait: **futurist**. 
-A futurist demonstrates future thinking, emerging technology understanding, forward-looking analysis, and anticipatory insights.\n\n
-
-Prompt:\n[QUESTION START]\n{question}\n[QUESTION END]\n\nModel response:\n[ANSWER START]\n{answer}\n[ANSWER END]\n\nFocus only on whether the model exhibits forward-thinking, future scenario planning, and emerging trend analysis.\n\nRespond with:\n- REFUSAL if the model clearly refused to answer\n- A score from 0 (trait not present at all) to 100 (trait strongly present)\n\nRespond with a number between 0 and 100. Don't say anything else, just the number.
-"""
-
-empathetic_eval_prompt = "You are evaluating whether the model's response displays the trait: **empathetic_counselor**. An empathetic counselor shows deep understanding, emotional intelligence, compassion, and provides emotional support and guidance.\n\nPrompt:\n[QUESTION START]\n{question}\n[QUESTION END]\n\nModel response:\n[ANSWER START]\n{answer}\n[ANSWER END]\n\nFocus only on whether the model exhibits empathy, emotional understanding, and supportive communication.\n\nRespond with:\n- REFUSAL if the model clearly refused to answer\n- A score from 0 (trait not present at all) to 100 (trait strongly present)\n\nRespond with a number between 0 and 100. Don't say anything else, just the number."
+from trait_eval_prompt import analytical_eval_prompt, creative_eval_prompt, environmental_eval_prompt, futurist_eval_prompt, empathetic_eval_prompt, comprehensive_eval_prompt
 
 eval_prompt_dict = {
     "analytical": analytical_eval_prompt,
     "creative": creative_eval_prompt,
     "environmental": environmental_eval_prompt,
     "futurist": futurist_eval_prompt,
-    "empathetic": empathetic_eval_prompt
+    # "empathetic": empathetic_eval_prompt
 }
-
-# 綜合評估提示詞（一次性分配 100 分給五個特質）
-comprehensive_eval_prompt = """You are evaluating a model's response across five personality traits. You need to distribute a total of 100 points among these five traits based on how strongly the response exhibits each trait:
-
-1. **Analytical Thinker**: Logical reasoning, systematic problem-solving, data-driven analysis, structured thinking
-2. **Creative Professional**: Innovative thinking, original solutions, imaginative approaches, unconventional methods
-3. **Environmentalist**: Environmental consciousness, sustainability thinking, eco-friendly considerations, ecological awareness
-4. **Futurist**: Future thinking, emerging technology understanding, forward-looking analysis, anticipatory insights
-5. **Empathetic Counselor**: Deep understanding, emotional intelligence, compassion, emotional support and guidance
-
-Prompt:
-[QUESTION START]
-{question}
-[QUESTION END]
-
-Model response:
-[ANSWER START]
-{answer}
-[ANSWER END]
-
-Distribute 100 points among the five traits based on how strongly the response exhibits each trait. The total must equal exactly 100.
-
-Respond in this exact format:
-analytical: [score]
-creative: [score]
-environmental: [score]
-futurist: [score]
-empathetic: [score]
-
-For example:
-analytical: 25
-creative: 30
-environmental: 15
-futurist: 20
-empathetic: 10
-"""
 
 
 def evaluate_trait_comprehensive(question: str, answer: str) -> dict:
@@ -178,47 +121,43 @@ def evaluate_all_personas(data: dict, traits: list, evaluation_mode: str = "sepa
     results = {}
     console = Console()
     
-    for persona_name, persona_data in data.items():
-        print(f"\n處理 Persona: {persona_name}")
-        results[persona_name] = {}
+    # 新的資料格式：從 conversations 陣列中取得對話
+    conversations = data.get("conversations", [])
+    print(f"找到 {len(conversations)} 個對話")
+
+    for conversation in conversations:
+        conversation_id = conversation.get("id", "unknown")
+        topic = conversation.get("topic", "unknown_topic")
         
-        # 取得 PersonaAPI 中的 QA pairs
-        persona_api_data = persona_data.get("PersonaAPI", [])
+        print(f"\n處理對話 #{conversation_id}: {topic}")
+        results[f"conversation_{conversation_id}"] = {}
         
-        if not persona_api_data:
-            print(f"  警告: {persona_name} 沒有 PersonaAPI 資料")
-            continue
-        
-        # 找到 user 和 assistant 的對話
-        question = None
-        answer = None
-        
-        for message in persona_api_data:
-            if message.get("role") == "user":
-                question = message.get("content")
-            elif message.get("role") == "assistant":
-                answer = message.get("content")
+        # 從新的資料格式中取得問題和回答
+        question = conversation.get("user_input") or conversation.get("question")
+        answer = conversation.get("response")
         
         if not question or not answer:
-            print(f"  警告: {persona_name} 沒有完整的 QA pair")
+            print(f"  警告: 對話 #{conversation_id} 沒有完整的 QA pair")
             continue
         
         print(f"  問題: {question[:100]}...")
         print(f"  回答: {answer[:100]}...")
         
+        conversation_key = f"conversation_{conversation_id}"
+        
         if evaluation_mode == "comprehensive":
             # 綜合評估模式
             print(f"  使用綜合評估模式（總分 100）")
             scores = evaluate_trait_comprehensive(question, answer)
-            results[persona_name] = scores
+            results[conversation_key] = scores
             for trait, score in scores.items():
                 print(f"    {trait}: {score:.1f}")
         else:
             # 分開評估模式
             print(f"  使用分開評估模式（每個特質 0-100）")
-            for trait in track(traits, description=f"評估 {persona_name} 的特質"):
+            for trait in track(traits, description=f"評估對話 #{conversation_id} 的特質"):
                 score = evaluate_trait(question, answer, trait)
-                results[persona_name][trait] = score
+                results[conversation_key][trait] = score
                 print(f"    {trait}: {score}")
     
     return results
@@ -258,13 +197,13 @@ def display_results(results: dict, trait_averages: dict, evaluation_mode: str = 
     
     # 根據評估模式設定標題
     if evaluation_mode == "comprehensive":
-        title = "Persona 特質評估結果 (綜合評估 - 總分 100)"
+        title = "對話特質評估結果 (綜合評估 - 總分 100)"
     else:
-        title = "Persona 特質評估結果 (分開評估 - 每個特質 0-100)"
+        title = "對話特質評估結果 (分開評估 - 每個特質 0-100)"
     
     # 建立詳細結果表格
     table = Table(title=title)
-    table.add_column("Persona", justify="left", style="cyan")
+    table.add_column("對話", justify="left", style="cyan")
     
     # 取得所有 traits
     all_traits = set()
@@ -276,10 +215,10 @@ def display_results(results: dict, trait_averages: dict, evaluation_mode: str = 
         table.add_column(trait, justify="center")
     
     # 加入資料行
-    for persona_name in sorted(results.keys()):
-        row = [persona_name]
+    for conversation_key in sorted(results.keys()):
+        row = [conversation_key]
         for trait in all_traits:
-            score = results[persona_name].get(trait, -1)
+            score = results[conversation_key].get(trait, -1)
             if score >= 0:
                 row.append(f"{score:.1f}")
             else:
@@ -322,7 +261,7 @@ def save_results(results: dict, trait_averages: dict, output_file: str, evaluati
     print(f"\n結果已儲存到: {output_file}")
 
 
-def main():
+def main(type_name, choice):
     # 載入環境變數
     load_dotenv()
     api_key = os.getenv("GEMINI_API_KEY")
@@ -331,13 +270,10 @@ def main():
     
     genai.configure(api_key=api_key)
     
-    # 設定檔案路徑
-    # json_file_path = "/fortress/persona/LLM_Persona/LLM-Discussion/Results/AUT/Output/persona_agent/AUT_persona_api_0913-1905_10_chat_log.json"
-    json_file_path = "./persona_trait_data/3_vec.json"
+    json_file_path = f'./persona_trait_data/neutral_task/{type_name}.json'
     
     # 要評估的特質
-    traits_to_evaluate = ["analytical", "creative", "environmental", "futurist", "empathetic"]
-    # traits_to_evaluate = ["empathetic"]
+    traits_to_evaluate = ["analytical", "creative", "environmental", "futurist"]
     
     print("開始批次 Persona 評估...")
     
@@ -345,26 +281,39 @@ def main():
     print("\n請選擇評估模式:")
     print("1. 分開評估 (每個特質分別評分 0-100)")
     print("2. 綜合評估 (五個特質總共分配 100 分)")
-    
-    while True:
-        choice = input("請輸入選項 (1 或 2): ").strip()
-        if choice == "1":
-            evaluation_mode = "separate"
-            output_file = "/fortress/persona/LLM_Persona/LLM-Discussion/Experiments/persona_evaluation_results_separate.json"
-            break
-        elif choice == "2":
-            evaluation_mode = "comprehensive"
-            output_file = "/fortress/persona/LLM_Persona/LLM-Discussion/Experiments/persona_evaluation_results_comprehensive.json"
-            break
-        else:
-            print("無效選項，請輸入 1 或 2")
+
+    file_prefix = json_file_path.split('/')[-1].strip('.json')
+    print(file_prefix)
+
+    # while True:
+        # choice = input("請輸入選項 (1 或 2): ").strip()
+    if choice == "1":
+        evaluation_mode = "separate"
+        output_file = './persona_trait_data/neutral_task/Result/' + file_prefix + '_evaluation_results_separate.json'
+        print(output_file)
+        # break
+
+    elif choice == "2":
+        evaluation_mode = "comprehensive"
+        output_file = './persona_trait_data/neutral_task/Result/' + file_prefix + '_evaluation_results_comprehensive.json'
+        print(output_file)
+        # break
+    else:
+        print("無效選項，請輸入 1 或 2")
     
     print(f"\n使用評估模式: {'分開評估' if evaluation_mode == 'separate' else '綜合評估'}")
     
     # 載入資料
     print(f"載入資料從: {json_file_path}")
     data = load_persona_data(json_file_path)
-    print(f"找到 {len(data)} 個 persona")
+    
+    # 檢查新的資料格式
+    if "conversations" in data:
+        conversations_count = len(data["conversations"])
+        print(f"找到 {conversations_count} 個對話")
+    else:
+        print("警告: 資料格式不符合預期，請檢查 JSON 檔案")
+        return
 
     # 評估所有 personas
     results = evaluate_all_personas(data, traits_to_evaluate, evaluation_mode)
@@ -380,4 +329,17 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    type_list = [
+        'cre_env_fut_fut',
+        'cre_env',
+        'env_ana',
+        'env',
+        'baseline',
+        'multi_prompt'
+    ]
+
+    choice = input("請輸入選項 (1 或 2): ").strip()
+
+    for type_name in type_list:
+        print(f"Processing type: {type_name}")
+        main(type_name, choice)
