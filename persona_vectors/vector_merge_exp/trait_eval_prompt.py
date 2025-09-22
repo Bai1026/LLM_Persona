@@ -63,7 +63,6 @@ comprehensive_eval_prompt = """You are evaluating a model's response across five
 2. **Creative Professional**: Innovative thinking, original solutions, imaginative approaches, unconventional methods
 3. **Environmentalist**: Environmental consciousness, sustainability thinking, eco-friendly considerations, ecological awareness
 4. **Futurist**: Future thinking, emerging technology understanding, forward-looking analysis, anticipatory insights
-5. **Empathetic Counselor**: Deep understanding, emotional intelligence, compassion, emotional support and guidance
 
 Prompt:
 [QUESTION START]

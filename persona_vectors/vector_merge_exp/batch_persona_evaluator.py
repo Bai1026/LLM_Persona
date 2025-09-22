@@ -21,7 +21,6 @@ eval_prompt_dict = {
     "creative": creative_eval_prompt,
     "environmental": environmental_eval_prompt,
     "futurist": futurist_eval_prompt,
-    # "empathetic": empathetic_eval_prompt
 }
 
 
