@@ -76,6 +76,12 @@ python Experiment/persona_api.py \
 python Experiment/persona_api.py --model meta-llama/Llama-3.1-8B-Instruct --vector_paths creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt --fusion_method weighted_average --layer 20 --coef 2.0
 ```
 
+- gemma-4b-it
+
+```bash
+python Experiment/persona_api.py --model google/gemma-3-4b-it --vector_paths creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt --fusion_method weighted_average --layer 20 --coef 2.0
+```
+
 ---
 
 ## Evaluation using LLM-Discussion Benchmark
@@ -97,14 +103,14 @@ python auto_eval_persona.py \
 - Scientific
 
 ```bash
-ython auto_eval_persona.py   -d ../Datasets/Scientific/scientific_3.json   -t Scientific   -p 1   -v 4
+python auto_eval_persona.py   -d ../Datasets/Scientific/scientific_100.json   -t Scientific   -p 1   -v 4
 ```
 
 - Similarities
 
 ```bash
 python auto_eval_persona.py \
-  -d ../Datasets/Similarities/similarities_10.json \
+  -d ../Datasets/Similarities/similarities_100.json \
   -t Similarities \
   -p 1 \
   -v 4
@@ -114,7 +120,7 @@ python auto_eval_persona.py \
 
 ```bash
 python auto_eval_persona.py \
-  -d ../Datasets/Instances/instances_10.json \
+  -d ../Datasets/Instances/instances_100.json \
   -t Instances \
   -p 1 \
   -v 4
