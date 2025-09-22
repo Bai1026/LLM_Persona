@@ -202,7 +202,7 @@ class PersonaAPIRunner:
         
         for i, pattern in enumerate(patterns):
             matches = re.findall(pattern, content, re.MULTILINE | re.DOTALL)
-            print(f"DEBUG: Pattern {i+1} found {len(matches)} matches")  # 除錯資訊
+            # print(f"DEBUG: Pattern {i+1} found {len(matches)} matches")  # 除錯資訊
             if matches:
                 for j, match in enumerate(matches):
                     if len(match) == 3:  # (number, title, content)
@@ -210,7 +210,7 @@ class PersonaAPIRunner:
                         title = match[1].strip()
                         body = match[2].strip()
                         
-                        print(f"DEBUG: Processing match {j+1}: '{title}', body length: {len(body)}")
+                        # print(f"DEBUG: Processing match {j+1}: '{title}', body length: {len(body)}")
                         
                         # 清理重複的內容
                         # original_body_length = len(body)
@@ -224,7 +224,7 @@ class PersonaAPIRunner:
                         if body:
                             full_item += f": {body}"
                         responses.append(full_item)
-                        print(f"DEBUG: Added response: {title}")  # 除錯資訊
+                        # print(f"DEBUG: Added response: {title}")  # 除錯資訊
                 
                 if responses:  # 如果找到匹配，就不嘗試其他模式
                     print(f"DEBUG: Total responses collected: {len(responses)}")  # 除錯資訊
@@ -307,7 +307,8 @@ class PersonaAPIRunner:
         
         print(f"🚀 開始 {self.task_type} 任務，共 {len(examples)} 個項目")
         
-        for item_data in examples:
+        from tqdm import tqdm
+        for item_data in tqdm(examples):
             # 處理不同的資料集格式
             if isinstance(item_data, str):
                 # 如果是字串格式（Scientific, Instances, Similarities 通常是這種格式）
@@ -434,24 +435,24 @@ def main():
     
     end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    if args.eval_mode and discussion_output:
-        # 整合原有的評估系統
-        evaluation_root = Path(__file__).parent.parent / 'Evaluation'
-        sys.path.append(str(evaluation_root))
-        from auto_grade_final import auto_grade
+    # if args.eval_mode and discussion_output:
+    #     # 整合原有的評估系統
+    #     evaluation_root = Path(__file__).parent.parent / 'Evaluation'
+    #     sys.path.append(str(evaluation_root))
+    #     from auto_grade_final import auto_grade
         
-        # 呼叫評估
-        eval_args = SimpleNamespace(
-            version="4", 
-            input_file=discussion_output,  # 這裡已經是正確的檔案名稱
-            type="sampling", 
-            sample=3, 
-            task=args.type, 
-            output="y"
-        )
-        auto_grade(eval_args)
-        print(f"🕒 結束時間: {end_time}")
-        print(f"Total Time: {start_time} to {end_time}")
+    #     # 呼叫評估
+    #     eval_args = SimpleNamespace(
+    #         version="4", 
+    #         input_file=discussion_output,  # 這裡已經是正確的檔案名稱
+    #         type="sampling", 
+    #         sample=3, 
+    #         task=args.type, 
+    #         output="y"
+    #     )
+    #     auto_grade(eval_args)
+    #     print(f"🕒 結束時間: {end_time}")
+    #     print(f"Total Time: {start_time} to {end_time}")
 
 
 if __name__ == "__main__":
