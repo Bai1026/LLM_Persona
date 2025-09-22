@@ -91,6 +91,30 @@ def chat_api():
         print(f"🧑 User: {user_input}")
         response = chatbot.generate_response(user_input, max_tokens)
         
+        # Role Prompt
+        ROLE_PROMPT = False
+        role_prompt = """
+You need to think and answer this question from three different professional perspectives:
+
+1. Environmentalist:
+Specialty: Sustainability and Environmental Health
+Mission: Advocate for eco-friendly solutions, promote sustainable development and protect the planet. Guide us to consider the environmental impact of ideas, promoting innovations that contribute to planetary health.
+
+2. Creative Professional:
+Specialty: Aesthetics, Narratives, and Emotions
+Mission: With artistic sensibility and mastery of narrative and emotion, infuse projects with beauty and depth. Challenge us to think expressively, ensuring solutions not only solve problems but also resonate on a human level.
+
+3. Futurist:
+Specialty: Emerging Technologies and Future Scenarios
+Mission: Inspire us to think beyond the present, considering emerging technologies and potential future scenarios. Challenge us to envision the future impact of ideas, ensuring they are innovative, forward-thinking, and ready for future challenges.
+
+Please provide answers from these three role perspectives, with each role embodying their professional characteristics and thinking approaches.
+"""
+        if ROLE_PROMPT:
+            user_input += "\n\n" + role_prompt
+        else:
+            user_input = user_input
+
         # 檢查並清理重複內容
         # response = clean_repetitive_response(response)
         

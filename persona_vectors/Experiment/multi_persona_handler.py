@@ -118,6 +118,9 @@ class MultiPersonaChatbot:
         
         # 使用融合後的向量
         self.update_persona_weights(self.current_weights)
+
+        # TODO: 手動更改 weights
+        # self.update_persona_weights([0.6, 0.2, 0.1, 0.1])
     
     def update_persona_weights(self, weights: List[float]):
         """更新 persona 權重並重新融合向量"""
