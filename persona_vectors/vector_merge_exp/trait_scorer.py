@@ -53,6 +53,7 @@ def evaluate_trait(question: str, answer: str, trait: str) -> str:
         
         # 測試訊息
         test_message = prompt
+        # test_message = 'hi'
         print(f"發送訊息: {test_message}")
         
         # 呼叫 API
