@@ -329,12 +329,17 @@ def main(type_name, choice):
 
 if __name__ == "__main__":
     type_list = [
-        'cre_env_fut_fut',
-        'cre_env',
-        'env_ana',
-        'env',
-        'baseline',
-        'multi_prompt'
+        # 'cre_env_fut_fut',
+        # 'cre_env',
+        # 'env_ana',
+        # 'env',
+        # 'baseline',
+        # 'multi_prompt'
+        'cre',
+        'ana_fut',
+        'cre_ana',
+        'cre_fut',
+        'env_fut',
     ]
 
     choice = input("請輸入選項 (1 或 2): ").strip()

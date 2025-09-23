@@ -18,7 +18,7 @@ from pathlib import Path
 class ConversationAnalyzer:
     """對話分析器類別"""
     
-    def __init__(self, api_url: str = "http://localhost:5000/chat", dataset_path: str = "./persona_trait_data/neutral_task/dataset.json"):
+    def __init__(self, api_url: str = "http://localhost:5001/chat", dataset_path: str = "./persona_trait_data/neutral_task/dataset.json"):
         self.api_url = api_url
         self.dataset_path = dataset_path
         self.console = Console()
@@ -125,7 +125,7 @@ class ConversationAnalyzer:
         """儲存結果到檔案"""
         if output_path is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            output_path = f"conversation_analysis_results_{timestamp}.json"
+            output_path = f"./persona_trait_data/neutral_task/{timestamp}.json"
         
         try:
             with open(output_path, 'w', encoding='utf-8') as f:
