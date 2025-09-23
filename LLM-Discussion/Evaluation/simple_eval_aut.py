@@ -223,20 +223,6 @@ def simple_eval(input_file):
     ori_mean = f"Originality 回應平均分數: {[f'{score:.3f}' for score in averages['originality_scores']]}"
     ela_mean = f"Elaboration 回應平均分數: {[f'{score:.3f}' for score in averages['elaboration_scores']]}"
 
-    # # 計算變異數統計
-    # import statistics
-    # if len(averages['originality_individual_scores']) > 1:
-    #     orig_std = statistics.stdev(averages['originality_individual_scores'])
-    #     # print(f"Originality 標準差: {orig_std:.3f}")
-    #     ori_std = f"Originality 標準差: {orig_std:.3f}"
-    #     all_results.append({ori_mean: ori_std})
-    
-    # if len(averages['elaboration_individual_scores']) > 1:
-    #     elab_std = statistics.stdev(averages['elaboration_individual_scores'])
-    #     # print(f"Elaboration 標準差: {elab_std:.3f}")
-    #     ela_std = f"Elaboration 標準差: {elab_std:.3f}"
-    #     all_results.append({ela_mean: ela_std})
-
     print("="*50)
     
     # 儲存詳細結果
@@ -255,18 +241,16 @@ def simple_eval(input_file):
 
 if __name__ == "__main__":
     # 測試用檔案
-    # input_file = 'test_3_samples.json'
-    # input_file = '../Results/Similarities/Output/persona_agent/Similarities_persona_api_0920-2330_100_chat_log.json'
-    # input_file_path = './Main_Results/AUT/'
-    input_file_path = './Main_Results/Vector_Amount_AUT/'
+    input_file_path = './Main_Results/AUT/'
     finding_list = [
-        '1vec_1',
+        # '1vec_1',
+        # '1vec_2',
         # '2vec',
         # '3vec',
         # '4vec',
         # '5vec',
-        '6vec',
-        '7vec',
+        # '6vec',
+        # '7vec',
 
         # 'llama_vector',
         # 'llama_single',
@@ -274,6 +258,7 @@ if __name__ == "__main__":
         # 'qwen_vector',
         # 'qwen_single',
         # 'qwen_multi',
+        'gemma_vector'
     ]
 
     for finding in finding_list:

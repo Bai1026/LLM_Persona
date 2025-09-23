@@ -51,6 +51,16 @@ def auto_eval_persona():
             "-p", str(args.prompt),
             "--model", args.openai_model
         ]
+    
+    elif args.model == "gemma":
+        # 使用 Persona API 模式 - 2nd file
+        generate_cmd = [
+            sys.executable, "persona_conversation2.py",
+            "-d", args.dataset,
+            "-t", args.task,
+            "-p", str(args.prompt)
+        ]
+
     elif args.model:
         # 使用指定的模型 (qwen 或 llama)
         generate_cmd = [
@@ -60,6 +70,7 @@ def auto_eval_persona():
             "-p", str(args.prompt),
             "-m", args.model
         ]
+
     else:
         # 使用 Persona API 模式
         generate_cmd = [

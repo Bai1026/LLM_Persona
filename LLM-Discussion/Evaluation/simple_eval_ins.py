@@ -128,10 +128,23 @@ def calculate_averages(evaluation_results):
     
     avg_originality = sum(originality_scores) / len(originality_scores) if originality_scores else 0
     avg_elaboration = sum(elaboration_scores) / len(elaboration_scores) if elaboration_scores else 0
+
+    # 計算變異數統計
+    import statistics
+    if len(originality_individual_scores) > 1:
+        orig_std = statistics.stdev(originality_individual_scores)
+        ori_std = f"Originality 標準差: {orig_std:.3f}"
     
+    if len(elaboration_individual_scores) > 1:
+        elab_std = statistics.stdev(elaboration_individual_scores)
+        ela_std = f"Elaboration 標準差: {elab_std:.3f}"
+
     return {
-        'average_originality': avg_originality,
-        'average_elaboration': avg_elaboration,
+        'average_originality': f"{avg_originality:.3f}",
+        'originality_std': ori_std,
+        'average_elaboration': f"{avg_elaboration:.3f}",
+        'elaboration_std': ela_std,
+
         'total_responses': len(evaluation_results) // 2,  # 每個回應評估兩個標準
         'originality_scores': originality_scores,  # 平均分數列表
         'elaboration_scores': elaboration_scores,  # 平均分數列表
@@ -150,7 +163,7 @@ def simple_eval(input_file):
     # api_key = os.getenv("OPENAI_API_KEY")
     from dotenv import load_dotenv, find_dotenv
     load_dotenv(find_dotenv())
-    api_key = os.getenv("OPENAI_API_KEY_0")
+    api_key = os.getenv("OPENAI_API_KEY")
 
     version = "gpt-4o-mini"
     cache_file_name = "cache_simple_eval.pickle"
@@ -206,38 +219,9 @@ def simple_eval(input_file):
     
     # 計算平均分數
     averages = calculate_averages(all_results)
-    
-    # # 輸出結果
-    # print("\n" + "="*50)
-    # print("評估結果摘要")
-    # print("="*50)
-    # print(f"總共評估回應數: {averages['total_responses']}")
-    # print(f"每個回應評估次數: 3次")
-    # print(f"總評估次數: {averages['total_evaluations']}")
-    # print(f"Originality 回應平均分數: {[f'{score:.3f}' for score in averages['originality_scores']]}")
-    # print(f"Elaboration 回應平均分數: {[f'{score:.3f}' for score in averages['elaboration_scores']]}")
-    # print(f"Originality 所有個別分數: {averages['originality_individual_scores']}")
-    # print(f"Elaboration 所有個別分數: {averages['elaboration_individual_scores']}")
-
-    # print(f"平均 Originality 分數: {averages['average_originality']:.3f}")
-    # print(f"平均 Elaboration 分數: {averages['average_elaboration']:.3f}")
 
     ori_mean = f"Originality 回應平均分數: {[f'{score:.3f}' for score in averages['originality_scores']]}"
     ela_mean = f"Elaboration 回應平均分數: {[f'{score:.3f}' for score in averages['elaboration_scores']]}"
-
-    # 計算變異數統計
-    import statistics
-    if len(averages['originality_individual_scores']) > 1:
-        orig_std = statistics.stdev(averages['originality_individual_scores'])
-        # print(f"Originality 標準差: {orig_std:.3f}")
-        ori_std = f"Originality 標準差: {orig_std:.3f}"
-        all_results.append({'Originality 標準差': orig_std})
-    
-    if len(averages['elaboration_individual_scores']) > 1:
-        elab_std = statistics.stdev(averages['elaboration_individual_scores'])
-        # print(f"Elaboration 標準差: {elab_std:.3f}")
-        ela_std = f"Elaboration 標準差: {elab_std:.3f}"
-        all_results.append({'Elaboration 標準差': elab_std})
 
     print("="*50)
     
@@ -253,39 +237,29 @@ def simple_eval(input_file):
     
     print(f"\n詳細結果已儲存至: {output_file}")
     
-    return averages, all_results, ori_mean, ela_mean, ori_std, ela_std
+    return averages, all_results
 
 if __name__ == "__main__":
+    # 測試用檔案
     input_file_path = './Main_Results/Ins/'
     finding_list = [
-        'llama_vector',
-        'llama_single',
-        'llama_multi',
+        # 'llama_vector',
+        # 'llama_single',
+        # 'llama_multi',
         # 'qwen_vector',
         # 'qwen_single',
         # 'qwen_multi',
+        "gemma_vector",
+        "gemma_single",
+        "gemma_multi",
     ]
-    ori_results = []
-    ela_results = []
 
     for finding in finding_list:
         input_file = input_file_path + finding + '.json'
 
         if os.path.exists(input_file):
-            _, _, ori_mean, ela_mean, ori_std, ela_std = simple_eval(input_file)
-            ori_results.append(finding + ': ' + ori_mean + ', ' + ori_std)
-            ela_results.append(finding + ': ' + ela_mean + ', ' + ela_std)
+            simple_eval(input_file)
             
         else:
             print(f"測試檔案 {input_file} 不存在")
     
-    print("\n" + "="*50)
-    print("所有 Originality 結果")
-    print("="*50)
-    for res in ori_results:
-        print(res)
-    print("\n" + "="*50)
-    print("所有 Elaboration 結果")
-    print("="*50)
-    for res in ela_results:
-        print(res)
