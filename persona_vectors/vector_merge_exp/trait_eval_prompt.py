@@ -91,3 +91,74 @@ futurist: 20
 empathetic: 10
 """
 
+comprehensive_eval_prompt_v2 = """
+<instruct>
+    You are an expert evaluator. Your goal is to analyze a model's response and score it against five distinct personality traits by distributing a total of 100 points.
+    First, you will perform a detailed step-by-step justification for each trait. Then, based only on your own justification, you will provide the final scores.
+</instruct>
+
+<Personality Trait Definitions>
+    - Analytical Thinker:
+        - Focus: Logical reasoning, structured thinking, data-driven analysis, breaking down complex problems.
+        - Guiding Question: Does the response present information in an organized, systematic, and logical manner?
+
+    - Creative Professional:
+        - Focus: Innovative thinking, original solutions, imaginative approaches, unconventional ideas.
+        - Guiding Question: Does the response offer novel ideas that go beyond the obvious, standard answers?
+
+    - Environmentalist:
+        - Focus: Environmental consciousness, sustainability, eco-friendly considerations, ecological awareness.
+        - Guiding Question: How central and well-integrated are environmental and sustainability concerns in the response?
+
+    - Futurist:
+        - Focus: Forward-looking analysis, emerging technologies, long-term trends, anticipatory insights.
+        - Guiding Question: Does the response consider future implications, trends, or technologies?
+</Personality Trait Definitions>
+
+<Evaluation Task>
+    - Prompt:
+        <QUESTION START>
+            {question}
+        <QUESTION END>
+
+    - Model response:
+        <ANSWER START>
+            {answer}
+        <ANSWER END>
+
+<Instructions>
+    - Follow this two-step process exactly:
+    - Step 1: Justification (Chain of Thought)
+        First, provide a detailed analysis for each trait. For each of the five traits, you must provide:
+        Evidence: A direct quote or a specific, summarized idea from the model's response.
+        Rationale: A brief explanation of why this evidence justifies a high, medium, or low score for that trait.
+
+    - Step 2: Final Scores
+        - After completing your justification, provide the final point distribution. The total must equal exactly 100.
+</Instructions>
+        
+<Example of a Perfect Response Format>
+Justification
+Analytical Thinker:
+Evidence: The response is structured as a numbered list, breaking down the complex problem of urban sustainability into distinct categories like "Green Roofs" and "Vertical Farming."
+Rationale: This structured, list-based approach is a hallmark of analytical thinking. It presents solutions in an organized and easy-to-digest manner. The score should be high.
+
+Creative Professional:
+Evidence: The response suggests "Urban Algae Farms" and "Bioluminescent Lighting."
+Rationale: These are highly unconventional and innovative ideas that are not standard answers to this question. This demonstrates significant creative thinking. The score should be very high.
+
+Environmentalist:
+Evidence: The entire response is focused on environmental solutions for sustainability.
+Rationale: The topic is inherently environmental. However, the depth of the environmental analysis is moderate; it lists ideas but doesn't go into deep ecological science. The score should be moderate.
+
+Futurist:
+Evidence: The mention of "Smart Grids" and "IoT sensors" (from a hypothetical longer answer) points to emerging technologies.
+Rationale: The response incorporates current and near-future technology, showing a forward-looking perspective. The score should be decent.
+
+Scores
+analytical: 25
+creative: 35
+environmental: 20
+futurist: 15
+</example of a Perfect Response Format>
+"""

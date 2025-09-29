@@ -56,21 +56,71 @@ def evaluate_trait_comprehensive(question: str, answer: str, eval_model: str = "
             raise ValueError(f"不支援的評估模型: {eval_model}")
         
         # 解析回應
+        # 解析分數 - 尋找 "Scores" 部分
         scores = {}
         total_score = 0
         
-        for line in score_text.split('\n'):
-            if ':' in line:
-                trait, score_str = line.split(':', 1)
-                trait = trait.strip()
-                score_str = score_str.strip()
-                
+        # 先嘗試找到 "Scores" 或 "scores" 區段
+        lines = score_text.split('\n')
+        score_section_started = False
+        
+        for line in lines:
+            line = line.strip()
+            
+            # 檢查是否進入分數區段
+            if line.lower() in ['scores', 'score:', 'scores:', 'final scores', 'final scores:']:
+                score_section_started = True
+                continue
+            
+            # 如果在分數區段，或者沒找到分數區段但行包含分數格式
+            if (score_section_started or not any('scores' in l.lower() for l in lines)) and ':' in line:
+                try:
+                    trait, score_str = line.split(':', 1)
+                    trait = trait.strip().lower()
+                    score_str = score_str.strip()
+                    
+                    # 移除可能的額外文字，只保留數字
+                    import re
+                    score_match = re.search(r'\d+(?:\.\d+)?', score_str)
+                    if score_match:
+                        score = float(score_match.group())
+                        
+                        # 標準化特質名稱
+                        trait_mapping = {
+                            'analytical': 'analytical',
+                            'analytical thinker': 'analytical',
+                            'creative': 'creative',
+                            'creative professional': 'creative',
+                            'environmental': 'environmental',
+                            'environmentalist': 'environmental',
+                            'futurist': 'futurist',
+                            'empathetic': 'empathetic',
+                            'empathetic counselor': 'empathetic'
+                        }
+                        
+                        normalized_trait = trait_mapping.get(trait, trait)
+                        scores[normalized_trait] = score
+                        total_score += score
+                    else:
+                        print(f"無法解析分數: {score_str} for trait {trait}")
+                except ValueError as e:
+                    print(f"無法解析分數: {score_str} for trait {trait} - {e}")
+        
+        # 如果沒有找到任何分數，嘗試更寬鬆的解析
+        if not scores:
+            print("嘗試更寬鬆的分數解析...")
+            import re
+            # 尋找類似 "trait: number" 的模式
+            pattern = r'(analytical|creative|environmental|futurist|empathetic).*?(\d+(?:\.\d+)?)'
+            matches = re.findall(pattern, score_text, re.IGNORECASE)
+            
+            for trait, score_str in matches:
                 try:
                     score = float(score_str)
-                    scores[trait] = score
+                    scores[trait.lower()] = score
                     total_score += score
                 except ValueError:
-                    print(f"無法解析分數: {score_str} for trait {trait}")
+                    continue
         
         # 檢查總分是否為 100
         if abs(total_score - 100) > 1:  # 允許小誤差
@@ -371,16 +421,16 @@ def main(type_name, choice, eval_model):
 if __name__ == "__main__":
     type_list = [
         # 'cre_env_fut_fut',
-        'cre_env',
+        # 'cre_env',
         # 'env_ana',
-        'env',
-        'baseline',
+        # 'env',
+        # 'baseline',
         # 'multi_prompt'
         'cre',
-        # 'ana_fut',
-        # 'cre_ana',
-        # 'cre_fut',
-        # 'env_fut',
+        'ana_fut',
+        'cre_ana',
+        'cre_fut',
+        'env_fut',
     ]
 
     # 讓使用者選擇評估模式
