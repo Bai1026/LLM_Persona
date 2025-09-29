@@ -258,7 +258,9 @@ if __name__ == "__main__":
         # 'qwen_vector',
         # 'qwen_single',
         # 'qwen_multi',
-        'gemma_vector'
+        # 'gemma_vector',
+        'gemma_single',
+        'gemma_multi',
     ]
 
     for finding in finding_list:
