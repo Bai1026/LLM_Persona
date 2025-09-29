@@ -58,11 +58,13 @@ class PersonaChatbot:
     def generate_response(self, user_input, max_tokens=1000):
         """產生模型回應"""
         # 更新對話歷史
-        self.conversation_history.append({"role": "user", "content": user_input})
+        # self.conversation_history.append({"role": "user", "content": user_input})
+        current_conversation = [{"role": "user", "content": user_input}]        
         
         # 建構prompt
         prompt = self.tokenizer.apply_chat_template(
-            self.conversation_history, 
+            # self.conversation_history, 
+            current_conversation,
             tokenize=False, 
             add_generation_prompt=True
         )
@@ -81,7 +83,8 @@ class PersonaChatbot:
             with torch.no_grad():
                 outputs = self.model.generate(
                     **inputs,
-                    max_new_tokens=min(max_tokens, 512),   # 進一步限制長度
+                    # max_new_tokens=min(max_tokens, 512),   # 進一步限制長度
+                    max_new_tokens=max_tokens,               # 允許較長回應
                     do_sample=True,
                     # temperature=0.6,                       # 降低創意度
                     top_p=0.8,                            # 降低隨機性
@@ -104,11 +107,11 @@ class PersonaChatbot:
         torch.cuda.empty_cache()
         
         # 更新對話歷史
-        self.conversation_history.append({"role": "assistant", "content": response})
+        # self.conversation_history.append({"role": "assistant", "content": response})
         
         # 限制歷史長度
-        if len(self.conversation_history) > 10:
-            self.conversation_history = self.conversation_history[-10:]
+        # if len(self.conversation_history) > 10:
+            # self.conversation_history = self.conversation_history[-10:]
         
         return response
     
@@ -168,9 +171,9 @@ class PersonaChatbot:
             except ValueError:
                 print("❌ 係數必須是數字")
         
-        elif cmd == '/reset':
-            self.conversation_history = []
-            print("🔄 對話歷史已清除")
+        # elif cmd == '/reset':
+        #     self.conversation_history = []
+        #     print("🔄 對話歷史已清除")
         
         elif cmd == '/quit':
             print("👋 再見！")

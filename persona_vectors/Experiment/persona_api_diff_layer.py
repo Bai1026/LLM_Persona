@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import argparse
 import re
 from rich import print
-from multi_persona_handler2 import MultiPersonaChatbot
+from multi_persona_handler_diff_layer import MultiPersonaChatbot
 
 app = Flask(__name__)
 chatbot = None
@@ -19,7 +19,7 @@ def chat_api():
         max_tokens = data.get('max_tokens', 1000)  # 預設值改為更合理的1000
         # TODO: change the max_tokens value for llm discussion
         max_tokens = min(max_tokens, 2048)  # 強制限制最大值
-    
+        
         print(f"🧑 User: {user_input}")
         response = chatbot.generate_response(user_input, max_tokens)
         
@@ -129,9 +129,9 @@ def main():
     parser = argparse.ArgumentParser(description="Multi-Persona Chatbot API")
     
     # parser.add_argument("--model", default="Qwen/Qwen2.5-7B-Instruct", help="模型名稱")
-    # parser.add_argument("--model", default="meta-llama/Llama-3.1-8B-Instruct", help="模型名稱")
+    parser.add_argument("--model", default="meta-llama/Llama-3.1-8B-Instruct", help="模型名稱")
     # parser.add_argument("--model", default="google/gemma-2-9b-it", help="模型名稱")
-    parser.add_argument("--model", default="google/gemma-3-4b-it", help="模型名稱")
+    # parser.add_argument("--model", default="google/gemma-3-4b-it", help="模型名稱")
     
 
     parser.add_argument("--vector_paths", nargs='+', required=True, help="多個 persona 向量路徑")
@@ -141,7 +141,7 @@ def main():
                        choices=["weighted_average", "concatenate", "attention", "dynamic"],
                        help="向量融合方法")
     parser.add_argument("--host", default="127.0.0.1", help="API 主機位址")
-    parser.add_argument("--port", type=int, default=5001, help="API 連接埠")
+    parser.add_argument("--port", type=int, default=5000, help="API 連接埠")
     
     args = parser.parse_args()
     

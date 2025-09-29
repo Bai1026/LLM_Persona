@@ -54,6 +54,12 @@ python interactive_chat.py \
 
 ```bash
 python persona_api.py --vector_path "persona_vectors/Qwen2.5-7B-Instruct/multi_role/academic_researcher_response_avg_diff.pt" --layer 20 --coef 2.0
+
+python Experiment/persona_api.py \
+--vector_paths creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt \
+--fusion_method weighted_average \
+--layer 20 \
+--coef 0.0
 ```
 
 ### Run the persona api with mulitple characters
