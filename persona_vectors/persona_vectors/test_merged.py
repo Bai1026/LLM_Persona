@@ -9,7 +9,7 @@ VEC_B_PATH = "Llama-3.1-8B-Instruct/multi_role/environmentalist_response_avg_dif
 DEVICE     = "cuda" if torch.cuda.is_available() else "cpu"
 
 STEER_LAYER = 20
-ALPHA_A, ALPHA_B = 2.0, 2.0      # 主實驗權重
+ALPHA_A, ALPHA_B = 1.0, 1.0      # 主實驗權重
 EPS_A,   EPS_B   = 0.1, 0.1      # 校準小擾動（估計 transport）
 
 # 只輸出這個層範圍
@@ -18,41 +18,41 @@ LAYER_FROM, LAYER_TO = 19, 32    # [19, 32] 含頭含尾
 # 是否使用每層 persona 向量（若 .pt 有每層）
 USE_PER_LAYER_PERSONA_VECS = True
 
-# NEUTRAL_LIST = [
-#     "Urban Planning (2050 City Block Masterplan): Design a masterplan for a new city block to be built in 2050. Describe core principles, layout, mobility, public space, services, and governance constraints.",
-#     "Product Launch (Micro-Teleportation for Small Objects): Outline a public launch plan for a micro-teleportation technology for small items. Include positioning, safety/regulation, go-to-market, operations, and risk.",
-#     "Social Issue (Countering Misinformation): Propose a multi-pronged plan to reduce misinformation on social platforms: policy, product, incentives, literacy, measurement.",
-#     "Corporate Strategy (Legacy Manufacturer vs. AI Disruption): Design a transformation strategy for a legacy manufacturer facing AI disruption: portfolio, org, tech stack, talent, risk, timeline.",
-#     "Healthcare Innovation (Reimagine the Hospital): Redesign the future hospital experience for patients, families, and staff. Address flows, safety, data, wellbeing, equity, and feasibility.",
-#     "Education Reform (Ideal High-School Curriculum): Propose a 4-year curriculum: core subjects, skills, experiential learning, assessment, inclusion, and teacher enablement.",
-#     "Disaster Response (Early Recovery Plan for a Metro Area): Draft an initial 30–60 day recovery plan after a major natural disaster: assessment, triage, logistics, comms, governance, equity.",
-#     "Space Exploration (Next 50 Years Priority): State and justify the top priority for human space exploration in the next 50 years. Define milestones, risks, ethics, and spillovers.",
-#     "Sustainable Fashion (Net-Zero Brand Model): Propose a business model for a fully sustainable fashion brand: materials, supply chain, circularity, economics, verification, storytelling.",
-#     "Global Challenge (Food Waste Reduction): Design a multi-layer plan to reduce global food waste across production, retail, and households: incentives, infra, tech, policy, culture."
+NEUTRAL_LIST = [
+    "Urban Planning (2050 City Block Masterplan): Design a masterplan for a new city block to be built in 2050. Describe core principles, layout, mobility, public space, services, and governance constraints.",
+    "Product Launch (Micro-Teleportation for Small Objects): Outline a public launch plan for a micro-teleportation technology for small items. Include positioning, safety/regulation, go-to-market, operations, and risk.",
+    "Social Issue (Countering Misinformation): Propose a multi-pronged plan to reduce misinformation on social platforms: policy, product, incentives, literacy, measurement.",
+    "Corporate Strategy (Legacy Manufacturer vs. AI Disruption): Design a transformation strategy for a legacy manufacturer facing AI disruption: portfolio, org, tech stack, talent, risk, timeline.",
+    "Healthcare Innovation (Reimagine the Hospital): Redesign the future hospital experience for patients, families, and staff. Address flows, safety, data, wellbeing, equity, and feasibility.",
+    "Education Reform (Ideal High-School Curriculum): Propose a 4-year curriculum: core subjects, skills, experiential learning, assessment, inclusion, and teacher enablement.",
+    "Disaster Response (Early Recovery Plan for a Metro Area): Draft an initial 30–60 day recovery plan after a major natural disaster: assessment, triage, logistics, comms, governance, equity.",
+    "Space Exploration (Next 50 Years Priority): State and justify the top priority for human space exploration in the next 50 years. Define milestones, risks, ethics, and spillovers.",
+    "Sustainable Fashion (Net-Zero Brand Model): Propose a business model for a fully sustainable fashion brand: materials, supply chain, circularity, economics, verification, storytelling.",
+    "Global Challenge (Food Waste Reduction): Design a multi-layer plan to reduce global food waste across production, retail, and households: incentives, infra, tech, policy, culture."
+]
+
+# AUT_LIST = [
+#     "What are some creative use for Fork? The goal is to come up with creative ideas, which are ideas that strike people as clever, unusual, interesting, uncommon, humorous, innovative, or different. Present a list of 5 creative and diverse uses for Fork.",
+#     "What are some creative use for Jar? The goal is to come up with creative ideas, which are ideas that strike people as clever, unusual, interesting, uncommon, humorous, innovative, or different. Present a list of 5 creative and diverse uses for Jar."
 # ]
 
-AUT_LIST = [
-    "What are some creative use for Fork? The goal is to come up with creative ideas, which are ideas that strike people as clever, unusual, interesting, uncommon, humorous, innovative, or different. Present a list of 5 creative and diverse uses for Fork.",
-    "What are some creative use for Jar? The goal is to come up with creative ideas, which are ideas that strike people as clever, unusual, interesting, uncommon, humorous, innovative, or different. Present a list of 5 creative and diverse uses for Jar."
-]
+# INS_LIST = [
+#     "Name all the round things you can think of.",
+#     "Name all the things you can think of that will make a noise.",
+#     "Name all the things you can think of that have a screen."
+# ]
 
-INS_LIST = [
-    "Name all the round things you can think of.",
-    "Name all the things you can think of that will make a noise.",
-    "Name all the things you can think of that have a screen."
-]
+# SIMI_LIST = [
+#     "Tell me all the ways in which a kite and a balloon are alike.",
+#     "Tell me all the ways in which a pencil and a pen are alike.",
+#     "Tell me all the ways in which a chair and a couch are alike."
+# ]
 
-SIMI_LIST = [
-    "Tell me all the ways in which a kite and a balloon are alike.",
-    "Tell me all the ways in which a pencil and a pen are alike.",
-    "Tell me all the ways in which a chair and a couch are alike."
-]
-
-SCI_LIST = [
-    "If you can take a spaceship to travel in outer space and go to a planet, what scientific questions do you want to research? For example, are there any living things on the planet?",
-    "Please think up as many possible improvements as you can to a regular bicycle, making it more interesting, more useful and more beautiful. For example, make the tires reflective, so they can be seen in the dark."
-]
-NEUTRAL_LIST = AUT_LIST + INS_LIST + SIMI_LIST + SCI_LIST
+# SCI_LIST = [
+#     "If you can take a spaceship to travel in outer space and go to a planet, what scientific questions do you want to research? For example, are there any living things on the planet?",
+#     "Please think up as many possible improvements as you can to a regular bicycle, making it more interesting, more useful and more beautiful. For example, make the tires reflective, so they can be seen in the dark."
+# ]
+# NEUTRAL_LIST = AUT_LIST + INS_LIST + SIMI_LIST + SCI_LIST
 
 # ===================== 工具 =====================
 @torch.no_grad()
