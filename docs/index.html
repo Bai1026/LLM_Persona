@@ -1,507 +1,279 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>研究進度報告：Persona Vector Merge 專案</title>
+    <title>BILLY: Steering Large Language Models with Multiple Persona Vectors for Creative Generation</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Lighter gray background */
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #4f46e5, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            text-align: center;
+            margin-bottom: 2rem;
         }
         .card {
             background-color: white;
             border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e5e7eb;
         }
-        h1, h2, h3 {
-            font-weight: 600;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-        .tag {
+        .btn {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .tag-green {
-            background-color: #d1fae5;
-            color: #065f46;
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
         }
-        .tag-blue {
-            background-color: #dbeafe;
-            color: #1e40af;
+        .btn-primary:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
         }
-        .tag-red {
-            background-color: #fee2e2;
-            color: #991b1b;
+        .btn-secondary {
+            background-color: white;
+            color: #4f46e5;
+            border: 1px solid #4f46e5;
+        }
+        .btn-secondary:hover {
+            background-color: #eef2ff;
+            transform: translateY(-2px);
         }
         table {
             width: 100%;
             border-collapse: collapse;
         }
         th, td {
-            border: 1px solid #e5e7eb;
-            padding: 0.75rem;
             text-align: left;
-            white-space: nowrap;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
         }
         th {
-            background-color: #f9fafb;
+            font-weight: 600;
+            color: #111827;
         }
-        .sortable {
-            cursor: pointer;
-            position: relative;
-        }
-        .sortable::after {
-            content: ' \2195'; /* Up-down arrow */
-            opacity: 0.4;
-            position: absolute;
-            right: 0.5rem;
-        }
-        .sortable.asc::after {
-            content: ' \2191'; /* Up arrow */
-            opacity: 1;
-        }
-        .sortable.desc::after {
-            content: ' \2193'; /* Down arrow */
-            opacity: 1;
-        }
-        tr:nth-child(even) {
-            background-color: #f9fafb;
-        }
-        .benchmark-table td {
-            white-space: normal;
-        }
-        pre {
-            background-color: #f3f4f6;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        code {
-            font-family: 'Courier New', Courier, monospace;
+        tr:last-child td {
+            border-bottom: none;
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 p-4 sm:p-6 md:p-8">
-    <div class="max-w-7xl mx-auto">
-        <!-- 頁首標題 -->
-        <header class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">研究進度報告</h1>
-            <p class="text-lg text-gray-600 mt-1">專案名稱：透過 Persona Vector Merge 提升大型語言模型創造力</p>
-        </header>
+<body class="text-gray-800">
 
-        <!-- 1. 專案核心理念 -->
-        <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">1. 專案核心理念</h2>
-            <p class="text-base leading-relaxed">
-                現有的 Multi-Agent (如 LLM-Discussion 框架) 方法雖然能提升創造力，但其依賴多次、輪流的線上推理，面臨<strong>成本高昂、推理延遲巨大</strong>的瓶頸。本研究提出一種創新的 <strong>Persona Vector Merge 機制</strong>，將「角色模擬」的過程從「線上互動」轉變為「離線表示」。我們透過**離線 (Offline)** 計算並融合多個角色的 Persona Vector，創造出一個單一的、富含多維視角的複合向量 (Composite Vector)。在推理時，這個複合向量能一次性地引導單一模型，使其在一次前向傳播中，就能模擬出多角色腦力激盪的效果。這代表了從「互動式模擬 (Interactive Simulation)」到「表示式引導 (Representational Steering)」的範式轉移，旨在達成 <span class="font-semibold text-indigo-600">「降本增效」</span>的雙重目標。
+    <!-- Header Section -->
+    <header class="py-12 bg-white border-b">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">
+                <div class="flex items-center justify-center gap-x-4 mb-2">
+                    <span class="gradient-text">BILLY</span>
+                    <img src="img/billie.png" alt="BILLY Mascot" class="w-12 h-12" onerror="this.onerror=null;this.src='https://placehold.co/80x80/EFEFEF/333333?text=billie.png';">
+                </div>
+                Steering Large Language Models with<br class="hidden md:block"> Multiple Persona Vectors for Creative Generation
+            </h1>
+            <p class="mt-6 max-w-3xl mx-auto text-lg text-gray-600">
+                A training-free framework that captures the creative benefits of multi-LLM collaboration within a single model, drastically reducing computational costs and latency.
             </p>
-        </div>
-
-        <!-- 4. Benchmarks and Evaluation Metrics -->
-        <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">2. Benchmarks and Evaluation Metrics</h2>
-            <div class="space-y-6">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800">2.1 評估指標 (Metrics)</h3>
-                    <p class="mt-2 text-gray-700">We employ the metrics established by the Torrance Tests of Creative Thinking (TTCT) (Torrance, 1966), recognized for their robustness in measuring creative capabilities and are commonly applied in assessing human creativity (Cramond et al., 2005). The TTCT framework comprises four distinct metrics:</p>
-                    <ul class="list-disc list-inside ml-4 mt-2 space-y-2 text-gray-700">
-                        <li><strong>Originality:</strong> Considering novelty responses, not familiar and unusual, but relevant.</li>
-                        <li><strong>Elaboration:</strong> The amount of details used to extend a response.</li>
-                        <li><strong>Fluency:</strong> The number of relevant responses.</li>
-                        <li><strong>Flexibility:</strong> A variety of categories or shifts in responses.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800">2.2 基準測試任務 (Benchmarks)</h3>
-                    <div class="overflow-x-auto mt-2">
-                         <table class="benchmark-table">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="font-semibold">Benchmark</th>
-                                    <th class="font-semibold">Description</th>
-                                    <th class="font-semibold">Sample Task</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>AUT</strong><br>(Alternative Use Task)</td>
-                                    <td>This benchmark requires participants to come up with as many creative uses as possible for a simple object.</td>
-                                    <td>What are some creative uses for a fork?</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>INSTANCES</strong></td>
-                                    <td>This benchmark requires participants to list as many creative answers as possible that fit a specific criterion.</td>
-                                    <td>Name all the round things you can think of.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>SIMILARITIES</strong></td>
-                                    <td>This benchmark asks participants to creatively explore similarities between two things.</td>
-                                    <td>Tell me all the ways in which a book and a magazine are alike.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>SCIENTIFIC</strong></td>
-                                    <td>This benchmark asks participants to generate innovative ideas, envision hypothetical scenarios, propose improvements, and design experiments, all scientifically.</td>
-                                    <td>Please think of as many possible improvements as you can to a regular bicycle, making it more interesting, more useful, and more beautiful.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="mt-8">
+                <p class="text-md font-medium text-gray-800">
+                    Tsung-Min Pai¹, Jui-I Wang², Li-Chun Lu³, Shao-Hua Sun¹,³, Hung-yi Lee¹, Kai-Wei Chang¹,⁴
+                </p>
+                <p class="mt-2 text-sm text-gray-500 leading-relaxed">
+                    ¹Department of Electrical Engineering, National Taiwan University<br>
+                    ²Department of Computer Science & Information Engineering, National Taiwan University<br>
+                    ³Graduate Institute of Communication Engineering, National Taiwan University<br>
+                    ⁴CSAIL, Massachusetts Institute of Technology
+                </p>
+            </div>
+            <div class="mt-10 flex flex-wrap justify-center gap-4">
+                <a href="#paper" class="btn btn-primary">Read Paper</a>
+                <a href="#code" class="btn btn-secondary">🚧 Get Code</a>
+                <a href="#bibtex" class="btn btn-secondary">Cite Us</a>
             </div>
         </div>
+    </header>
 
-        <!-- 5. Prompt 設計 -->
-        <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">3. Prompt 設計</h2>
-            <p class="mb-4 text-gray-700">為確保比較的公平性並適應不同模型的特性，我們設計了多種 Prompt 進行測試。一個重要的發現是，對於開源小模型 (如 Qwen, Llama)，簡潔直接的 Prompt 往往比複雜冗長的描述能帶來更好的生成品質。</p>
-            <div>
-                <h3 class="text-lg font-semibold text-gray-800">3.1 英文 Prompts (AUT 任務)</h3>
-                <pre><code class="language-python">
-# 複雜版本 (對小模型效果不佳)
-# task_description = f"What are some creative use for {item}? The goal is to come up with creative ideas, which are ideas that strike people as clever, unusual, interesting, uncommon, humorous, innovative, or different. Present a list of as many creative and diverse uses for {item} as possible."
-# task_prompt = f"Can you answer the following question as creatively as possible: {task_description} {discussion_prompt} Please put your answer in a list format, starting with 1. ... 2. ... 3. ... and so on."
-
-# --- 測試版本 ---
-
-# Test-1 (主要使用版本，要求固定數量以追求品質)
-task_prompt = f"Please provide 5 innovative and original uses for '{item}'. {discussion_prompt}"
-
-# Test-2 (不限制數量)
-# task_prompt = f"Please provide some innovative and original uses for '{item}'. {discussion_prompt}"
-
-# Test-3 (要求較多數量)
-# task_prompt = f"Please provide 10 innovative and original uses for '{item}'. {discussion_prompt}"
-                </code></pre>
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-6 py-16 md:py-24">
+        
+        <!-- Teaser Image Section -->
+        <section id="teaser" class="mb-16 md:mb-24">
+            <h2 class="section-title">Core Concept</h2>
+            <div class="card p-4">
+                <img src="Teaser.png" alt="BILLY Method Diagram" class="rounded-lg shadow-lg w-full" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/EFEFEF/333333?text=Teaser.pdf+Diagram';">
+                <p class="text-center text-gray-500 mt-4 text-sm">
+                    BILLY extracts and fuses persona vectors from a "Creative Professional" and an "Environmentalist" to steer a base model, generating output that embodies both domains.
+                </p>
             </div>
-            <div class="mt-6">
-                <h3 class="text-lg font-semibold text-gray-800">3.2 中文 Prompt (AUT 任務)</h3>
-                 <pre><code class="language-python">
-# 中文測試版本
-task_prompt = f"請為「{item}」提供5個創新和原創的用途。請盡可能多樣化和創造性地回答。"
-                </code></pre>
+        </section>
+
+        <!-- Abstract / About Section -->
+        <section id="about" class="mb-16 md:mb-24">
+            <h2 class="section-title">About BILLY</h2>
+            <div class="card p-8 text-lg text-gray-700 leading-relaxed space-y-4">
+                <p>
+                    Multi-LLM systems enhance creativity by simulating human collective intelligence, but suffer from high computational costs and inference latency. To address this, we propose <strong class="text-indigo-600">BILLY (Blending persona vectors for Large Language model creativity)</strong>, a training-free framework.
+                </p>
+                <p>
+                    BILLY's core idea is to capture the benefits of multi-LLM collaboration—inducing diverse perspectives and specialized expertise—<strong class="text-indigo-600">within a single model</strong>. We achieve this by extracting and blending multiple distinct persona vectors directly in the model's activation space. During inference, this merged vector steers the generation process, enabling multi-perspective output without explicit multi-LLM communication.
+                </p>
+                <p>
+                    Experiments show that BILLY surpasses both single-model prompting and traditional multi-LLM approaches on creativity-oriented benchmarks, while substantially reducing inference time and computational costs.
+                </p>
             </div>
-        </div>
+        </section>
 
-        <!-- 2. 目前實驗成果亮點 -->
-        <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">4. 目前實驗成果亮點</h2>
-            <div class="space-y-4">
-                <div>
-                    <span class="tag tag-green">雙重勝利</span>
-                    <p class="mt-2">在成本 (Cost) 與效能 (Performance) 上，我們的方法均顯著優於現有的 Multi-Agent Baseline。</p>
-                </div>
-                <div>
-                    <span class="tag tag-blue">小模型超越大模型</span>
-                    <p class="mt-2">實驗證明，我們使用的小模型 (7B/8B 等級) 在整合 Persona Vector 後，其創造力指標 (特別是 Originality 和 Elaboration) 能穩定勝過數十倍大的模型 (如 Llama-405B, GPT-4o-mini) 在 Multi-Agent 框架下的表現。</p>
-                </div>
-
-                <!-- 關鍵數據對比表格 -->
+        <!-- Benchmarks & Metrics Section -->
+        <section id="benchmarks" class="mb-16 md:mb-24">
+            <h2 class="section-title">Benchmarks & Metrics</h2>
+            <div class="card p-8">
+                <h3 class="text-2xl font-bold mb-6 text-center">Creativity Benchmarks</h3>
                 <div class="overflow-x-auto">
-                    <h3 class="text-lg font-semibold my-3">AUT 任務關鍵指標對比 (Originality & Elaboration)</h3>
                     <table>
-                        <thead class="bg-gray-50">
+                        <thead>
                             <tr>
-                                <th class="font-semibold">方法</th>
-                                <th class="font-semibold">模型</th>
-                                <th class="font-semibold">Originality (平均分)</th>
-                                <th class="font-semibold">Elaboration (平均分)</th>
-                                <th class="font-semibold">樣本數 (N)</th>
+                                <th>Benchmark</th>
+                                <th>Description</th>
+                                <th>Sample Task</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="bg-green-50">
-                                <td><strong>Vector Merge (本方法)</strong></td>
-                                <td>Llama3.1-8B</td>
-                                <td class="font-bold text-green-700">4.51</td>
-                                <td class="font-bold text-green-700">4.629</td>
-                                <td>100</td>
-                            </tr>
-                            <tr class="bg-green-50">
-                                <td><strong>Vector Merge (本方法)</strong></td>
-                                <td>Qwen2.5-7B</td>
-                                <td class="font-bold text-green-700">4.45</td>
-                                <td class="font-bold text-green-700">4.168</td>
-                                <td>100</td>
-                            </tr>
-                            <tr class="bg-green-50">
-                                <td><strong>Vector Merge (本方法)</strong></td>
-                                <td>Llama3.1-8B</td>
-                                <td class="font-bold text-green-700">4.46</td>
-                                <td class="font-bold text-green-700">4.58</td>
-                                <td>10</td>
-                            </tr>
-                            <tr class="bg-green-50">
-                                <td><strong>Vector Merge (本方法)</strong></td>
-                                <td>Qwen2.5-7B</td>
-                                <td class="font-bold text-green-700">4.6</td>
-                                <td class="font-bold text-green-700">4.63</td>
-                                <td>10</td>
+                            <tr>
+                                <td class="font-semibold">AUT</td>
+                                <td>Evaluates divergent thinking by requiring the generation of numerous unconventional applications for an object.</td>
+                                <td>What are some creative uses for a mug?</td>
                             </tr>
                             <tr>
-                                <td>LLM-Discussion</td>
-                                <td>Qwen2.5-7B</td>
-                                <td>3.976</td>
-                                <td>1.704</td>
-                                <td>10</td>
+                                <td class="font-semibold">INSTANCES</td>
+                                <td>Measures the ability to produce a diverse set of examples that satisfy a given property.</td>
+                                <td>Name 5 square things you can think of.</td>
                             </tr>
                             <tr>
-                                <td>LLM-Discussion</td>
-                                <td>llama-3.1-405b</td>
-                                <td>4.052</td>
-                                <td>3.335</td>
-                                <td>10</td>
+                                <td class="font-semibold">SIMILARITIES</td>
+                                <td>Assesses associative creativity by challenging participants to identify non-obvious connections between two concepts.</td>
+                                <td>Tell me 5 ways in which a brick and a stone are alike.</td>
                             </tr>
                             <tr>
-                                <td>LLM-Discussion</td>
-                                <td>gpt-4o-mini</td>
-                                <td>4.009</td>
-                                <td>3.736</td>
-                                <td>10</td>
-                            </tr>
-                             <tr>
-                                <td>Single Agent</td>
-                                <td>Qwen2.5-7B</td>
-                                <td>4.0</td>
-                                <td>4.36</td>
-                                <td>10</td>
-                            </tr>
-                             <tr>
-                                <td>Single Agent (Multi-Role Prompt)</td>
-                                <td>Qwen2.5-7B</td>
-                                <td>4.197</td>
-                                <td>4.14</td>
-                                <td>10</td>
-                            </tr>
-                             <tr>
-                                <td>Single Agent</td>
-                                <td>Llama3-8b</td>
-                                <td>3.78</td>
-                                <td>4.1</td>
-                                <td>10</td>
-                            </tr>
-                             <tr>
-                                <td>Single Agent (Multi-Role Prompt)</td>
-                                <td>Llama3-8b</td>
-                                <td>4.29</td>
-                                <td>4.07</td>
-                                <td>10</td>
+                                <td class="font-semibold">SCIENTIFIC</td>
+                                <td>Probes creative problem-solving within a scientific framework.</td>
+                                <td>Find different scientific uses for a spoon.</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-
-        <!-- 3. 現況總結與分析 -->
-        <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">5. 現況總結與分析</h2>
-             <p class="mb-4 text-base">目前專案進展順利，核心假設已由初步實驗獲得強力支持。數據顯示我們的方法在關鍵指標上不僅有效，甚至超越了資源消耗更大的 SOTA 方法。當前的重點在於鞏固實驗的嚴謹性，並深化對方法內在機制的理解。</p>
-            <ul class="list-disc list-inside space-y-2">
-                <li><strong class="text-green-600">優勢 (Strengths):</strong>
-                    <ul class="list-disc list-inside ml-6 mt-1">
-                        <li>核心想法創新，實用價值高，提出「表示式引導」的新範式。</li>
-                        <li>初步數據非常強勁，故事線清晰 (e.g., 在 AUT 任務中，8B 模型效果超越 405B 模型)。</li>
-                        <li>實驗控制良好 (如 Prompt 設計公平)，能有效突顯方法本身的優越性。</li>
-                        <li>已驗證方法的魯棒性 (Baseline 方法在小模型上效果顯著衰退，而本方法表現穩定)。</li>
-                    </ul>
-                </li>
-                <li class="mt-2"><strong class="text-red-600">待補強處 (Weaknesses):</strong>
-                    <ul class="list-disc list-inside ml-6 mt-1">
-                        <li>目前與 Baseline 的比較存在樣本數不對等的問題 (100 vs 10)，這是確保結論無可辯駁、應對頂會嚴格審查的關鍵一步。</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
-
-        <!-- 6. 待辦事項與未來方向 -->
-        <div class="card border-l-4 border-indigo-500 bg-indigo-50">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">6. 待辦事項與未來方向 (目標：ICLR / ARR October)</h2>
-            <div class="space-y-6">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                        <span class="text-white bg-red-600 rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">1</span>
-                        第一優先級：補全核心實驗
-                    </h3>
-                    <ul class="list-disc list-inside ml-4 mt-2 text-gray-700">
-                        <li><strong>(最緊急)</strong> 為所有 Baseline 方法 (Multi-Agent Discussion, Vanilla Single Agent) 補齊 <strong>N=100</strong> 的實驗數據，確保比較的絕對公平性。</li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                        <span class="text-white bg-orange-500 rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">2</span>
-                        第二優先級：構建論文核心內容
-                    </h3>
-                    <ul class="list-disc list-inside ml-4 mt-2 text-gray-700">
-                        <li>設計論文的「主結果表」，清晰呈現本方法在**四個任務**上，與**多種 Baseline** (包含不同大小模型) 的全面比較。</li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                        <span class="text-white bg-yellow-500 rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">3</span>
-                        第三優先級：深化分析 (ICLR 關注點)
-                    </h3>
-                    <ul class="list-disc list-inside ml-4 mt-2 text-gray-700 space-y-2">
-                        <li><strong>消融實驗 (Ablation Study):</strong> 深入分析不同設計選擇的影響。<strong>例如：</strong>比較 [‘科學家’, ‘藝術家’] vs [‘科學家’, ‘工程師’, ‘哲學家’] 兩種組合，探討 persona 的數量與「語義多樣性」如何影響創造力分數。同時，對比「向量平均法」與「加權平均法」，找出最優的融合策略。</li>
-                        <li><strong>向量空間分析:</strong>
-                            <ul class="list-disc list-inside ml-6 mt-1 space-y-2">
-                                <li><strong>可視化分析：</strong>使用 t-SNE / UMAP 進行可視化，直觀展示融合後向量在語義空間中的位置。<strong>例如：</strong>在 t-SNE 圖上，我們預期「科學家」和「工程師」的向量會比較接近，而「藝術家」的向量會較遠。我們融合後的向量「科藝工程師」應該會出現在這三個點構成的三角形區域內，直觀證明融合的有效性。</li>
-                                <li><strong>語義探針 (Semantic Probing)：</strong>設計探針任務，證明融合後的向量確實繼承了多個 Persona 的特性。<strong>例如：</strong>給定 prompt “描述水的未來”，我們期望「科學家」向量會生成關於水資源淨化、相變儲能的內容（高邏輯性）；「藝術家」向量會生成關於眼淚形成的海洋、記憶組成的雨滴等（高想像力）；而我們融合後的向量，理想上應能生成兼具兩者特質的文本，例如「一種利用量子糾纏實現的即時水分子重組技術，能將沙漠中的濕氣詩意地凝結成可飲用的晨露」。</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                        <span class="text-white bg-blue-500 rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">4</span>
-                        論文敘事架構
-                    </h3>
-                    <ul class="list-disc list-inside ml-4 mt-2 text-gray-700">
-                        <li>確立論文故事線：從現有方法的三大痛點 (成本、延遲、兼容性) 出發，引出我們的解決方案，並透過全面實驗和深入分析來證明其優越性。</li>
-                    </ul>
+                <h3 class="text-2xl font-bold mt-12 mb-6 text-center">Evaluation Metrics</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-50 p-6 rounded-lg border">
+                        <h4 class="font-bold text-xl mb-2 text-indigo-700">Originality</h4>
+                        <p class="text-gray-600">Assesses the statistical rarity or unconventionality of a response. Ideas are scored based on novelty and divergence from common answers.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg border">
+                        <h4 class="font-bold text-xl mb-2 text-indigo-700">Elaboration</h4>
+                        <p class="text-gray-600">Measures the level of detail and supportive information. It evaluates the ability to expand upon a core idea with depth and context.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- 7. 附錄：詳細實驗數據 -->
-        <div class="card">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">7. 附錄：詳細實驗數據</h2>
-            <p class="text-sm text-gray-600 mb-4">提示：點擊表格標題 (如 "Model Name", "Mean Originality") 可以對數據進行排序。</p>
-            <div class="overflow-x-auto border border-gray-200 rounded-lg">
-                <table id="dataTable" class="min-w-full text-sm divide-y divide-gray-200">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(0, 'str')">Timestamp</th>
-                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(1, 'str')">Type</th>
-                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(2, 'str')">Mode</th>
-                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(3, 'str')">Model Name</th>
-                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(4, 'num')">Data Num</th>
-                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(5, 'num')">Mean Originality</th>
-                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(6, 'num')">Mean Elaboration</th>
-                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(7, 'num')">Mean Fluency</th>
-                            <th class="sortable px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" onclick="sortTable(8, 'num')">Mean Flexibility</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role Name</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dataTableBody" class="bg-white divide-y divide-gray-200">
-                    </tbody>
-                </table>
+        </section>
+
+        <!-- Main Results Section -->
+        <section id="results" class="mb-16 md:mb-24">
+            <h2 class="section-title">Main Results</h2>
+            <div class="card p-4">
+                <img src="main_result.png" alt="Main evaluation results table" class="rounded-lg shadow-lg w-full" onerror="this.onerror=null;this.src='https://placehold.co/1200x800/EFEFEF/333333?text=main_result.png';">
+                <p class="text-center text-gray-500 mt-4 text-sm px-4">
+                    Evaluation Results. We use Qwen-2.5-7B-Instruct, Llama-3.1-8B-Instruct, and Gemma-3-4B-it as our base models and employ GPT-4o-mini as the judge. The highest scores are in purple, second-highest in blue. BILLY's Originality scores surpass nearly all baselines across all benchmarks.
+                </p>
             </div>
+        </section>
+        
+        <!-- Analysis Section -->
+        <section id="analysis" class="mb-16 md:mb-24">
+            <h2 class="section-title">Analysis</h2>
+            <p class="text-center text-gray-600 -mt-6 mb-8 max-w-2xl mx-auto">
+                The following analyses adopt the Llama-3.1-8B-Instruct model, which we find sufficiently representative.
+            </p>
+            <div class="space-y-12">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- Efficiency -->
+                    <div class="card p-4 flex flex-col">
+                        <h3 class="text-2xl font-bold mb-4 text-center">Efficiency Analysis</h3>
+                        <img src="comparison.png" alt="Comparison of inference time and token cost" class="rounded-lg shadow-lg w-full" onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFEFEF/333333?text=comparison.png';">
+                        <p class="text-center text-gray-500 mt-4 text-sm px-4 flex-grow">
+                            Inference Time and Token Cost. BILLY demonstrates a significant reduction in both latency and token cost compared to the LLM Discussion baseline.
+                        </p>
+                    </div>
+                    <!-- Qualitative Result -->
+                    <div class="card p-4 flex flex-col">
+                        <h3 class="text-2xl font-bold mb-4 text-center">Qualitative Result</h3>
+                        <img src="qualitative.png" alt="Qualitative comparison of persona fusion" class="rounded-lg shadow-lg w-full" onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFEFEF/333333?text=qualitative.png';">
+                        <p class="text-center text-gray-500 mt-4 text-sm px-4 flex-grow">
+                             A case study on the 'Reimagine the Hospital' task. The merged vector demonstrates a true conceptual fusion, reframing substantive concepts from the environmentalist with the visionary style of the creative vector.
+                        </p>
+                    </div>
+                </div>
+                <!-- Interpretability -->
+                <div class="card p-4">
+                    <h3 class="text-2xl font-bold mb-4 text-center">Interpretability Analysis</h3>
+                    <img src="projection.png" alt="Projection analysis of activation steering" class="rounded-lg shadow-lg w-full" onerror="this.onerror=null;this.src='https://placehold.co/1200x400/EFEFEF/333333?text=projection.png';">
+                    <p class="text-center text-gray-500 mt-4 text-sm px-4">
+                        Projection of activation changes onto persona vectors. Vector steering with BILLY (green) shows superior control over prompting (red). Merged vectors successfully co-activate both personas, unlike single vectors.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Citing Section -->
+        <section id="bibtex" class="mb-16 md:mb-24">
+            <h2 class="section-title">How to Cite</h2>
+            <div class="card p-6">
+                <h3 id="paper" class="text-2xl font-bold mb-4 text-center">📄 Paper</h3>
+                <p class="text-center mb-6"><a href="#" class="text-indigo-600 hover:underline font-semibold">[Link to your ArXiv paper here]</a></p>
+                
+                <h3 id="code" class="text-2xl font-bold mb-4 text-center">💻 Code</h3>
+                <p class="text-center mb-6"><a href="#" class="text-indigo-600 hover:underline font-semibold">[Link to your GitHub repository here]</a></p>
+
+                <h3 class="text-xl font-semibold mb-2">BibTeX</h3>
+                <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto"><code>@misc{pai2025billy,
+    title={BILLY: Steering Large Language Models via Merging Persona Vectors for Creative Generation}, 
+    author={Tsung-Min Pai and Jui-I Wang and Li-Chun Lu and Shao-Hua Sun and Hung-yi Lee and Kai-Wei Chang},
+    year={2025},
+    eprint={},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL}
+}</code></pre>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t py-8">
+        <div class="max-w-6xl mx-auto px-6 text-center text-gray-500">
+            <p>&copy; 2025 Tsung-Min Pai & et al. Website template generated by Gemini.</p>
         </div>
+    </footer>
 
-    </div>
-
-    <script>
-        const rawData = `Timestamp, Task, Type, Mode, Agent, Round, Model Name, Role Name, Data Num, Mean Fluency, STD Fluency, Mean Flexibility, STD Flexibility, Mean Originality, STD Originality, Mean Elaboration, STD Elaboration, File Name
-0901-1326, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI, 10, 4.667, 0.516, 4.967, 0.1, 3.32, 0.614, 3.38, 0.616, AUT_persona_api_0901-1326_10 (empathetic_counselor)
-0902-2331, AUT, baseline, persona, PersonaAPI, 1, Qwen25, PersonaAPI, 10, 5.0, 0.0, 5.0, 0.0, 3.66, 0.53, 3.96, 0.356, AUT_openai_baseline_1_1_gpt_4o_mini_baseline_0902-2331_10
-0903-1206, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI, 10, 4.967, 0.1, 5.0, 0.0, 4.46, 0.335, 4.68, 0.183, AUT_persona_api_0903-1206_10 (analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt empathetic_counselor_response_avg_diff.pt)
-0903-1447, AUT, vanilla, vanilla, VanillaQwen, 1, Qwen25, VanillaQwen, 10, 5.0, 0.0, 5.0, 0.0, 4.0, 0.559, 4.36, 0.418, AUT_vanilla_qwen_1_1_Qwen25_VanillaQwen_vanilla_20250903-144738_10
-0908-1348, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI, 10, 5.0, 0.0, 5.0, 0.0, 4.46, 0.377, 4.19, 0.611, AUT_persona_api_0908-0548_10 (analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt empathetic_counselor_response_avg_diff.pt)
-0908-1445, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI-Chinese, 10, 4.6, 0.757, 4.867, 0.306, 4.51, 0.342, 4.42, 0.59, AUT_persona_api_0908-0645_10 (analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt)
-0908-1716, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI-English, 10, 9.1, 1.422, 8.1, 1.62, 3.86, 0.461, 3.17, 0.585, AUT_persona_api_0908-1716_10 (analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt)
-0908-1802, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI-English-test1, 10, 4.7, 0.64, 4.8, 0.6, 4.6, 0.41, 4.63, 0.607, AUT_persona_api_0908-1802_10 (analytical_thinker_response_avg_diff.pt creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt)
-0908-2152, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English-test1, 10, 4.933, 0.2, 4.7, 0.605, 4.46, 0.284, 4.58, 0.303, AUT_persona_api_0908-2152_10
-0908-2215, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English, 10, 9.9, 0.213, 7.3, 0.983, 3.22, 0.349, 3.26, 0.4, AUT_persona_api_0908-2215_10
-0908-2245, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-Chinese, 10, 4.9, 0.473, 5.067, 0.2, 4.42, 0.469, 4.26, 0.482, AUT_persona_api_0908-2245_10
-0908-2309, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English-test2, 10, 9.9, 0.213, 7.433, 1.469, 3.64, 0.564, 3.46, 0.467, AUT_persona_api_0908-2309_10
-0908-2342, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English-test3, 10, 9.867, 0.4, 6.867, 0.67, 3.92, 0.564, 3.88, 0.527, AUT_persona_api_0908-2342_10
-0909-0149, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English-test3, 100, 9.803, 0.631, 7.433, 1.399, 4.05, 0.462, 3.918, 0.439, AUT_persona_api_0909-0149_100
-0909-1354, AUT, api, persona, PersonaAPI, 1, Llama31, PersonaAPI-English-test1, 100, 4.897, 0.319, 4.79, 0.436, 4.51, 0.426, 4.629, 0.367, AUT_persona_api_0909-1354_100
-0909-1826, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI-English-test1, 100, 4.58, 1.06, 4.623, 0.743, 4.45, 0.469, 4.168, 0.969, AUT_persona_api_0909-1826_100
-0909-2056, AUT, api, persona, PersonaAPI, 1, Qwen25, PersonaAPI-Chinese, 100, 4.747, 1.182, 5.037, 0.753, 4.336, 0.517, 4.344, 0.695, AUT_persona_api_0909-2056_100
-0906-0102, AUT, discussion, roleplay, 4, 5, gpt-4o-mini, Environmentalist-CreativeProfessional-Futurist-Futurist, 10, 32.942, 4.928, 26.933, 9.816, 4.009, 0.152, 3.736, 0.196, AUT_multi_debate_roleplay_4_5_gpt-4o-mini_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-06-01-02-15_10
-0909-0313, AUT, discussion, roleplay, 4, 5, qwen2-5-7b-instruct, Environmentalist-CreativeProfessional-Futurist-Futurist, 10, 4.375, 3.14, 5.367, 1.643, 3.976, 0.714, 1.704, 0.53, AUT_multi_debate_roleplay_4_5_qwen2-5-7b-instruct_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-09-03-13-47_10
-0909-1821, AUT, discussion, roleplay, 4, 5, llama-3-1-8b-instruct, Environmentalist-CreativeProfessional-Futurist-Futurist, 10, 11.475, 6.3, 6.908, 2.581, 3.991, 1.367, 3.358, 1.308, AUT_multi_debate_roleplay_4_5_llama-3-1-8b-instruct_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-09-18-21-18_10
-0910-0004, AUT, discussion, roleplay, 4, 5, llama-3-1-405b-instruct, Environmentalist-CreativeProfessional-Futurist-Futurist, 10, 14.692, 6.259, 7.083, 1.972, 4.052, 0.955, 3.335, 0.872, AUT_multi_debate_roleplay_4_5_llama-3-1-405b-instruct_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-10-00-04-11_10`;
-        
-        const dataTableBody = document.getElementById('dataTableBody');
-        const rows = rawData.trim().split('\n').slice(1); // ignore header
-        
-        const dataToRender = rows.map(row => {
-            const cols = row.split(',').map(item => item.trim());
-            return {
-                timestamp: cols[0],
-                type: cols[2],
-                mode: cols[3],
-                modelName: cols[6],
-                dataNum: parseInt(cols[8]),
-                meanOriginality: parseFloat(cols[13]),
-                meanElaboration: parseFloat(cols[15]),
-                meanFluency: parseFloat(cols[9]),
-                meanFlexibility: parseFloat(cols[11]),
-                roleName: cols[7]
-            };
-        });
-
-        function renderTable(data) {
-            dataTableBody.innerHTML = '';
-            data.forEach(item => {
-                const rowEl = document.createElement('tr');
-                rowEl.innerHTML = `
-                    <td class="px-6 py-4">${item.timestamp}</td>
-                    <td class="px-6 py-4">${item.type}</td>
-                    <td class="px-6 py-4">${item.mode}</td>
-                    <td class="px-6 py-4">${item.modelName}</td>
-                    <td class="px-6 py-4">${item.dataNum}</td>
-                    <td class="px-6 py-4 font-medium">${item.meanOriginality.toFixed(3)}</td>
-                    <td class="px-6 py-4 font-medium">${item.meanElaboration.toFixed(3)}</td>
-                    <td class="px-6 py-4">${item.meanFluency.toFixed(3)}</td>
-                    <td class="px-6 py-4">${item.meanFlexibility.toFixed(3)}</td>
-                    <td class="px-6 py-4 text-xs text-gray-600" style="white-space: normal;">${item.roleName}</td>
-                `;
-                dataTableBody.appendChild(rowEl);
-            });
-        }
-        
-        // Initial render
-        renderTable(dataToRender);
-
-        let currentSort = {
-            col: -1,
-            asc: true
-        };
-
-        function sortTable(colIndex, type = 'str') {
-            const headers = document.querySelectorAll('#dataTable th');
-            
-            if (currentSort.col === colIndex) {
-                currentSort.asc = !currentSort.asc;
-            } else {
-                currentSort.col = colIndex;
-                currentSort.asc = true;
-            }
-            
-            headers.forEach(h => h.classList.remove('asc', 'desc'));
-            headers[colIndex].classList.add(currentSort.asc ? 'asc' : 'desc');
-
-            const keyMap = ['timestamp', 'type', 'mode', 'modelName', 'dataNum', 'meanOriginality', 'meanElaboration', 'meanFluency', 'meanFlexibility', 'roleName'];
-            const key = keyMap[colIndex];
-
-            const sortedData = [...dataToRender].sort((a, b) => {
-                let valA = a[key];
-                let valB = b[key];
-
-                if (type === 'num') {
-                    return currentSort.asc ? valA - valB : valB - valA;
-                } else {
-                    return currentSort.asc ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                }
-            });
-            
-            renderTable(sortedData);
-        }
-    </script>
 </body>
 </html>
 
