@@ -46,7 +46,8 @@ if __name__ == "__main__":
     client = ChatbotClient()
     
     # 傳送訊息
-    result = client.send_message("What are some creative use for fork? The goal is to come up with creative ideas")
+    # result = client.send_message("What are some creative use for fork? The goal is to come up with creative ideas")
+    result = client.send_message(""" "Healthcare Innovation (Reimagine the Hospital)": "Redesign the future hospital experience for patients, families, and staff. Address flows, safety, data, wellbeing, equity, and feasibility.""")
     print(f"回應: {result['response']}")
     
     # 查看狀態
