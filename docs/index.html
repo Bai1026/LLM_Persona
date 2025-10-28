@@ -236,19 +236,67 @@
     <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-6 py-16 md:py-24">
 
+        <!-- Introduction Section -->
+        <section id="introduction" class="mb-16 md:mb-24">
+            <h2 class="section-title">Introduction</h2>
+            <div class="card p-8 text-gray-700 leading-relaxed space-y-4">
+                <h3 class="text-xl font-bold text-gray-800 mb-3">The Promise of Creative AI</h3>
+                <p>
+                    Creativity is widely recognized as a cornerstone of human progress, driving innovation across domains and enabling major scientific breakthroughs. Recent research has explored the creativity of large language models (LLMs), viewing them as promising tools for applications such as story writing, design ideation, and scientific discovery, thereby augmenting human problem-solving and imagination.
+                </p>
+
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Multi-LLM Paradigms: Promise and Limitations</h3>
+                <p>
+                    Recent studies highlight the potential of the multi-LLM paradigm, which aims to simulate human collective intelligence by engaging multiple LLMs in iterative discussion to arrive at more comprehensive and well-balanced solutions. This paradigm allows systems to generate a broader range of ideas beyond what a single model can reach.
+                </p>
+                <p>
+                    In the context of creativity, these frameworks often assign diverse roles to LLMs and employ structured, multi-round interactions. For example, one LLM may act as a creative professional while another serves as an environmentalist, enabling the system to explore and integrate multiple perspectives through iterative exchanges.
+                </p>
+                
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p class="text-red-800 font-semibold mb-2">⚠️ The Challenge</p>
+                    <p class="text-red-700 text-sm">
+                        Despite these advantages, multi-LLM frameworks face a major challenge: <strong>substantial computational cost and increased inference time</strong> associated with multi-LLM coordination. The iterative nature of multi-LLM dialogue substantially increases input and output tokens, making the process computationally costly and increasing inference latency, limiting scalability in real-world settings.
+                        <br>
+                        Also, there is a chance that the models encounter <strong>process loss</strong>, where the benefits of multi-LLM interaction are offset by inefficiencies in communication and integration, leading to suboptimal outcomes.
+                    </p>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800 mb-3">The BILLY Solution</h3>
+                <p>
+                    We therefore ask: <em>Without relying on multiple models carrying on a multi-round discussion, can a single LLM simulate diverse perspectives in an efficient manner?</em>
+                </p>
+                <p>
+                    While prompting approaches exist (asking models to adopt multiple roles simultaneously), they depend heavily on the model's ability to integrate and coordinate multiple perspectives within a single response. In practice, LLMs may handle each persona separately but struggle to integrate them coherently.
+                </p>
+                <p>
+                    To address these challenges while retaining the creative advantages of multi-LLM interaction, we propose <strong class="text-indigo-600">BILLY: BlendIng persona vectors for Large Language model creativitY</strong>. Inspired by recent advances in extracting persona vectors and steering model behavior through activation engineering, BILLY extends these ideas by merging multiple persona vectors within a single LLM.
+                </p>
+
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h4 class="text-green-800 font-semibold mb-2">✨ Our Contributions</h4>
+                    <ul class="text-green-700 text-sm space-y-2 list-disc list-inside ml-2">
+                        <li><strong>Enhanced Creativity:</strong> BILLY blends multiple persona vectors within a single LLM, generating diverse, multi-perspective creative responses that surpass both single-model prompting and multi-LLM approaches.</li>
+                        <li><strong>Efficiency and Simplicity:</strong> Entirely training-free, requiring no additional fine-tuning or multi-LLM communication, achieving superior creativity with substantially lower computational costs.</li>
+                        <li><strong>Interpretability via Persona Vectors:</strong> Operating directly in the latent activation space, BILLY offers an interpretable mechanism for understanding and steering creativity with fine-grained control.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
         <!-- Abstract / About Section -->
         <section id="about" class="mb-16 md:mb-24">
-            <h2 class="section-title">Abstract</h2>
+            <h2 class="section-title">About BILLY</h2>
             <div class="card p-8 text-lg text-gray-700 leading-relaxed space-y-4">
-                <p>
+                <!-- <p>
                     Multi-LLM systems enhance creativity by simulating human collective intelligence, but suffer from high computational costs and inference latency. To address this, we propose <strong class="text-indigo-600">BILLY, Blending persona vectors for Large Language model creativity</strong>, a training-free framework.
-                </p>
+                </p> -->
                 <p>
                     BILLY's core idea is to capture the benefits of multi-LLM collaboration—inducing diverse perspectives and specialized expertise—<strong class="text-indigo-600">within a single model</strong>. We achieve this by extracting and blending multiple distinct persona vectors directly in the model's activation space. During inference, this merged vector steers the generation process, enabling multi-perspective output without explicit multi-LLM communication.
                 </p>
-                <p>
+                <!-- <p>
                     Experiments show that BILLY surpasses both single-model prompting and traditional multi-LLM approaches on creativity-oriented benchmarks, while substantially reducing inference time and computational costs.
-                </p>
+                </p> -->
                 
                 <!-- Centered Image -->
                 <div class="flex justify-center mb-4">
@@ -555,7 +603,7 @@
                     <div class="bg-blue-50 border border-purple-200 rounded-lg p-6 mt-4">
                         <div class="text-gray-700 text-sm leading-relaxed space-y-4">
                             <p>
-                                To verify how effectively our method aligns model representations with target personas, we analyze the projection of activation changes Δa(l) in Equation (4) onto layer-specific persona vectors. This analysis is conducted using 10 neutral questions shown in Section F and 10 randomly selected questions from our evaluation dataset.
+                                To verify how effectively our method aligns model representations with target personas, we analyze the projection of activation changes Δa(l) in Equation (4) onto layer-specific persona vectors.
                             </p>
                             
                             <p>
@@ -569,7 +617,7 @@
                             <div class="bg-white p-4 rounded border-l-4 border-blue-400 mb-3">
                                 <p class="text-sm text-gray-600 mb-2"><strong>Step 1: Define Activation Difference Vector</strong></p>
                                 <p class="text-xs text-gray-600 mb-2">
-                                    First, we define the activation difference vector, Δa(l), for each layer l. This vector is the difference between the steered activations a(l)_steered from Equation (3) and the original activations a(l)_original from a standard forward pass without steering:
+                                    First, we define the activation difference vector, Δa(l), for each layer l. This vector is the difference between the steered activations a(l)_steered and the original activations a(l)_original from a standard forward pass without steering:
                                 </p>
                                 <div class="text-center mb-2">
                                     <img src="img/formula_4.png" alt="Activation Difference Formula" class="mx-auto opacity-80 max-w-xs">
@@ -598,14 +646,14 @@
                                 <li>
                                     <strong>Vector Steering Superiority:</strong> While prompting fails to consistently induce all intended personas (negative projections on vENV), BILLY consistently achieves positive projections on both vCRE and vENV.
                                 </li>
-                                <li>
-                                    <strong>Selective Persona Control:</strong> Individual vectors (BILLY-CRE, BILLY-ENV) precisely control their intended semantic concepts with minimal cross-activation.
-                                </li>
-                                <li>
+                                <!-- <li>
                                     <strong>Complex Interaction Effects:</strong> BILLY (CRE + ENV) successfully co-activates both personas, but the effect is non-linear—the environmentalist vector provides substantive content that the creative vector reframes for richer output.
-                                </li>
+                                </li> -->
                                 <li>
                                     <strong>Superior Controllability:</strong> Direct latent space manipulation enables more reliable and interpretable multi-faceted persona generation compared to prompting approaches.
+                                </li>
+                                <li>
+                                    <strong>Selective Persona Control:</strong> Individual vectors (BILLY-CRE, BILLY-ENV) precisely control their intended semantic concepts with minimal cross-activation.
                                 </li>
                             </ul>
                         </div>
