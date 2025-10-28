@@ -160,21 +160,10 @@
 
     <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-6 py-16 md:py-24">
-        
-        <!-- Teaser Image Section -->
-        <section id="teaser" class="mb-16 md:mb-24">
-            <h2 class="section-title">Core Concept</h2>
-            <div class="card p-4">
-                <img src="img/teaser.png" alt="BILLY Method Diagram" class="rounded-lg shadow-lg w-full" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/EFEFEF/333333?text=Teaser.pdf+Diagram';">
-                <p class="text-center text-gray-500 mt-4 text-sm">
-                    Extracts and fuses persona vectors from a "Creative Professional" and an "Environmentalist" to steer a base model, generating output embodies both domains.
-                </p>
-            </div>
-        </section>
 
         <!-- Abstract / About Section -->
         <section id="about" class="mb-16 md:mb-24">
-            <h2 class="section-title">About BILLY</h2>
+            <h2 class="section-title">Abstract</h2>
             <div class="card p-8 text-lg text-gray-700 leading-relaxed space-y-4">
                 <p>
                     Multi-LLM systems enhance creativity by simulating human collective intelligence, but suffer from high computational costs and inference latency. To address this, we propose <strong class="text-indigo-600">BILLY, Blending persona vectors for Large Language model creativity</strong>, a training-free framework.
@@ -185,12 +174,21 @@
                 <p>
                     Experiments show that BILLY surpasses both single-model prompting and traditional multi-LLM approaches on creativity-oriented benchmarks, while substantially reducing inference time and computational costs.
                 </p>
+                
+                <!-- Centered Image -->
+                <div class="flex justify-center mb-4">
+                    <img src="img/teaser.png" alt="BILLY Method Diagram" class="rounded-lg shadow-lg w-1/2 max-w-4xl" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/EFEFEF/333333?text=Teaser.pdf+Diagram';">
+                </div>
+                <p class="text-center text-gray-500 mt-4 text-sm">
+                    <strong class="text-indigo-600">BILLY (BlendIng persona vectors for Large Language model creativitY)</strong>. To enhance the creativity of a single LLM, we extract and fuse the persona vectors of a Creative Professional and an Environmentalist, steering a base model by this composite vector to generate outputs based on both domains.
+                    </p>
+                </p>
             </div>
         </section>
 
         <!-- Method Section -->
         <section id="method" class="mb-16 md:mb-24">
-            <h2 class="section-title">Method</h2>
+            <h2 class="section-title">Approach</h2>
             <div class="card p-8">
                 <p class="text-gray-600 mb-8 text-center max-w-4xl mx-auto">
                     BILLY achieves multi-persona fusion through three stages: persona vector extraction, offline fusion, and inference-time steering.
@@ -363,6 +361,29 @@
                     <div class="card p-4 flex flex-col">
                         <h3 class="text-2xl font-bold mb-4 text-center">Efficiency Analysis</h3>
                         <img src="img/comparison.png" alt="Comparison of inference time and token cost" class="rounded-lg shadow-lg w-full" onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFEFEF/333333?text=comparison.png';">
+                        
+                        <!-- Performance Metrics -->
+                        <div class="mt-4 bg-gray-50 p-4 rounded-lg border">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center">
+                                    <h4 class="text-sm font-semibold text-gray-700 mb-2">BILLY (Ours)</h4>
+                                    <div class="space-y-1">
+                                        <div class="text-xs text-gray-600">Inference Time: <span class="font-bold text-green-600">19s</span></div>
+                                        <div class="text-xs text-gray-600">Token Cost: <span class="font-bold text-green-600">0.3$/10k query</span></div>
+                                        <!-- <div class="text-xs text-gray-600">Efficiency: <span class="font-bold text-blue-600">~95% reduction</span></div> -->
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <h4 class="text-sm font-semibold text-gray-700 mb-2">LLM Discussion</h4>
+                                    <div class="space-y-1">
+                                        <div class="text-xs text-gray-600">Inference Time: <span class="font-bold text-red-500">513s (27.02 times)</span></div>
+                                        <div class="text-xs text-gray-600">Token Cost: <span class="font-bold text-red-500">25.5$/10k query (90.9 times)</span></div>
+                                        <!-- <div class="text-xs text-gray-600">Multi-agent: <span class="font-bold text-orange-500">High overhead</span></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <p class="text-center text-gray-500 mt-4 text-sm px-4 flex-grow">
                             Inference Time and Token Cost. BILLY demonstrates a significant reduction in both latency and token cost compared to the LLM Discussion baseline.
                         </p>
@@ -376,6 +397,41 @@
                         </p>
                     </div>
                 </div>
+
+                <!-- Vector Composition Analysis -->
+                <div class="card p-4">
+                    <h3 class="text-2xl font-bold mb-4 text-center">Analysis of Various Vector Compositions</h3>
+                    <div class="flex justify-center mb-4">
+                        <img src="img/vec_combination.png" alt="Persona Vector Combinations Analysis" class="rounded-lg shadow-lg w-1/2 max-w-md" onerror="this.onerror=null;this.src='https://placehold.co/600x300/EFEFEF/333333?text=Figure+2%3A+Persona+Vector+Combinations+Analysis';">
+                    </div>
+                    <p class="text-center text-gray-500 mt-4 text-sm px-4 mb-4">
+                        Persona Vector Combinations Analysis. Based on the default 4 vectors, we modify the combination of persona vectors from one to seven.
+                    </p>
+                    
+                    <!-- Analysis Text -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-4">
+                        <div class="text-gray-700 text-sm leading-relaxed space-y-3">
+                            <p>
+                                To investigate the relationship between the quantity of fused personas and creativity, we vary the number of merged vectors from one to seven. The results are presented in Figure 2 with the specific persona vector combinations detailed in Section D.
+                            </p>
+                            <p>
+                                <strong class="text-blue-800">Key Findings:</strong>
+                            </p>
+                            <ul class="list-disc list-inside space-y-2 ml-4">
+                                <li>
+                                    <strong>Creative Professional Dominance:</strong> Any vector merge with the creative professional persona results in exceptionally high creative performance.
+                                </li>
+                                <li>
+                                    <strong>Diminishing Returns:</strong> While increasing the number of persona vectors from one (1-CRE) to three yields a noticeable improvement, further additions from four to seven vectors do not produce additional significant gains.
+                                </li>
+                                <li>
+                                    <strong>Non-Additive Benefits:</strong> This suggests that the primary benefit of BILLY is not simply additive—quality of composition matters more than quantity.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Interpretability -->
                 <div class="card p-4">
                     <h3 class="text-2xl font-bold mb-4 text-center">Projection Analysis</h3>
