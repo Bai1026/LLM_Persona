@@ -218,13 +218,11 @@
             </p>
             <div class="mt-8">
                 <p class="text-md font-medium text-gray-800">
-                    Tsung-Min Pai¹, Jui-I Wang², Li-Chun Lu³, Shao-Hua Sun¹,³, Hung-Yi Lee¹, Kai-Wei Chang⁴
+                    Tsung-Min Pai¹, Jui-I Wang¹, Li-Chun Lu¹, Shao-Hua Sun¹, Hung-Yi Lee¹, Kai-Wei Chang²
                 </p>
                 <p class="mt-2 text-sm text-gray-500 leading-relaxed">
-                    ¹Department of Electrical Engineering, National Taiwan University<br>
-                    ²Department of Computer Science & Information Engineering, National Taiwan University<br>
-                    ³Graduate Institute of Communication Engineering, National Taiwan University<br>
-                    ⁴CSAIL, Massachusetts Institute of Technology
+                    ¹National Taiwan University,
+                    ²Massachusetts Institute of Technology
                 </p>
             </div>
             <div class="mt-10 flex flex-wrap justify-center gap-4">
@@ -554,20 +552,47 @@
                     </p>
                     
                     <!-- Analysis Text -->
-                    <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 mt-4">
-                        <div class="text-gray-700 text-sm leading-relaxed space-y-3">
+                    <div class="bg-blue-50 border border-purple-200 rounded-lg p-6 mt-4">
+                        <div class="text-gray-700 text-sm leading-relaxed space-y-4">
                             <p>
-                                <strong>Methodology:</strong> To verify how effectively our method aligns model representations with target personas, we analyze the projection of activation changes Δa⃗(l) onto layer-specific persona vectors using 10 neutral questions and 10 randomly selected evaluation questions.
+                                To verify how effectively our method aligns model representations with target personas, we analyze the projection of activation changes Δa(l) in Equation (4) onto layer-specific persona vectors. This analysis is conducted using 10 neutral questions shown in Section F and 10 randomly selected questions from our evaluation dataset.
                             </p>
                             
-                            <div class="bg-white p-3 rounded border-l-4 border-purple-400 mb-3">
-                                <p class="text-xs text-gray-600 mb-1"><strong>Formula:</strong></p>
-                                <p class="text-xs font-mono text-gray-800">Projection(l)_persona = Δa⃗(l) · v⃗(l)_persona / ||v⃗(l)_persona||</p>
-                                <p class="text-xs text-gray-600 mt-1">Higher positive values indicate stronger alignment with intended persona direction.</p>
+                            <p>
+                                The core idea is to measure the change in the model's activations caused by our steering vector and then calculate how much of the change occurred along the intended persona's direction.
+                            </p>
+                            
+                            <p>
+                                <strong class="text-blue-800">Analysis Process:</strong>
+                            </p>
+                            
+                            <div class="bg-white p-4 rounded border-l-4 border-blue-400 mb-3">
+                                <p class="text-sm text-gray-600 mb-2"><strong>Step 1: Define Activation Difference Vector</strong></p>
+                                <p class="text-xs text-gray-600 mb-2">
+                                    First, we define the activation difference vector, Δa(l), for each layer l. This vector is the difference between the steered activations a(l)_steered from Equation (3) and the original activations a(l)_original from a standard forward pass without steering:
+                                </p>
+                                <div class="text-center mb-2">
+                                    <img src="img/formula_4.png" alt="Activation Difference Formula" class="mx-auto opacity-80 max-w-xs">
+                                </div>
+                                <p class="text-xs text-gray-500 text-center">Equation (4): Activation difference calculation</p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded border-l-4 border-blue-400 mb-3">
+                                <p class="text-sm text-gray-600 mb-2"><strong>Step 2: Calculate Projection Value</strong></p>
+                                <p class="text-xs text-gray-600 mb-2">
+                                    Second, to quantify the alignment of this change with a specific persona, we project the activation difference vector Δa(l) onto that persona's predefined, layer-specific unit persona vector. The resulting projection value, Projection(l)_persona, is calculated via the dot product:
+                                </p>
+                                <div class="text-center mb-2">
+                                    <img src="img/formula_5.png" alt="Projection Calculation Formula" class="mx-auto opacity-80 max-w-xs">
+                                </div>
+                                <p class="text-xs text-gray-500 text-center">Equation (5): Projection value calculation</p>
+                                <p class="text-xs text-gray-600 mt-2">
+                                    where v(l)_persona is the persona vector for a given persona at layer l. A higher positive projection value indicates that our steering intervention more strongly shifted the model's activations along that persona's semantic axis.
+                                </p>
                             </div>
                             
                             <p>
-                                <strong class="text-purple-800">Key Findings:</strong>
+                                <strong class="text-blue-800">Key Findings:</strong>
                             </p>
                             <ul class="list-disc list-inside space-y-2 ml-4">
                                 <li>
