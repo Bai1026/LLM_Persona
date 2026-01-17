@@ -1,0 +1,247 @@
+===
+
+File name: Instances_llama_1_1_Llama_SingleRole_llama_0917-2339_100
+總秒數: 1436.2045466899872
+時間差: 0:23:56.204547
+
+===
+
+File name: Scientific_llama_1_1_Llama_SingleRole_llama_0918-0212_100
+總秒數: 1786.4704637527466
+時間差: 0:29:46.470464
+
+===
+
+File name: Similarities_llama_1_1_Llama_SingleRole_llama_0918-0524_100
+總秒數: 1998.950050354004
+時間差: 0:33:18.950050
+
+===
+
+File name: Instances_llama_1_1_Llama_MultiRole_llama_0918-0759_100
+總秒數: 2206.657956600189
+時間差: 0:36:46.657957
+
+===
+
+File name: Scientific_llama_1_1_Llama_MultiRole_llama_0918-1523_100
+總秒數: 2467.235519886017
+時間差: 0:41:07.235520
+
+===
+
+File name: Similarities_llama_1_1_Llama_MultiRole_llama_0918-2034_100
+總秒數: 2462.1019060611725
+時間差: 0:41:02.101906
+
+===
+
+File name: AUT_google_topline_1_1_gemini_2_5_pro_Google_topline_0920-0015_100
+總秒數: 3191.5265312194824
+時間差: 0:54:21.526531
+
+
+===
+
+File name: AUT_google_topline_1_1_gemini_2_5_pro_Google_topline_0920-1527_100
+總秒數: 4356.155931472778
+時間差: 1:12:36.155931
+
+===
+
+File name: ../../Results/AUT/Output/multi_agent/AUT_multi_debate_roleplay_4_5_gemini-2-5-pro_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-21-05-11-17_100.json
+總秒數: 53013.84284448624
+時間差: 14:43:33.842844
+
+===
+
+File name: Instances_google_topline_1_1_gemini_2_5_pro_SingleRole_0922-0138_100
+總秒數: 2278.3586156368256
+時間差: 0:37:58.358616
+
+===
+
+File name: Instances_google_topline_1_1_gemini_2_5_pro_MultiRole_0922-0244_100
+總秒數: 3950.6248636245728
+時間差: 1:05:50.624864
+
+===
+每個休息30秒 每五個在休息60秒
+File name: Similarities_google_topline_1_1_gemini_2_5_pro_SingleRole_0922-1852_100
+總秒數: 6653.892156600952
+時間差: 1:50:53.892157
+
+===
+每個休息30秒 每五個在休息60秒
+File name: Similarities_google_topline_1_1_gemini_2_5_pro_MultiRole_0922-2324_100
+總秒數: 8353.751495599747
+時間差: 2:19:13.751496
+
+===
+
+File name: Instances_google_topline_1_1_gemini_2_5_pro_SingleRole_0922-2337_100
+總秒數: 0.027062416076660156
+時間差: 0:00:00.027062
+
+===
+
+File name: Instances_google_topline_1_1_gemini_2_5_pro_SingleRole_0922-2343_100
+總秒數: 82.08021426200867
+時間差: 0:01:22.080214
+
+===
+
+File name: Similarities_google_topline_1_1_gemini_2_5_pro_MultiRole_0922-2352_100
+總秒數: 263.29945158958435
+時間差: 0:04:23.299452
+
+===
+
+File name: Similarities_google_topline_1_1_gemini_2_5_pro_MultiRole_0922-2359_100
+總秒數: 74.14516019821167
+時間差: 0:01:14.145160
+
+===
+
+File name: Similarities_google_topline_1_1_gemini_2_5_pro_SingleRole_0923-0005_100
+總秒數: 110.33017778396606
+時間差: 0:01:50.330178
+
+===
+
+File name: Scientific_google_topline_1_1_gemini_2_5_pro_SingleRole_0923-0234_100
+總秒數: 8488.080639839172
+時間差: 2:21:28.080640
+
+===
+
+File name: Scientific_google_topline_1_1_gemini_2_5_pro_MultiRole_0923-1612_100
+總秒數: 9062.126361131668
+時間差: 2:31:02.126361
+
+===
+
+File name: ../../Results/AUT/Output/multi_agent/AUT_multi_debate_roleplay_4_2_gemma-3-4b-it_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-23-17-09-03_2.json
+總秒數: 451.4369330406189
+時間差: 0:07:31.436933
+
+===
+
+File name: ../../Results/AUT/Output/multi_agent/AUT_multi_debate_roleplay_4_2_gemma-3-4b-it_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-23-18-07-28_2.json
+總秒數: 464.38664054870605
+時間差: 0:07:44.386641
+
+===
+
+File name: AUT_qwen_1_1_Qwen_SingleRole_qwen_0923-2339_100
+總秒數: 1371.003833770752
+時間差: 0:22:51.003834
+
+===
+
+File name: Instances_qwen_1_1_Qwen_SingleRole_qwen_0923-2356_100
+總秒數: 1049.2328388690948
+時間差: 0:17:29.232839
+
+===
+
+File name: Scientific_qwen_1_1_Qwen_SingleRole_qwen_0924-0030_100
+總秒數: 2033.8408954143524
+時間差: 0:33:53.840895
+
+===
+
+File name: Similarities_qwen_1_1_Qwen_SingleRole_qwen_0924-0054_100
+總秒數: 1430.3311462402344
+時間差: 0:23:50.331146
+
+===
+
+File name: AUT_llama_1_1_Llama_SingleRole_llama_0924-0139_100
+總秒數: 1473.2932872772217
+時間差: 0:24:33.293287
+
+===
+
+File name: Instances_llama_1_1_Llama_SingleRole_llama_0924-0159_100
+總秒數: 1202.2518546581268
+時間差: 0:20:02.251855
+
+===
+
+File name: Scientific_llama_1_1_Llama_SingleRole_llama_0924-0242_100
+總秒數: 2600.382086753845
+時間差: 0:43:20.382087
+
+===
+
+File name: Similarities_llama_1_1_Llama_SingleRole_llama_0924-0315_100
+總秒數: 1933.97328042984
+時間差: 0:32:13.973280
+
+===
+
+File name: ../../Results/AUT/Output/multi_agent/AUT_multi_debate_roleplay_4_5_qwen2-5-7b-instruct_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-24-18-12-36_100.json
+總秒數: 37680.84028458595
+時間差: 10:28:00.840285
+
+===
+
+File name: AUT_gemma_1_1_Gemma_SingleRole_gemma_0926-2208_100
+總秒數: 0.6940090656280518
+時間差: 0:00:00.694009
+
+===
+
+File name: AUT_gemma_1_1_Gemma_SingleRole_gemma_0926-2245_1
+總秒數: 32.835870027542114
+時間差: 0:00:32.835870
+
+===
+
+File name: AUT_gemma_1_1_Gemma_SingleRole_gemma_0926-2315_100
+總秒數: 1454.31436085701
+時間差: 0:24:14.314361
+
+===
+
+File name: Instances_gemma_1_1_Gemma_SingleRole_gemma_0926-2343_100
+總秒數: 1461.0211811065674
+時間差: 0:24:21.021181
+
+===
+
+File name: Similarities_gemma_1_1_Gemma_SingleRole_gemma_0927-0011_100
+總秒數: 1441.148577928543
+時間差: 0:24:01.148578
+
+===
+
+File name: Scientific_gemma_1_1_Gemma_SingleRole_gemma_0927-0036_100
+總秒數: 1392.692417383194
+時間差: 0:23:12.692417
+
+===
+
+File name: AUT_gemma_1_1_Gemma_SingleRole_gemma_0927-0423_100
+總秒數: 1416.4836165904999
+時間差: 0:23:36.483617
+
+===
+
+File name: ../../Results/AUT/Output/multi_agent/AUT_multi_debate_roleplay_4_2_gemma-3-4b-it_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-27-15-40-23_1.json
+總秒數: 409.1073360443115
+時間差: 0:06:49.107336
+
+===
+
+File name: ../../Results/AUT/Output/multi_agent/AUT_multi_debate_roleplay_4_5_gemma-3-4b-it_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-28-16-44-00_2.json
+總秒數: 1363.8338100910187
+時間差: 0:22:43.833810
+
+===
+
+File name: ../../Results/AUT/Output/multi_agent/AUT_multi_debate_roleplay_4_5_gemma-3-4b-it_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-30-21-09-16_100.json
+總秒數: 609.7999119758606
+時間差: 0:10:09.799912
+

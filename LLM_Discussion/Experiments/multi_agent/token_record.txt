@@ -1,0 +1,1708 @@
+
+Time Usage: 0:00:41.567316
+Input token: 58, Thinking token: 2098, Output token: 1589
+    Current Input: 58, Current Ouput: 3687, Current Fee: 0.0369425
+---
+Time Usage: 0:00:38.021226
+Input token: 53, Thinking token: 1945, Output token: 1606
+    Current Input: 111, Current Ouput: 7238, Current Fee: 0.07251875
+---
+Time Usage: 0:00:40.752953
+Input token: 52, Thinking token: 1849, Output token: 2049
+    Current Input: 163, Current Ouput: 11136, Current Fee: 0.11156375000000002
+---
+Time Usage: 0:00:51.740722
+Input token: 49, Thinking token: 1743, Output token: 1794
+    Current Input: 212, Current Ouput: 14673, Current Fee: 0.146995
+---
+
+-----------------------------------------------------------------------------
+
+## Similarity Single Agent
+
+Time Usage: 0:00:34.368176
+Input token: 38, Thinking token: 1764, Output token: 1080
+    Current Input: 38, Current Ouput: 2844, Current Fee: 0.028487500000000002
+---
+Time Usage: 0:00:29.380475
+Input token: 38, Thinking token: 1631, Output token: 702
+    Current Input: 76, Current Ouput: 5177, Current Fee: 0.051865
+---
+Time Usage: 0:00:31.257662
+Input token: 38, Thinking token: 1636, Output token: 741
+    Current Input: 114, Current Ouput: 7554, Current Fee: 0.07568250000000001
+---
+Time Usage: 0:00:26.385251
+Input token: 38, Thinking token: 1618, Output token: 802
+    Current Input: 152, Current Ouput: 9974, Current Fee: 0.09993
+---
+Time Usage: 0:00:37.302636
+Input token: 38, Thinking token: 1774, Output token: 659
+    Current Input: 190, Current Ouput: 12407, Current Fee: 0.12430750000000002
+---
+Time Usage: 0:00:23.738404
+Input token: 38, Thinking token: 1608, Output token: 594
+    Current Input: 228, Current Ouput: 14609, Current Fee: 0.14637500000000003
+---
+Time Usage: 0:00:24.329696
+Input token: 38, Thinking token: 1539, Output token: 603
+    Current Input: 266, Current Ouput: 16751, Current Fee: 0.16784250000000003
+---
+Time Usage: 0:00:29.979908
+Input token: 38, Thinking token: 1789, Output token: 774
+    Current Input: 304, Current Ouput: 19314, Current Fee: 0.19352
+---
+Time Usage: 0:00:23.272016
+Input token: 38, Thinking token: 1419, Output token: 665
+    Current Input: 342, Current Ouput: 21398, Current Fee: 0.21440750000000003
+---
+Time Usage: 0:00:21.980564
+Input token: 38, Thinking token: 1351, Output token: 691
+    Current Input: 380, Current Ouput: 23440, Current Fee: 0.23487500000000003
+---
+Time Usage: 0:00:24.200648
+Input token: 38, Thinking token: 1380, Output token: 871
+    Current Input: 418, Current Ouput: 25691, Current Fee: 0.2574325
+---
+Time Usage: 0:00:31.753048
+Input token: 38, Thinking token: 1894, Output token: 645
+    Current Input: 456, Current Ouput: 28230, Current Fee: 0.28287
+---
+Time Usage: 0:00:23.496123
+Input token: 38, Thinking token: 1359, Output token: 650
+    Current Input: 494, Current Ouput: 30239, Current Fee: 0.30300750000000004
+---
+Time Usage: 0:00:23.451730
+Input token: 38, Thinking token: 1390, Output token: 657
+    Current Input: 532, Current Ouput: 32286, Current Fee: 0.32352500000000006
+---
+Time Usage: 0:00:26.069840
+Input token: 38, Thinking token: 1856, Output token: 676
+    Current Input: 570, Current Ouput: 34818, Current Fee: 0.34889250000000005
+---
+Time Usage: 0:00:22.668506
+Input token: 38, Thinking token: 1507, Output token: 600
+    Current Input: 608, Current Ouput: 36925, Current Fee: 0.37001
+---
+Time Usage: 0:00:29.609038
+Input token: 38, Thinking token: 1463, Output token: 663
+    Current Input: 646, Current Ouput: 39051, Current Fee: 0.39131750000000004
+---
+Time Usage: 0:00:23.025983
+Input token: 38, Thinking token: 1481, Output token: 644
+    Current Input: 684, Current Ouput: 41176, Current Fee: 0.412615
+---
+Time Usage: 0:00:29.960767
+Input token: 39, Thinking token: 1557, Output token: 993
+    Current Input: 723, Current Ouput: 43726, Current Fee: 0.43816375
+---
+Time Usage: 0:00:19.839333
+Input token: 38, Thinking token: 1410, Output token: 588
+    Current Input: 761, Current Ouput: 45724, Current Fee: 0.45819125000000005
+---
+Time Usage: 0:00:23.845497
+Input token: 38, Thinking token: 1475, Output token: 635
+    Current Input: 799, Current Ouput: 47834, Current Fee: 0.47933875000000004
+---
+Time Usage: 0:00:29.098731
+Input token: 38, Thinking token: 1661, Output token: 771
+    Current Input: 837, Current Ouput: 50266, Current Fee: 0.50370625
+---
+Time Usage: 0:00:25.987964
+Input token: 38, Thinking token: 1845, Output token: 571
+    Current Input: 875, Current Ouput: 52682, Current Fee: 0.5279137500000001
+---
+Time Usage: 0:00:21.920764
+Input token: 38, Thinking token: 1426, Output token: 659
+    Current Input: 913, Current Ouput: 54767, Current Fee: 0.54881125
+---
+Time Usage: 0:00:21.531459
+Input token: 37, Thinking token: 1424, Output token: 633
+    Current Input: 950, Current Ouput: 56824, Current Fee: 0.5694275000000001
+---
+Time Usage: 0:00:21.637750
+Input token: 38, Thinking token: 1411, Output token: 612
+    Current Input: 988, Current Ouput: 58847, Current Fee: 0.589705
+---
+Time Usage: 0:00:22.222332
+Input token: 38, Thinking token: 1415, Output token: 630
+    Current Input: 1026, Current Ouput: 60892, Current Fee: 0.6102025
+---
+Time Usage: 0:00:23.612261
+Input token: 38, Thinking token: 1572, Output token: 805
+    Current Input: 1064, Current Ouput: 63269, Current Fee: 0.6340200000000001
+---
+Time Usage: 0:00:26.567826
+Input token: 38, Thinking token: 1737, Output token: 681
+    Current Input: 1102, Current Ouput: 65687, Current Fee: 0.6582475000000001
+---
+Time Usage: 0:00:30.908367
+Input token: 38, Thinking token: 1502, Output token: 917
+    Current Input: 1140, Current Ouput: 68106, Current Fee: 0.6824850000000001
+---
+Time Usage: 0:00:20.257418
+Input token: 38, Thinking token: 1434, Output token: 566
+    Current Input: 1178, Current Ouput: 70106, Current Fee: 0.7025325
+---
+Time Usage: 0:00:24.184112
+Input token: 37, Thinking token: 1411, Output token: 779
+    Current Input: 1215, Current Ouput: 72296, Current Fee: 0.7244787500000001
+---
+Time Usage: 0:00:25.616535
+Input token: 38, Thinking token: 1509, Output token: 803
+    Current Input: 1253, Current Ouput: 74608, Current Fee: 0.7476462500000001
+---
+Time Usage: 0:00:23.841838
+Input token: 39, Thinking token: 1555, Output token: 652
+    Current Input: 1292, Current Ouput: 76815, Current Fee: 0.7697650000000001
+---
+Time Usage: 0:00:32.758749
+Input token: 38, Thinking token: 1727, Output token: 782
+    Current Input: 1330, Current Ouput: 79324, Current Fee: 0.7949025000000001
+---
+Time Usage: 0:00:25.679353
+Input token: 38, Thinking token: 1495, Output token: 899
+    Current Input: 1368, Current Ouput: 81718, Current Fee: 0.81889
+---
+Time Usage: 0:00:47.746595
+Input token: 38, Thinking token: 1471, Output token: 755
+    Current Input: 1406, Current Ouput: 83944, Current Fee: 0.8411975
+---
+Time Usage: 0:00:28.967276
+Input token: 38, Thinking token: 1721, Output token: 558
+    Current Input: 1444, Current Ouput: 86223, Current Fee: 0.864035
+---
+Time Usage: 0:00:26.454051
+Input token: 38, Thinking token: 1461, Output token: 661
+    Current Input: 1482, Current Ouput: 88345, Current Fee: 0.8853025000000001
+---
+Time Usage: 0:00:28.418351
+Input token: 38, Thinking token: 1773, Output token: 705
+    Current Input: 1520, Current Ouput: 90823, Current Fee: 0.9101300000000001
+---
+Time Usage: 0:00:27.762820
+Input token: 38, Thinking token: 1362, Output token: 982
+    Current Input: 1558, Current Ouput: 93167, Current Fee: 0.9336175000000001
+---
+Time Usage: 0:00:29.929431
+Input token: 38, Thinking token: 1497, Output token: 929
+    Current Input: 1596, Current Ouput: 95593, Current Fee: 0.957925
+---
+Time Usage: 0:00:27.896458
+Input token: 38, Thinking token: 1580, Output token: 583
+    Current Input: 1634, Current Ouput: 97756, Current Fee: 0.9796025
+---
+Time Usage: 0:00:23.409639
+Input token: 38, Thinking token: 1519, Output token: 620
+    Current Input: 1672, Current Ouput: 99895, Current Fee: 1.0010400000000002
+---
+Time Usage: 0:00:22.155783
+Input token: 38, Thinking token: 1361, Output token: 612
+    Current Input: 1710, Current Ouput: 101868, Current Fee: 1.0208175
+---
+Time Usage: 0:00:25.029367
+Input token: 38, Thinking token: 1574, Output token: 652
+    Current Input: 1748, Current Ouput: 104094, Current Fee: 1.043125
+---
+Time Usage: 0:00:22.721862
+Input token: 38, Thinking token: 1360, Output token: 637
+    Current Input: 1786, Current Ouput: 106091, Current Fee: 1.0631425
+---
+Time Usage: 0:00:23.900496
+Input token: 38, Thinking token: 1413, Output token: 655
+    Current Input: 1824, Current Ouput: 108159, Current Fee: 1.0838700000000001
+---
+Time Usage: 0:00:22.568444
+Input token: 38, Thinking token: 1516, Output token: 626
+    Current Input: 1862, Current Ouput: 110301, Current Fee: 1.1053375
+---
+Time Usage: 0:00:22.274925
+Input token: 38, Thinking token: 1581, Output token: 604
+    Current Input: 1900, Current Ouput: 112486, Current Fee: 1.1272350000000002
+---
+Time Usage: 0:00:29.319298
+Input token: 38, Thinking token: 1948, Output token: 801
+    Current Input: 1938, Current Ouput: 115235, Current Fee: 1.1547725
+---
+Time Usage: 0:00:23.477874
+Input token: 38, Thinking token: 1642, Output token: 583
+    Current Input: 1976, Current Ouput: 117460, Current Fee: 1.17707
+---
+Time Usage: 0:00:26.847008
+Input token: 38, Thinking token: 1623, Output token: 712
+    Current Input: 2014, Current Ouput: 119795, Current Fee: 1.2004675
+---
+Time Usage: 0:00:23.985729
+Input token: 38, Thinking token: 1451, Output token: 703
+    Current Input: 2052, Current Ouput: 121949, Current Fee: 1.2220550000000001
+---
+Time Usage: 0:00:26.279760
+Input token: 38, Thinking token: 1691, Output token: 723
+    Current Input: 2090, Current Ouput: 124363, Current Fee: 1.2462425
+---
+Time Usage: 0:00:22.366860
+Input token: 38, Thinking token: 1409, Output token: 683
+    Current Input: 2128, Current Ouput: 126455, Current Fee: 1.2672100000000002
+---
+Time Usage: 0:00:23.120064
+Input token: 38, Thinking token: 1566, Output token: 759
+    Current Input: 2166, Current Ouput: 128780, Current Fee: 1.2905075000000001
+---
+Time Usage: 0:00:21.474375
+Input token: 38, Thinking token: 1500, Output token: 658
+    Current Input: 2204, Current Ouput: 130938, Current Fee: 1.3121350000000003
+---
+Time Usage: 0:00:23.638953
+Input token: 38, Thinking token: 1692, Output token: 680
+    Current Input: 2242, Current Ouput: 133310, Current Fee: 1.3359025000000002
+---
+Time Usage: 0:00:23.905634
+Input token: 38, Thinking token: 1645, Output token: 712
+    Current Input: 2280, Current Ouput: 135667, Current Fee: 1.35952
+---
+Time Usage: 0:00:23.524513
+Input token: 38, Thinking token: 1488, Output token: 740
+    Current Input: 2318, Current Ouput: 137895, Current Fee: 1.3818475000000001
+---
+Time Usage: 0:00:23.304643
+Input token: 38, Thinking token: 1584, Output token: 635
+    Current Input: 2356, Current Ouput: 140114, Current Fee: 1.404085
+---
+Time Usage: 0:00:24.029201
+Input token: 38, Thinking token: 1379, Output token: 723
+    Current Input: 2394, Current Ouput: 142216, Current Fee: 1.4251525
+---
+Time Usage: 0:00:28.593451
+Input token: 38, Thinking token: 1690, Output token: 869
+    Current Input: 2432, Current Ouput: 144775, Current Fee: 1.45079
+---
+Time Usage: 0:00:22.748462
+Input token: 38, Thinking token: 1341, Output token: 617
+    Current Input: 2470, Current Ouput: 146733, Current Fee: 1.4704175
+---
+Time Usage: 0:00:24.414638
+Input token: 38, Thinking token: 1438, Output token: 660
+    Current Input: 2508, Current Ouput: 148831, Current Fee: 1.4914450000000001
+---
+Time Usage: 0:00:24.466466
+Input token: 38, Thinking token: 1531, Output token: 636
+    Current Input: 2546, Current Ouput: 150998, Current Fee: 1.5131625000000002
+---
+Time Usage: 0:00:22.364627
+Input token: 38, Thinking token: 1465, Output token: 646
+    Current Input: 2584, Current Ouput: 153109, Current Fee: 1.5343200000000001
+---
+Time Usage: 0:00:27.272969
+Input token: 39, Thinking token: 1597, Output token: 678
+    Current Input: 2623, Current Ouput: 155384, Current Fee: 1.55711875
+---
+Time Usage: 0:00:30.187185
+Input token: 38, Thinking token: 1669, Output token: 846
+    Current Input: 2661, Current Ouput: 157899, Current Fee: 1.58231625
+---
+Time Usage: 0:00:25.311308
+Input token: 38, Thinking token: 1515, Output token: 752
+    Current Input: 2699, Current Ouput: 160166, Current Fee: 1.60503375
+---
+Time Usage: 0:00:24.120862
+Input token: 38, Thinking token: 1662, Output token: 596
+    Current Input: 2737, Current Ouput: 162424, Current Fee: 1.62766125
+---
+Time Usage: 0:00:26.726909
+Input token: 38, Thinking token: 1452, Output token: 780
+    Current Input: 2775, Current Ouput: 164656, Current Fee: 1.6500287500000002
+---
+Time Usage: 0:00:20.554267
+Input token: 38, Thinking token: 1474, Output token: 564
+    Current Input: 2813, Current Ouput: 166694, Current Fee: 1.6704562500000002
+---
+Time Usage: 0:00:27.600627
+Input token: 38, Thinking token: 1402, Output token: 1206
+    Current Input: 2851, Current Ouput: 169302, Current Fee: 1.6965837500000003
+---
+Time Usage: 0:00:21.016560
+Input token: 38, Thinking token: 1339, Output token: 588
+    Current Input: 2889, Current Ouput: 171229, Current Fee: 1.7159012500000002
+---
+Time Usage: 0:00:22.653651
+Input token: 38, Thinking token: 1527, Output token: 571
+    Current Input: 2927, Current Ouput: 173327, Current Fee: 1.7369287500000001
+---
+Time Usage: 0:00:27.062406
+Input token: 39, Thinking token: 1674, Output token: 680
+    Current Input: 2966, Current Ouput: 175681, Current Fee: 1.7605175000000002
+---
+Time Usage: 0:00:20.767456
+Input token: 38, Thinking token: 1502, Output token: 564
+    Current Input: 3004, Current Ouput: 177747, Current Fee: 1.781225
+---
+Time Usage: 0:00:22.480427
+Input token: 38, Thinking token: 1464, Output token: 660
+    Current Input: 3042, Current Ouput: 179871, Current Fee: 1.8025125000000002
+---
+Time Usage: 0:00:30.929147
+Input token: 38, Thinking token: 1867, Output token: 1068
+    Current Input: 3080, Current Ouput: 182806, Current Fee: 1.8319100000000001
+---
+Time Usage: 0:00:22.443395
+Input token: 38, Thinking token: 1415, Output token: 655
+    Current Input: 3118, Current Ouput: 184876, Current Fee: 1.8526575000000003
+---
+Time Usage: 0:00:23.073531
+Input token: 39, Thinking token: 1601, Output token: 650
+    Current Input: 3157, Current Ouput: 187127, Current Fee: 1.8752162500000003
+---
+Time Usage: 0:00:27.953861
+Input token: 38, Thinking token: 1881, Output token: 741
+    Current Input: 3195, Current Ouput: 189749, Current Fee: 1.9014837500000001
+---
+Time Usage: 0:00:22.688670
+Input token: 38, Thinking token: 1511, Output token: 665
+    Current Input: 3233, Current Ouput: 191925, Current Fee: 1.9232912500000001
+---
+Time Usage: 0:00:23.816117
+Input token: 39, Thinking token: 1499, Output token: 731
+    Current Input: 3272, Current Ouput: 194155, Current Fee: 1.94564
+---
+Time Usage: 0:00:24.835304
+Input token: 38, Thinking token: 1440, Output token: 760
+    Current Input: 3310, Current Ouput: 196355, Current Fee: 1.9676875
+---
+Time Usage: 0:00:28.133928
+Input token: 38, Thinking token: 1826, Output token: 739
+    Current Input: 3348, Current Ouput: 198920, Current Fee: 1.9933850000000002
+---
+Time Usage: 0:00:21.499006
+Input token: 38, Thinking token: 1548, Output token: 606
+    Current Input: 3386, Current Ouput: 201074, Current Fee: 2.0149725000000003
+---
+Time Usage: 0:00:22.881095
+Input token: 38, Thinking token: 1453, Output token: 717
+    Current Input: 3424, Current Ouput: 203244, Current Fee: 2.0367200000000003
+---
+Time Usage: 0:00:23.137905
+Input token: 38, Thinking token: 1461, Output token: 630
+    Current Input: 3462, Current Ouput: 205335, Current Fee: 2.0576775
+---
+Time Usage: 0:00:24.356201
+Input token: 38, Thinking token: 1560, Output token: 682
+    Current Input: 3500, Current Ouput: 207577, Current Fee: 2.0801450000000004
+---
+Time Usage: 0:00:22.988574
+Input token: 38, Thinking token: 1445, Output token: 676
+    Current Input: 3538, Current Ouput: 209698, Current Fee: 2.1014025000000003
+---
+Time Usage: 0:00:27.574193
+Input token: 38, Thinking token: 1764, Output token: 818
+    Current Input: 3576, Current Ouput: 212280, Current Fee: 2.12727
+---
+Time Usage: 0:00:29.262957
+Input token: 38, Thinking token: 1592, Output token: 695
+    Current Input: 3614, Current Ouput: 214567, Current Fee: 2.1501875
+---
+Time Usage: 0:00:29.802063
+Input token: 38, Thinking token: 1701, Output token: 1112
+    Current Input: 3652, Current Ouput: 217380, Current Fee: 2.1783650000000003
+---
+Time Usage: 0:00:23.134914
+Input token: 38, Thinking token: 1507, Output token: 649
+    Current Input: 3690, Current Ouput: 219536, Current Fee: 2.1999725
+---
+Time Usage: 0:00:22.920298
+Input token: 39, Thinking token: 1411, Output token: 673
+    Current Input: 3729, Current Ouput: 221620, Current Fee: 2.22086125
+
+
+
+---------------------------------------------------------
+
+
+---
+Time Usage: 0:00:43.000471
+Input token: 243, Thinking token: 1996, Output token: 1846
+    Current Input: 243, Current Ouput: 3842, Current Fee: 0.03872375
+---
+Time Usage: 0:00:48.428573
+Input token: 243, Thinking token: 2467, Output token: 1706
+    Current Input: 486, Current Ouput: 8015, Current Fee: 0.08075750000000001
+---
+Time Usage: 0:00:38.824441
+Input token: 243, Thinking token: 1878, Output token: 1785
+    Current Input: 729, Current Ouput: 11678, Current Fee: 0.11769125000000001
+---
+Time Usage: 0:00:40.287379
+Input token: 243, Thinking token: 1870, Output token: 1460
+    Current Input: 972, Current Ouput: 15008, Current Fee: 0.151295
+---
+Time Usage: 0:00:44.401563
+Input token: 243, Thinking token: 1792, Output token: 1573
+    Current Input: 1215, Current Ouput: 18373, Current Fee: 0.18524875000000002
+---
+Time Usage: 0:00:43.555289
+Input token: 243, Thinking token: 2232, Output token: 1485
+    Current Input: 1458, Current Ouput: 22090, Current Fee: 0.22272250000000002
+---
+Time Usage: 0:00:40.763396
+Input token: 243, Thinking token: 1906, Output token: 1758
+    Current Input: 1701, Current Ouput: 25754, Current Fee: 0.25966625000000004
+---
+Time Usage: 0:00:44.625949
+Input token: 243, Thinking token: 1887, Output token: 1689
+    Current Input: 1944, Current Ouput: 29330, Current Fee: 0.29573
+---
+Time Usage: 0:00:42.008839
+Input token: 243, Thinking token: 1863, Output token: 1811
+    Current Input: 2187, Current Ouput: 33004, Current Fee: 0.33277375
+---
+Time Usage: 0:00:44.399249
+Input token: 243, Thinking token: 1933, Output token: 1718
+    Current Input: 2430, Current Ouput: 36655, Current Fee: 0.36958750000000007
+---
+Time Usage: 0:00:44.776163
+Input token: 243, Thinking token: 2360, Output token: 1752
+    Current Input: 2673, Current Ouput: 40767, Current Fee: 0.41101125000000005
+---
+Time Usage: 0:00:46.982631
+Input token: 243, Thinking token: 2069, Output token: 1543
+    Current Input: 2916, Current Ouput: 44379, Current Fee: 0.447435
+---
+Time Usage: 0:00:46.605280
+Input token: 243, Thinking token: 2399, Output token: 1631
+    Current Input: 3159, Current Ouput: 48409, Current Fee: 0.48803875
+---
+Time Usage: 0:00:37.571198
+Input token: 243, Thinking token: 1820, Output token: 1722
+    Current Input: 3402, Current Ouput: 51951, Current Fee: 0.5237625
+---
+Time Usage: 0:00:44.807995
+Input token: 243, Thinking token: 2018, Output token: 1691
+    Current Input: 3645, Current Ouput: 55660, Current Fee: 0.5611562500000001
+---
+Time Usage: 0:00:49.654498
+Input token: 243, Thinking token: 2067, Output token: 1766
+    Current Input: 3888, Current Ouput: 59493, Current Fee: 0.59979
+---
+Time Usage: 0:00:42.726054
+Input token: 243, Thinking token: 1743, Output token: 1541
+    Current Input: 4131, Current Ouput: 62777, Current Fee: 0.6329337500000001
+---
+Time Usage: 0:00:46.368134
+Input token: 243, Thinking token: 1909, Output token: 1835
+    Current Input: 4374, Current Ouput: 66521, Current Fee: 0.6706775
+---
+Time Usage: 0:00:49.568901
+Input token: 244, Thinking token: 1909, Output token: 1880
+    Current Input: 4618, Current Ouput: 70310, Current Fee: 0.7088725
+---
+Time Usage: 0:00:36.923637
+Input token: 243, Thinking token: 1589, Output token: 1594
+    Current Input: 4861, Current Ouput: 73493, Current Fee: 0.7410062500000001
+---
+Time Usage: 0:00:47.762260
+Input token: 243, Thinking token: 2156, Output token: 1887
+    Current Input: 5104, Current Ouput: 77536, Current Fee: 0.7817400000000001
+---
+Time Usage: 0:00:39.682941
+Input token: 243, Thinking token: 1907, Output token: 1635
+    Current Input: 5347, Current Ouput: 81078, Current Fee: 0.81746375
+---
+Time Usage: 0:00:46.241372
+Input token: 243, Thinking token: 1949, Output token: 1551
+    Current Input: 5590, Current Ouput: 84578, Current Fee: 0.8527675000000001
+---
+Time Usage: 0:00:57.314633
+Input token: 243, Thinking token: 2969, Output token: 1780
+    Current Input: 5833, Current Ouput: 89327, Current Fee: 0.9005612500000001
+---
+Time Usage: 0:00:55.340572
+Input token: 242, Thinking token: 1843, Output token: 1651
+    Current Input: 6075, Current Ouput: 92821, Current Fee: 0.93580375
+---
+Time Usage: 0:00:39.136527
+Input token: 243, Thinking token: 1844, Output token: 1626
+    Current Input: 6318, Current Ouput: 96291, Current Fee: 0.9708075
+---
+Time Usage: 0:00:43.796324
+Input token: 243, Thinking token: 2040, Output token: 1564
+    Current Input: 6561, Current Ouput: 99895, Current Fee: 1.0071512500000002
+---
+Time Usage: 0:00:38.774479
+Input token: 243, Thinking token: 1873, Output token: 1612
+    Current Input: 6804, Current Ouput: 103380, Current Fee: 1.042305
+---
+Time Usage: 0:00:51.935582
+Input token: 243, Thinking token: 2286, Output token: 1771
+    Current Input: 7047, Current Ouput: 107437, Current Fee: 1.08317875
+---
+Time Usage: 0:00:56.591782
+Input token: 243, Thinking token: 2109, Output token: 1763
+    Current Input: 7290, Current Ouput: 111309, Current Fee: 1.1222025000000002
+---
+Time Usage: 0:00:44.491796
+Input token: 242, Thinking token: 1915, Output token: 1689
+    Current Input: 7532, Current Ouput: 114913, Current Fee: 1.158545
+---
+Time Usage: 0:00:42.757851
+Input token: 243, Thinking token: 2079, Output token: 1773
+    Current Input: 7775, Current Ouput: 118765, Current Fee: 1.19736875
+---
+Time Usage: 0:00:42.351585
+Input token: 244, Thinking token: 2028, Output token: 1689
+    Current Input: 8019, Current Ouput: 122482, Current Fee: 1.23484375
+---
+Time Usage: 0:00:45.448323
+Input token: 245, Thinking token: 2181, Output token: 1651
+    Current Input: 8264, Current Ouput: 126314, Current Fee: 1.27347
+---
+Time Usage: 0:00:45.523659
+Input token: 243, Thinking token: 2076, Output token: 1759
+    Current Input: 8507, Current Ouput: 130149, Current Fee: 1.31212375
+---
+Time Usage: 0:00:39.827638
+Input token: 243, Thinking token: 1996, Output token: 1617
+    Current Input: 8750, Current Ouput: 133762, Current Fee: 1.3485575
+---
+Time Usage: 0:00:48.004660
+Input token: 243, Thinking token: 1941, Output token: 1701
+    Current Input: 8993, Current Ouput: 137404, Current Fee: 1.3852812500000002
+---
+Time Usage: 0:00:48.712404
+Input token: 243, Thinking token: 2031, Output token: 1625
+    Current Input: 9236, Current Ouput: 141060, Current Fee: 1.422145
+---
+Time Usage: 0:00:50.446805
+Input token: 243, Thinking token: 1900, Output token: 1682
+    Current Input: 9479, Current Ouput: 144642, Current Fee: 1.45826875
+---
+Time Usage: 0:00:45.756524
+Input token: 243, Thinking token: 2049, Output token: 1835
+    Current Input: 9722, Current Ouput: 148526, Current Fee: 1.4974125
+---
+Time Usage: 0:00:43.473268
+Input token: 243, Thinking token: 1966, Output token: 1781
+    Current Input: 9965, Current Ouput: 152273, Current Fee: 1.5351862500000002
+---
+Time Usage: 0:00:43.370835
+Input token: 243, Thinking token: 1833, Output token: 1699
+    Current Input: 10208, Current Ouput: 155805, Current Fee: 1.5708100000000003
+---
+Time Usage: 0:00:42.997515
+Input token: 243, Thinking token: 2173, Output token: 1588
+    Current Input: 10451, Current Ouput: 159566, Current Fee: 1.60872375
+---
+Time Usage: 0:00:40.944622
+Input token: 243, Thinking token: 1793, Output token: 1619
+    Current Input: 10694, Current Ouput: 162978, Current Fee: 1.6431475000000002
+---
+Time Usage: 0:00:39.285967
+Input token: 243, Thinking token: 1820, Output token: 1640
+    Current Input: 10937, Current Ouput: 166438, Current Fee: 1.6780512500000002
+---
+Time Usage: 0:00:48.064728
+Input token: 243, Thinking token: 2534, Output token: 1756
+    Current Input: 11180, Current Ouput: 170728, Current Fee: 1.7212550000000002
+---
+Time Usage: 0:00:43.124463
+Input token: 243, Thinking token: 1924, Output token: 1623
+    Current Input: 11423, Current Ouput: 174275, Current Fee: 1.7570287500000001
+---
+Time Usage: 0:00:37.556805
+Input token: 243, Thinking token: 1874, Output token: 1463
+    Current Input: 11666, Current Ouput: 177612, Current Fee: 1.7907025
+---
+Time Usage: 0:00:41.994898
+Input token: 243, Thinking token: 2184, Output token: 1488
+    Current Input: 11909, Current Ouput: 181284, Current Fee: 1.8277262500000002
+---
+Time Usage: 0:00:38.647707
+Input token: 243, Thinking token: 1676, Output token: 1688
+    Current Input: 12152, Current Ouput: 184648, Current Fee: 1.8616700000000002
+---
+Time Usage: 0:00:49.702086
+Input token: 243, Thinking token: 1933, Output token: 1574
+    Current Input: 12395, Current Ouput: 188155, Current Fee: 1.8970437500000001
+---
+Time Usage: 0:00:38.003541
+Input token: 243, Thinking token: 2018, Output token: 1661
+    Current Input: 12638, Current Ouput: 191834, Current Fee: 1.9341375
+---
+Time Usage: 0:00:49.052868
+Input token: 243, Thinking token: 2175, Output token: 1872
+    Current Input: 12881, Current Ouput: 195881, Current Fee: 1.9749112500000001
+---
+Time Usage: 0:00:45.171133
+Input token: 243, Thinking token: 2108, Output token: 1699
+    Current Input: 13124, Current Ouput: 199688, Current Fee: 2.013285
+---
+Time Usage: 0:00:44.515778
+Input token: 243, Thinking token: 1842, Output token: 1875
+    Current Input: 13367, Current Ouput: 203405, Current Fee: 2.05075875
+---
+Time Usage: 0:00:51.406948
+Input token: 243, Thinking token: 2317, Output token: 1717
+    Current Input: 13610, Current Ouput: 207439, Current Fee: 2.0914025
+---
+Time Usage: 0:00:48.485707
+Input token: 243, Thinking token: 2307, Output token: 1574
+    Current Input: 13853, Current Ouput: 211320, Current Fee: 2.13051625
+---
+Time Usage: 0:00:45.004515
+Input token: 243, Thinking token: 2072, Output token: 1809
+    Current Input: 14096, Current Ouput: 215201, Current Fee: 2.16963
+---
+Time Usage: 0:00:51.435371
+Input token: 243, Thinking token: 1929, Output token: 1703
+    Current Input: 14339, Current Ouput: 218833, Current Fee: 2.20625375
+---
+Time Usage: 0:00:47.254762
+Input token: 243, Thinking token: 1958, Output token: 1741
+    Current Input: 14582, Current Ouput: 222532, Current Fee: 2.2435475
+---
+Time Usage: 0:00:37.969573
+Input token: 243, Thinking token: 1722, Output token: 1633
+    Current Input: 14825, Current Ouput: 225887, Current Fee: 2.2774012500000005
+---
+Time Usage: 0:00:46.924393
+Input token: 243, Thinking token: 2080, Output token: 1859
+    Current Input: 15068, Current Ouput: 229826, Current Fee: 2.317095
+---
+Time Usage: 0:00:45.325629
+Input token: 243, Thinking token: 1786, Output token: 1717
+    Current Input: 15311, Current Ouput: 233329, Current Fee: 2.3524287500000005
+---
+Time Usage: 0:00:39.273539
+Input token: 243, Thinking token: 1778, Output token: 1649
+    Current Input: 15554, Current Ouput: 236756, Current Fee: 2.3870025
+---
+Time Usage: 0:00:40.487550
+Input token: 243, Thinking token: 1843, Output token: 1759
+    Current Input: 15797, Current Ouput: 240358, Current Fee: 2.42332625
+---
+Time Usage: 0:00:38.458709
+Input token: 243, Thinking token: 1895, Output token: 1631
+    Current Input: 16040, Current Ouput: 243884, Current Fee: 2.4588900000000002
+---
+Time Usage: 0:00:37.221934
+Input token: 244, Thinking token: 1669, Output token: 1540
+    Current Input: 16284, Current Ouput: 247093, Current Fee: 2.491285
+---
+Time Usage: 0:00:38.017299
+Input token: 243, Thinking token: 1793, Output token: 1756
+    Current Input: 16527, Current Ouput: 250642, Current Fee: 2.5270787500000003
+---
+Time Usage: 0:00:41.696791
+Input token: 243, Thinking token: 1755, Output token: 1680
+    Current Input: 16770, Current Ouput: 254077, Current Fee: 2.5617325
+---
+Time Usage: 0:00:41.045330
+Input token: 243, Thinking token: 1839, Output token: 1526
+    Current Input: 17013, Current Ouput: 257442, Current Fee: 2.5956862500000004
+---
+Time Usage: 0:00:44.801807
+Input token: 243, Thinking token: 1955, Output token: 1753
+    Current Input: 17256, Current Ouput: 261150, Current Fee: 2.6330700000000005
+---
+Time Usage: 0:00:45.982219
+Input token: 243, Thinking token: 2117, Output token: 1802
+    Current Input: 17499, Current Ouput: 265069, Current Fee: 2.6725637500000006
+---
+Time Usage: 0:00:55.636974
+Input token: 243, Thinking token: 2295, Output token: 1880
+    Current Input: 17742, Current Ouput: 269244, Current Fee: 2.7146175000000006
+---
+Time Usage: 0:00:44.254220
+Input token: 243, Thinking token: 2108, Output token: 1643
+    Current Input: 17985, Current Ouput: 272995, Current Fee: 2.75243125
+---
+Time Usage: 0:00:43.713344
+Input token: 243, Thinking token: 2012, Output token: 1537
+    Current Input: 18228, Current Ouput: 276544, Current Fee: 2.788225
+---
+Time Usage: 0:00:40.626159
+Input token: 244, Thinking token: 1560, Output token: 1908
+    Current Input: 18472, Current Ouput: 280012, Current Fee: 2.82321
+---
+Time Usage: 0:00:45.804087
+Input token: 243, Thinking token: 2076, Output token: 1540
+    Current Input: 18715, Current Ouput: 283628, Current Fee: 2.8596737500000002
+---
+Time Usage: 0:00:43.742452
+Input token: 243, Thinking token: 1632, Output token: 1670
+    Current Input: 18958, Current Ouput: 286930, Current Fee: 2.8929975000000003
+---
+Time Usage: 0:00:43.677970
+Input token: 243, Thinking token: 2003, Output token: 1751
+    Current Input: 19201, Current Ouput: 290684, Current Fee: 2.9308412500000003
+---
+Time Usage: 0:00:40.903574
+Input token: 243, Thinking token: 1940, Output token: 1607
+    Current Input: 19444, Current Ouput: 294231, Current Fee: 2.9666150000000004
+---
+Time Usage: 0:00:42.216234
+Input token: 244, Thinking token: 1655, Output token: 1602
+    Current Input: 19688, Current Ouput: 297488, Current Fee: 2.99949
+---
+Time Usage: 0:00:39.708103
+Input token: 243, Thinking token: 1892, Output token: 1682
+    Current Input: 19931, Current Ouput: 301062, Current Fee: 3.0355337500000004
+---
+Time Usage: 0:00:45.820858
+Input token: 243, Thinking token: 2103, Output token: 1633
+    Current Input: 20174, Current Ouput: 304798, Current Fee: 3.0731975000000005
+---
+Time Usage: 0:00:47.163904
+Input token: 244, Thinking token: 2125, Output token: 1801
+    Current Input: 20418, Current Ouput: 308724, Current Fee: 3.1127625000000005
+---
+Time Usage: 0:00:43.503633
+Input token: 243, Thinking token: 1809, Output token: 1542
+    Current Input: 20661, Current Ouput: 312075, Current Fee: 3.1465762500000003
+---
+Time Usage: 0:00:46.238781
+Input token: 243, Thinking token: 2096, Output token: 1794
+    Current Input: 20904, Current Ouput: 315965, Current Fee: 3.1857800000000003
+---
+Time Usage: 0:00:52.434443
+Input token: 243, Thinking token: 2791, Output token: 1677
+    Current Input: 21147, Current Ouput: 320433, Current Fee: 3.23076375
+---
+Time Usage: 0:00:44.993720
+Input token: 243, Thinking token: 1890, Output token: 1703
+    Current Input: 21390, Current Ouput: 324026, Current Fee: 3.2669975
+---
+Time Usage: 0:00:36.380267
+Input token: 243, Thinking token: 1708, Output token: 1554
+    Current Input: 21633, Current Ouput: 327288, Current Fee: 3.29992125
+---
+Time Usage: 0:00:43.985321
+Input token: 243, Thinking token: 1903, Output token: 1544
+    Current Input: 21876, Current Ouput: 330735, Current Fee: 3.3346950000000004
+---
+Time Usage: 0:00:44.812563
+Input token: 243, Thinking token: 1939, Output token: 1763
+    Current Input: 22119, Current Ouput: 334437, Current Fee: 3.37201875
+---
+Time Usage: 0:00:42.239358
+Input token: 243, Thinking token: 1930, Output token: 1701
+    Current Input: 22362, Current Ouput: 338068, Current Fee: 3.4086325000000004
+---
+Time Usage: 0:00:45.508890
+Input token: 243, Thinking token: 1967, Output token: 1945
+    Current Input: 22605, Current Ouput: 341980, Current Fee: 3.4480562500000005
+---
+Time Usage: 0:00:44.421969
+Input token: 243, Thinking token: 1934, Output token: 1776
+    Current Input: 22848, Current Ouput: 345690, Current Fee: 3.4854600000000002
+---
+Time Usage: 0:00:51.736817
+Input token: 243, Thinking token: 2446, Output token: 1754
+    Current Input: 23091, Current Ouput: 349890, Current Fee: 3.5277637500000005
+---
+Time Usage: 0:00:43.347592
+Input token: 244, Thinking token: 2024, Output token: 1569
+    Current Input: 23335, Current Ouput: 353483, Current Fee: 3.5639987500000005
+
+
+---------------------------------------------------------------------------
+
+
+
+---
+Time Usage: 0:00:52.002445
+Input token: 33, Thinking token: 1880, Output token: 518
+    Current Input: 33, Current Ouput: 2398, Current Fee: 0.02402125
+---
+Time Usage: 0:00:46.752323
+Input token: 243, Thinking token: 2110, Output token: 1904
+    Current Input: 243, Current Ouput: 4014, Current Fee: 0.04044375
+---
+Time Usage: 0:00:47.153672
+Input token: 243, Thinking token: 2210, Output token: 1799
+    Current Input: 486, Current Ouput: 8023, Current Fee: 0.0808375
+---
+Time Usage: 0:00:49.516170
+Input token: 243, Thinking token: 2290, Output token: 1185
+    Current Input: 729, Current Ouput: 11498, Current Fee: 0.11589125000000002
+---
+Time Usage: 0:00:44.090786
+Input token: 243, Thinking token: 1942, Output token: 1937
+    Current Input: 243, Current Ouput: 3879, Current Fee: 0.039093750000000003
+---
+Time Usage: 0:00:23.338137
+Input token: 38, Thinking token: 1359, Output token: 621
+    Current Input: 38, Current Ouput: 1980, Current Fee: 0.0198475
+---
+Time Usage: 0:00:26.884809
+Input token: 40, Thinking token: 1610, Output token: 739
+    Current Input: 78, Current Ouput: 4329, Current Fee: 0.0433875
+---
+Time Usage: 0:00:37.915251
+Input token: 58, Thinking token: 1995, Output token: 1676
+    Current Input: 58, Current Ouput: 3671, Current Fee: 0.0367825
+---
+Time Usage: 0:00:38.252285
+Input token: 53, Thinking token: 2006, Output token: 1547
+    Current Input: 111, Current Ouput: 7224, Current Fee: 0.07237875000000002
+---
+Time Usage: 0:00:38.077554
+Input token: 52, Thinking token: 1695, Output token: 1693
+    Current Input: 163, Current Ouput: 10612, Current Fee: 0.10632375000000001
+---
+Time Usage: 0:00:42.440037
+Input token: 49, Thinking token: 1897, Output token: 1780
+    Current Input: 212, Current Ouput: 14289, Current Fee: 0.143155
+---
+Time Usage: 0:00:37.427105
+Input token: 51, Thinking token: 1808, Output token: 1553
+    Current Input: 263, Current Ouput: 17650, Current Fee: 0.17682875
+---
+Time Usage: 0:00:42.054268
+Input token: 52, Thinking token: 2258, Output token: 1941
+    Current Input: 315, Current Ouput: 21849, Current Fee: 0.21888375000000002
+---
+Time Usage: 0:00:37.485422
+Input token: 52, Thinking token: 1957, Output token: 1445
+    Current Input: 367, Current Ouput: 25251, Current Fee: 0.25296875
+---
+Time Usage: 0:00:46.289164
+Input token: 49, Thinking token: 2165, Output token: 2028
+    Current Input: 416, Current Ouput: 29444, Current Fee: 0.29496000000000006
+---
+Time Usage: 0:00:41.289366
+Input token: 49, Thinking token: 2014, Output token: 1875
+    Current Input: 465, Current Ouput: 33333, Current Fee: 0.33391125
+---
+Time Usage: 0:00:40.516715
+Input token: 49, Thinking token: 1784, Output token: 2108
+    Current Input: 514, Current Ouput: 37225, Current Fee: 0.3728925
+---
+Time Usage: 0:00:48.059368
+Input token: 45, Thinking token: 1977, Output token: 2353
+    Current Input: 559, Current Ouput: 41555, Current Fee: 0.41624875000000006
+---
+Time Usage: 0:00:43.726402
+Input token: 51, Thinking token: 2024, Output token: 1764
+    Current Input: 610, Current Ouput: 45343, Current Fee: 0.45419250000000005
+---
+Time Usage: 0:00:44.064017
+Input token: 55, Thinking token: 1861, Output token: 1829
+    Current Input: 665, Current Ouput: 49033, Current Fee: 0.49116125000000005
+---
+Time Usage: 0:00:29.085076
+Input token: 48, Thinking token: 1516, Output token: 1399
+    Current Input: 713, Current Ouput: 51948, Current Fee: 0.5203712500000001
+---
+Time Usage: 0:00:47.602693
+Input token: 48, Thinking token: 2308, Output token: 1870
+    Current Input: 761, Current Ouput: 56126, Current Fee: 0.56221125
+---
+Time Usage: 0:00:34.241817
+Input token: 47, Thinking token: 1706, Output token: 1650
+    Current Input: 808, Current Ouput: 59482, Current Fee: 0.59583
+---
+Time Usage: 0:00:42.317669
+Input token: 47, Thinking token: 1845, Output token: 1979
+    Current Input: 855, Current Ouput: 63306, Current Fee: 0.63412875
+---
+Time Usage: 0:00:48.689837
+Input token: 51, Thinking token: 1814, Output token: 2371
+    Current Input: 906, Current Ouput: 67491, Current Fee: 0.6760425
+---
+Time Usage: 0:00:41.248229
+Input token: 51, Thinking token: 2014, Output token: 1967
+    Current Input: 957, Current Ouput: 71472, Current Fee: 0.71591625
+---
+Time Usage: 0:00:38.561527
+Input token: 50, Thinking token: 1928, Output token: 1596
+    Current Input: 1007, Current Ouput: 74996, Current Fee: 0.75121875
+---
+Time Usage: 0:00:39.598353
+Input token: 45, Thinking token: 1913, Output token: 1548
+    Current Input: 1052, Current Ouput: 78457, Current Fee: 0.7858850000000001
+---
+Time Usage: 0:00:54.177457
+Input token: 37, Thinking token: 2299, Output token: 2252
+    Current Input: 1089, Current Ouput: 83008, Current Fee: 0.83144125
+---
+Time Usage: 0:00:44.322828
+Input token: 37, Thinking token: 1974, Output token: 2096
+    Current Input: 1126, Current Ouput: 87078, Current Fee: 0.8721875000000001
+---
+Time Usage: 0:00:41.343011
+Input token: 46, Thinking token: 1721, Output token: 1944
+    Current Input: 1172, Current Ouput: 90743, Current Fee: 0.9088950000000001
+---
+Time Usage: 0:00:50.143383
+Input token: 42, Thinking token: 1603, Output token: 2438
+    Current Input: 1214, Current Ouput: 94784, Current Fee: 0.9493575000000001
+---
+Time Usage: 0:00:51.827688
+Input token: 39, Thinking token: 2263, Output token: 2224
+    Current Input: 1253, Current Ouput: 99271, Current Fee: 0.9942762500000001
+---
+Time Usage: 0:00:49.640452
+Input token: 41, Thinking token: 2387, Output token: 1894
+    Current Input: 1294, Current Ouput: 103552, Current Fee: 1.0371375
+---
+Time Usage: 0:00:38.826197
+Input token: 39, Thinking token: 1719, Output token: 1655
+    Current Input: 1333, Current Ouput: 106926, Current Fee: 1.07092625
+---
+Time Usage: 0:00:45.084069
+Input token: 38, Thinking token: 1865, Output token: 2072
+    Current Input: 1371, Current Ouput: 110863, Current Fee: 1.11034375
+---
+Time Usage: 0:00:46.093255
+Input token: 44, Thinking token: 1891, Output token: 2096
+    Current Input: 1415, Current Ouput: 114850, Current Fee: 1.1502687500000002
+---
+Time Usage: 0:00:38.467911
+Input token: 41, Thinking token: 1362, Output token: 2053
+    Current Input: 1456, Current Ouput: 118265, Current Fee: 1.1844700000000001
+---
+Time Usage: 0:00:50.301400
+Input token: 40, Thinking token: 2131, Output token: 2192
+    Current Input: 1496, Current Ouput: 122588, Current Fee: 1.2277500000000001
+---
+Time Usage: 0:00:41.789691
+Input token: 43, Thinking token: 1894, Output token: 1804
+    Current Input: 1539, Current Ouput: 126286, Current Fee: 1.26478375
+---
+Time Usage: 0:00:45.390896
+Input token: 47, Thinking token: 2034, Output token: 1783
+    Current Input: 1586, Current Ouput: 130103, Current Fee: 1.3030125000000001
+---
+Time Usage: 0:00:48.696539
+Input token: 38, Thinking token: 2041, Output token: 2300
+    Current Input: 1624, Current Ouput: 134444, Current Fee: 1.34647
+---
+Time Usage: 0:00:41.715480
+Input token: 42, Thinking token: 1810, Output token: 1570
+    Current Input: 1666, Current Ouput: 137824, Current Fee: 1.3803225000000001
+---
+Time Usage: 0:00:51.107085
+Input token: 43, Thinking token: 2192, Output token: 2119
+    Current Input: 1709, Current Ouput: 142135, Current Fee: 1.42348625
+---
+Time Usage: 0:00:44.462142
+Input token: 46, Thinking token: 1816, Output token: 1953
+    Current Input: 1755, Current Ouput: 145904, Current Fee: 1.46123375
+---
+Time Usage: 0:00:41.582417
+Input token: 42, Thinking token: 1902, Output token: 1699
+    Current Input: 1797, Current Ouput: 149505, Current Fee: 1.4972962500000002
+---
+Time Usage: 0:00:57.165504
+Input token: 40, Thinking token: 2208, Output token: 2138
+    Current Input: 1837, Current Ouput: 153851, Current Fee: 1.5408062500000002
+---
+Time Usage: 0:00:45.181298
+Input token: 53, Thinking token: 1698, Output token: 1781
+    Current Input: 1890, Current Ouput: 157330, Current Fee: 1.5756625000000002
+---
+Time Usage: 0:00:37.989212
+Input token: 53, Thinking token: 1718, Output token: 1565
+    Current Input: 1943, Current Ouput: 160613, Current Fee: 1.60855875
+---
+Time Usage: 0:00:39.123652
+Input token: 52, Thinking token: 1666, Output token: 1634
+    Current Input: 1995, Current Ouput: 163913, Current Fee: 1.6416237500000002
+---
+Time Usage: 0:00:37.298633
+Input token: 50, Thinking token: 1892, Output token: 1590
+    Current Input: 2045, Current Ouput: 167395, Current Fee: 1.67650625
+---
+Time Usage: 0:00:40.652945
+Input token: 50, Thinking token: 2052, Output token: 1553
+    Current Input: 2095, Current Ouput: 171000, Current Fee: 1.71261875
+---
+Time Usage: 0:00:39.360301
+Input token: 51, Thinking token: 2019, Output token: 1551
+    Current Input: 2146, Current Ouput: 174570, Current Fee: 1.7483825000000002
+---
+Time Usage: 0:00:35.848931
+Input token: 50, Thinking token: 1918, Output token: 1590
+    Current Input: 2196, Current Ouput: 178078, Current Fee: 1.7835250000000002
+---
+Time Usage: 0:00:49.199525
+Input token: 48, Thinking token: 2320, Output token: 2088
+    Current Input: 2244, Current Ouput: 182486, Current Fee: 1.827665
+---
+Time Usage: 0:00:39.029901
+Input token: 48, Thinking token: 1866, Output token: 1615
+    Current Input: 2292, Current Ouput: 185967, Current Fee: 1.862535
+---
+Time Usage: 0:00:38.762350
+Input token: 51, Thinking token: 1914, Output token: 1761
+    Current Input: 2343, Current Ouput: 189642, Current Fee: 1.8993487500000001
+---
+Time Usage: 0:00:40.331679
+Input token: 47, Thinking token: 1933, Output token: 1737
+    Current Input: 2390, Current Ouput: 193312, Current Fee: 1.9361075
+---
+Time Usage: 0:00:43.690182
+Input token: 49, Thinking token: 2126, Output token: 1767
+    Current Input: 2439, Current Ouput: 197205, Current Fee: 1.9750987500000001
+---
+Time Usage: 0:00:40.542401
+Input token: 50, Thinking token: 1891, Output token: 1766
+    Current Input: 2489, Current Ouput: 200862, Current Fee: 2.01173125
+---
+Time Usage: 0:00:46.005777
+Input token: 48, Thinking token: 2015, Output token: 2062
+    Current Input: 2537, Current Ouput: 204939, Current Fee: 2.05256125
+---
+Time Usage: 0:00:36.147683
+Input token: 50, Thinking token: 1776, Output token: 1639
+    Current Input: 2587, Current Ouput: 208354, Current Fee: 2.0867737500000003
+---
+Time Usage: 0:00:38.056348
+Input token: 48, Thinking token: 1907, Output token: 1568
+    Current Input: 2635, Current Ouput: 211829, Current Fee: 2.12158375
+---
+Time Usage: 0:00:38.509095
+Input token: 47, Thinking token: 1711, Output token: 1675
+    Current Input: 2682, Current Ouput: 215215, Current Fee: 2.1555025000000003
+---
+Time Usage: 0:00:38.836301
+Input token: 48, Thinking token: 1886, Output token: 1409
+    Current Input: 2730, Current Ouput: 218510, Current Fee: 2.1885125000000003
+---
+Time Usage: 0:00:43.468865
+Input token: 50, Thinking token: 1944, Output token: 1794
+    Current Input: 2780, Current Ouput: 222248, Current Fee: 2.225955
+---
+Time Usage: 0:00:41.704648
+Input token: 47, Thinking token: 2049, Output token: 1808
+    Current Input: 2827, Current Ouput: 226105, Current Fee: 2.26458375
+---
+Time Usage: 0:00:45.737408
+Input token: 46, Thinking token: 2213, Output token: 1635
+    Current Input: 2873, Current Ouput: 229953, Current Fee: 2.3031212500000002
+---
+Time Usage: 0:00:46.275697
+Input token: 46, Thinking token: 1858, Output token: 2041
+    Current Input: 2919, Current Ouput: 233852, Current Fee: 2.3421687500000004
+---
+Time Usage: 0:00:40.662583
+Input token: 42, Thinking token: 1609, Output token: 1628
+    Current Input: 2961, Current Ouput: 237089, Current Fee: 2.3745912500000004
+---
+Time Usage: 0:00:39.871040
+Input token: 47, Thinking token: 2074, Output token: 1575
+    Current Input: 3008, Current Ouput: 240738, Current Fee: 2.4111400000000005
+---
+Time Usage: 0:00:42.443719
+Input token: 38, Thinking token: 1959, Output token: 1608
+    Current Input: 3046, Current Ouput: 244305, Current Fee: 2.4468575000000006
+---
+Time Usage: 0:00:45.399201
+Input token: 48, Thinking token: 1823, Output token: 2069
+    Current Input: 3094, Current Ouput: 248197, Current Fee: 2.4858375
+---
+Time Usage: 0:00:41.418856
+Input token: 39, Thinking token: 1885, Output token: 1738
+    Current Input: 3133, Current Ouput: 251820, Current Fee: 2.5221162500000003
+---
+Time Usage: 0:00:45.515620
+Input token: 46, Thinking token: 2033, Output token: 1740
+    Current Input: 3179, Current Ouput: 255593, Current Fee: 2.55990375
+---
+Time Usage: 0:00:41.797376
+Input token: 44, Thinking token: 2057, Output token: 1548
+    Current Input: 3223, Current Ouput: 259198, Current Fee: 2.59600875
+---
+Time Usage: 0:00:35.321620
+Input token: 42, Thinking token: 1825, Output token: 1461
+    Current Input: 3265, Current Ouput: 262484, Current Fee: 2.6289212500000003
+---
+Time Usage: 0:00:50.251126
+Input token: 43, Thinking token: 2203, Output token: 2278
+    Current Input: 3308, Current Ouput: 266965, Current Fee: 2.6737850000000005
+---
+Time Usage: 0:00:45.266976
+Input token: 47, Thinking token: 2008, Output token: 1948
+    Current Input: 3355, Current Ouput: 270921, Current Fee: 2.7134037500000003
+---
+Time Usage: 0:00:41.167084
+Input token: 46, Thinking token: 1960, Output token: 1576
+    Current Input: 3401, Current Ouput: 274457, Current Fee: 2.74882125
+---
+Time Usage: 0:00:38.955853
+Input token: 41, Thinking token: 1764, Output token: 1503
+    Current Input: 3442, Current Ouput: 277724, Current Fee: 2.7815425000000005
+---
+Time Usage: 0:00:44.086265
+Input token: 40, Thinking token: 2013, Output token: 1973
+    Current Input: 3482, Current Ouput: 281710, Current Fee: 2.8214525000000004
+---
+Time Usage: 0:00:47.661163
+Input token: 43, Thinking token: 2321, Output token: 1759
+    Current Input: 3525, Current Ouput: 285790, Current Fee: 2.8623062500000005
+---
+Time Usage: 0:00:31.632905
+Input token: 40, Thinking token: 1565, Output token: 1333
+    Current Input: 3565, Current Ouput: 288688, Current Fee: 2.89133625
+---
+Time Usage: 0:00:46.537962
+Input token: 43, Thinking token: 2178, Output token: 2213
+    Current Input: 3608, Current Ouput: 293079, Current Fee: 2.9353000000000002
+---
+Time Usage: 0:00:42.044180
+Input token: 43, Thinking token: 2006, Output token: 1844
+    Current Input: 3651, Current Ouput: 296929, Current Fee: 2.9738537500000004
+---
+Time Usage: 0:00:33.784683
+Input token: 41, Thinking token: 1521, Output token: 1416
+    Current Input: 3692, Current Ouput: 299866, Current Fee: 3.003275
+---
+Time Usage: 0:00:40.230293
+Input token: 58, Thinking token: 1653, Output token: 2247
+    Current Input: 3750, Current Ouput: 303766, Current Fee: 3.0423475000000004
+---
+Time Usage: 0:00:43.043297
+Input token: 52, Thinking token: 2110, Output token: 2045
+    Current Input: 3802, Current Ouput: 307921, Current Fee: 3.0839625
+---
+Time Usage: 0:00:44.524549
+Input token: 58, Thinking token: 2167, Output token: 2179
+    Current Input: 3860, Current Ouput: 312267, Current Fee: 3.127495
+---
+Time Usage: 0:00:44.459363
+Input token: 57, Thinking token: 2014, Output token: 2586
+    Current Input: 3917, Current Ouput: 316867, Current Fee: 3.17356625
+---
+Time Usage: 0:00:38.013267
+Input token: 47, Thinking token: 1286, Output token: 2277
+    Current Input: 3964, Current Ouput: 320430, Current Fee: 3.209255
+---
+Time Usage: 0:00:48.501861
+Input token: 49, Thinking token: 2280, Output token: 2005
+    Current Input: 4013, Current Ouput: 324715, Current Fee: 3.2521662500000006
+---
+Time Usage: 0:00:42.777245
+Input token: 44, Thinking token: 1976, Output token: 2291
+    Current Input: 4057, Current Ouput: 328982, Current Fee: 3.29489125
+---
+Time Usage: 0:00:49.213488
+Input token: 50, Thinking token: 2218, Output token: 2263
+    Current Input: 4107, Current Ouput: 333463, Current Fee: 3.3397637500000004
+---
+Time Usage: 0:00:43.932927
+Input token: 49, Thinking token: 2149, Output token: 2228
+    Current Input: 4156, Current Ouput: 337840, Current Fee: 3.383595
+---
+Time Usage: 0:00:45.158371
+Input token: 53, Thinking token: 1622, Output token: 2792
+    Current Input: 4209, Current Ouput: 342254, Current Fee: 3.4278012500000004
+---
+Time Usage: 0:00:43.366533
+Input token: 44, Thinking token: 1927, Output token: 2163
+    Current Input: 4253, Current Ouput: 346344, Current Fee: 3.46875625
+---
+Time Usage: 0:00:41.052447
+Input token: 50, Thinking token: 1922, Output token: 2118
+    Current Input: 4303, Current Ouput: 350384, Current Fee: 3.5092187500000005
+---
+Time Usage: 0:00:41.470742
+Input token: 55, Thinking token: 1776, Output token: 2267
+    Current Input: 4358, Current Ouput: 354427, Current Fee: 3.5497175000000003
+---
+Time Usage: 0:00:51.581975
+Input token: 45, Thinking token: 2120, Output token: 2800
+    Current Input: 4403, Current Ouput: 359347, Current Fee: 3.5989737500000003
+---
+Time Usage: 0:00:40.692680
+Input token: 49, Thinking token: 2018, Output token: 2162
+    Current Input: 4452, Current Ouput: 363527, Current Fee: 3.640835
+---
+Time Usage: 0:00:44.255773
+Input token: 44, Thinking token: 1703, Output token: 2377
+    Current Input: 4496, Current Ouput: 367607, Current Fee: 3.68169
+---
+Time Usage: 0:00:41.598634
+Input token: 52, Thinking token: 1669, Output token: 2424
+    Current Input: 4548, Current Ouput: 371700, Current Fee: 3.7226850000000007
+---
+Time Usage: 0:00:41.191192
+Input token: 47, Thinking token: 1703, Output token: 2490
+    Current Input: 4595, Current Ouput: 375893, Current Fee: 3.7646737500000005
+---
+Time Usage: 0:01:04.206454
+Input token: 45, Thinking token: 1723, Output token: 1901
+    Current Input: 4640, Current Ouput: 379517, Current Fee: 3.80097
+---
+Time Usage: 0:00:37.145215
+Input token: 51, Thinking token: 1672, Output token: 1946
+    Current Input: 4691, Current Ouput: 383135, Current Fee: 3.8372137500000005
+---
+Time Usage: 0:00:45.930751
+Input token: 263, Thinking token: 2237, Output token: 1954
+    Current Input: 263, Current Ouput: 4191, Current Fee: 0.042238750000000005
+---
+Time Usage: 0:00:43.008696
+Input token: 258, Thinking token: 2020, Output token: 2110
+    Current Input: 521, Current Ouput: 8321, Current Fee: 0.08386125000000001
+---
+Time Usage: 0:00:47.691068
+Input token: 257, Thinking token: 2262, Output token: 2053
+    Current Input: 778, Current Ouput: 12636, Current Fee: 0.1273325
+---
+Time Usage: 0:00:42.120784
+Input token: 254, Thinking token: 2071, Output token: 1925
+    Current Input: 1032, Current Ouput: 16632, Current Fee: 0.16761000000000004
+---
+Time Usage: 0:00:44.109496
+Input token: 256, Thinking token: 1993, Output token: 2073
+    Current Input: 1288, Current Ouput: 20698, Current Fee: 0.20859000000000003
+---
+Time Usage: 0:00:46.802027
+Input token: 257, Thinking token: 2245, Output token: 2048
+    Current Input: 1545, Current Ouput: 24991, Current Fee: 0.25184125
+---
+Time Usage: 0:00:42.176226
+Input token: 257, Thinking token: 1823, Output token: 1918
+    Current Input: 1802, Current Ouput: 28732, Current Fee: 0.2895725
+---
+Time Usage: 0:00:46.967927
+Input token: 254, Thinking token: 2060, Output token: 2216
+    Current Input: 2056, Current Ouput: 33008, Current Fee: 0.33265000000000006
+---
+Time Usage: 0:00:47.438779
+Input token: 254, Thinking token: 1871, Output token: 2266
+    Current Input: 2310, Current Ouput: 37145, Current Fee: 0.37433750000000005
+---
+Time Usage: 0:00:44.178843
+Input token: 254, Thinking token: 2114, Output token: 2095
+    Current Input: 2564, Current Ouput: 41354, Current Fee: 0.41674500000000003
+---
+Time Usage: 0:00:48.153277
+Input token: 250, Thinking token: 2142, Output token: 2480
+    Current Input: 2814, Current Ouput: 45976, Current Fee: 0.46327750000000006
+---
+Time Usage: 0:00:48.034669
+Input token: 256, Thinking token: 1965, Output token: 2305
+    Current Input: 3070, Current Ouput: 50246, Current Fee: 0.5062975000000001
+---
+Time Usage: 0:00:43.358319
+Input token: 260, Thinking token: 2104, Output token: 1798
+    Current Input: 3330, Current Ouput: 54148, Current Fee: 0.5456425
+---
+Time Usage: 0:00:43.525657
+Input token: 253, Thinking token: 1947, Output token: 2196
+    Current Input: 3583, Current Ouput: 58291, Current Fee: 0.58738875
+---
+Time Usage: 0:00:46.486912
+Input token: 253, Thinking token: 1948, Output token: 2181
+    Current Input: 3836, Current Ouput: 62420, Current Fee: 0.6289950000000001
+---
+Time Usage: 0:00:46.664853
+Input token: 252, Thinking token: 2148, Output token: 2128
+    Current Input: 4088, Current Ouput: 66696, Current Fee: 0.6720700000000001
+---
+Time Usage: 0:00:49.008836
+Input token: 252, Thinking token: 2418, Output token: 2096
+    Current Input: 4340, Current Ouput: 71210, Current Fee: 0.7175250000000001
+---
+Time Usage: 0:00:46.347244
+Input token: 256, Thinking token: 2041, Output token: 2255
+    Current Input: 4596, Current Ouput: 75506, Current Fee: 0.7608050000000001
+---
+Time Usage: 0:00:42.892601
+Input token: 256, Thinking token: 1700, Output token: 2271
+    Current Input: 4852, Current Ouput: 79477, Current Fee: 0.8008350000000001
+---
+Time Usage: 0:00:47.723983
+Input token: 255, Thinking token: 2087, Output token: 2259
+    Current Input: 5107, Current Ouput: 83823, Current Fee: 0.84461375
+---
+Time Usage: 0:00:42.710914
+Input token: 250, Thinking token: 1881, Output token: 1986
+    Current Input: 5357, Current Ouput: 87690, Current Fee: 0.8835962500000001
+---
+Time Usage: 0:00:51.611126
+Input token: 242, Thinking token: 2320, Output token: 2288
+    Current Input: 5599, Current Ouput: 92298, Current Fee: 0.9299787500000001
+---
+Time Usage: 0:00:42.036331
+Input token: 242, Thinking token: 1844, Output token: 2003
+    Current Input: 5841, Current Ouput: 96145, Current Fee: 0.9687512500000001
+---
+Time Usage: 0:00:53.678150
+Input token: 251, Thinking token: 2663, Output token: 2263
+    Current Input: 6092, Current Ouput: 101071, Current Fee: 1.018325
+---
+Time Usage: 0:00:46.936324
+Input token: 247, Thinking token: 2067, Output token: 2183
+    Current Input: 6339, Current Ouput: 105321, Current Fee: 1.06113375
+---
+Time Usage: 0:00:45.712315
+Input token: 244, Thinking token: 2024, Output token: 1936
+    Current Input: 6583, Current Ouput: 109281, Current Fee: 1.10103875
+---
+Time Usage: 0:00:47.200843
+Input token: 246, Thinking token: 1756, Output token: 2127
+    Current Input: 6829, Current Ouput: 113164, Current Fee: 1.1401762500000001
+---
+Time Usage: 0:00:42.538788
+Input token: 244, Thinking token: 1966, Output token: 2027
+    Current Input: 7073, Current Ouput: 117157, Current Fee: 1.18041125
+---
+Time Usage: 0:00:48.921580
+Input token: 243, Thinking token: 2057, Output token: 2143
+    Current Input: 7316, Current Ouput: 121357, Current Fee: 1.222715
+---
+Time Usage: 0:00:55.291737
+Input token: 249, Thinking token: 2202, Output token: 2564
+    Current Input: 7565, Current Ouput: 126123, Current Fee: 1.27068625
+---
+Time Usage: 0:00:46.379138
+Input token: 246, Thinking token: 2020, Output token: 2174
+    Current Input: 7811, Current Ouput: 130317, Current Fee: 1.3129337500000002
+---
+Time Usage: 0:00:41.135061
+Input token: 245, Thinking token: 1758, Output token: 1808
+    Current Input: 8056, Current Ouput: 133883, Current Fee: 1.3489000000000002
+---
+Time Usage: 0:00:45.500812
+Input token: 248, Thinking token: 1917, Output token: 2175
+    Current Input: 8304, Current Ouput: 137975, Current Fee: 1.39013
+---
+Time Usage: 0:00:44.684463
+Input token: 252, Thinking token: 2106, Output token: 1886
+    Current Input: 8556, Current Ouput: 141967, Current Fee: 1.430365
+---
+Time Usage: 0:00:46.857343
+Input token: 243, Thinking token: 2181, Output token: 2134
+    Current Input: 8799, Current Ouput: 146282, Current Fee: 1.47381875
+---
+Time Usage: 0:00:47.636989
+Input token: 247, Thinking token: 2346, Output token: 1881
+    Current Input: 9046, Current Ouput: 150509, Current Fee: 1.5163975
+---
+Time Usage: 0:00:50.778445
+Input token: 248, Thinking token: 2352, Output token: 2082
+    Current Input: 9294, Current Ouput: 154943, Current Fee: 1.5610475000000001
+---
+Time Usage: 0:00:46.931849
+Input token: 251, Thinking token: 2030, Output token: 2189
+    Current Input: 9545, Current Ouput: 159162, Current Fee: 1.60355125
+---
+Time Usage: 0:00:43.138334
+Input token: 247, Thinking token: 1962, Output token: 1876
+    Current Input: 9792, Current Ouput: 163000, Current Fee: 1.6422400000000001
+---
+Time Usage: 0:00:49.933445
+Input token: 245, Thinking token: 2292, Output token: 2049
+    Current Input: 10037, Current Ouput: 167341, Current Fee: 1.68595625
+---
+Time Usage: 0:00:43.056653
+Input token: 258, Thinking token: 1950, Output token: 2026
+    Current Input: 10295, Current Ouput: 171317, Current Fee: 1.72603875
+---
+Time Usage: 0:00:42.258703
+Input token: 258, Thinking token: 1940, Output token: 1883
+    Current Input: 10553, Current Ouput: 175140, Current Fee: 1.76459125
+---
+Time Usage: 0:00:51.181826
+Input token: 257, Thinking token: 2302, Output token: 2217
+    Current Input: 10810, Current Ouput: 179659, Current Fee: 1.8101025000000002
+---
+Time Usage: 0:00:40.996056
+Input token: 255, Thinking token: 1995, Output token: 1715
+    Current Input: 11065, Current Ouput: 183369, Current Fee: 1.84752125
+---
+Time Usage: 0:00:50.037991
+Input token: 255, Thinking token: 1710, Output token: 2290
+    Current Input: 11320, Current Ouput: 187369, Current Fee: 1.8878400000000002
+---
+Time Usage: 0:00:59.675992
+Input token: 256, Thinking token: 2348, Output token: 2968
+    Current Input: 11576, Current Ouput: 192685, Current Fee: 1.9413200000000002
+---
+Time Usage: 0:00:48.128589
+Input token: 255, Thinking token: 2269, Output token: 2219
+    Current Input: 11831, Current Ouput: 197173, Current Fee: 1.98651875
+---
+Time Usage: 0:00:44.239840
+Input token: 253, Thinking token: 1955, Output token: 1986
+    Current Input: 12084, Current Ouput: 201114, Current Fee: 2.0262450000000003
+---
+Time Usage: 0:00:49.132061
+Input token: 253, Thinking token: 2415, Output token: 2031
+    Current Input: 12337, Current Ouput: 205560, Current Fee: 2.0710212500000003
+---
+Time Usage: 0:00:53.335517
+Input token: 256, Thinking token: 2328, Output token: 2011
+    Current Input: 12593, Current Ouput: 209899, Current Fee: 2.11473125
+---
+Time Usage: 0:00:44.406644
+Input token: 252, Thinking token: 1888, Output token: 2201
+    Current Input: 12845, Current Ouput: 213988, Current Fee: 2.1559362500000003
+---
+Time Usage: 0:00:45.569257
+Input token: 254, Thinking token: 1885, Output token: 2154
+    Current Input: 13099, Current Ouput: 218027, Current Fee: 2.1966437500000002
+---
+Time Usage: 0:00:45.556122
+Input token: 255, Thinking token: 2204, Output token: 1957
+    Current Input: 13354, Current Ouput: 222188, Current Fee: 2.2385725
+---
+Time Usage: 0:00:46.042519
+Input token: 253, Thinking token: 2305, Output token: 1898
+    Current Input: 13607, Current Ouput: 226391, Current Fee: 2.28091875
+---
+Time Usage: 0:00:53.390976
+Input token: 255, Thinking token: 1989, Output token: 2619
+    Current Input: 13862, Current Ouput: 230999, Current Fee: 2.3273175
+---
+Time Usage: 0:00:51.705460
+Input token: 253, Thinking token: 2204, Output token: 2008
+    Current Input: 14115, Current Ouput: 235211, Current Fee: 2.36975375
+---
+Time Usage: 0:00:47.314287
+Input token: 252, Thinking token: 2212, Output token: 2057
+    Current Input: 14367, Current Ouput: 239480, Current Fee: 2.41275875
+---
+Time Usage: 0:00:48.288437
+Input token: 253, Thinking token: 1672, Output token: 2252
+    Current Input: 14620, Current Ouput: 243404, Current Fee: 2.452315
+---
+Time Usage: 0:00:50.402050
+Input token: 255, Thinking token: 2364, Output token: 1977
+    Current Input: 14875, Current Ouput: 247745, Current Fee: 2.49604375
+---
+Time Usage: 0:00:51.588097
+Input token: 252, Thinking token: 2422, Output token: 1977
+    Current Input: 15127, Current Ouput: 252144, Current Fee: 2.54034875
+---
+Time Usage: 0:00:49.528593
+Input token: 251, Thinking token: 2076, Output token: 1924
+    Current Input: 15378, Current Ouput: 256144, Current Fee: 2.5806625000000003
+---
+Time Usage: 0:00:47.549981
+Input token: 251, Thinking token: 2051, Output token: 1941
+    Current Input: 15629, Current Ouput: 260136, Current Fee: 2.62089625
+---
+Time Usage: 0:00:51.515723
+Input token: 247, Thinking token: 2097, Output token: 2090
+    Current Input: 15876, Current Ouput: 264323, Current Fee: 2.6630750000000005
+---
+Time Usage: 0:00:55.003177
+Input token: 252, Thinking token: 2506, Output token: 2210
+    Current Input: 16128, Current Ouput: 269039, Current Fee: 2.7105500000000005
+---
+Time Usage: 0:00:46.413807
+Input token: 243, Thinking token: 1948, Output token: 1968
+    Current Input: 16371, Current Ouput: 272955, Current Fee: 2.75001375
+---
+Time Usage: 0:00:50.098296
+Input token: 253, Thinking token: 2075, Output token: 2041
+    Current Input: 16624, Current Ouput: 277071, Current Fee: 2.79149
+---
+Time Usage: 0:00:55.246352
+Input token: 244, Thinking token: 2349, Output token: 2171
+    Current Input: 16868, Current Ouput: 281591, Current Fee: 2.836995
+---
+Time Usage: 0:00:41.944590
+Input token: 251, Thinking token: 1426, Output token: 1986
+    Current Input: 17119, Current Ouput: 285003, Current Fee: 2.87142875
+---
+Time Usage: 0:00:49.638016
+Input token: 249, Thinking token: 2118, Output token: 2201
+    Current Input: 17368, Current Ouput: 289322, Current Fee: 2.9149300000000005
+---
+Time Usage: 0:00:42.519942
+Input token: 247, Thinking token: 2000, Output token: 1781
+    Current Input: 17615, Current Ouput: 293103, Current Fee: 2.9530487500000002
+---
+Time Usage: 0:00:46.622820
+Input token: 248, Thinking token: 1988, Output token: 2179
+    Current Input: 17863, Current Ouput: 297270, Current Fee: 2.99502875
+---
+Time Usage: 0:00:52.345867
+Input token: 252, Thinking token: 2130, Output token: 2211
+    Current Input: 18115, Current Ouput: 301611, Current Fee: 3.03875375
+---
+Time Usage: 0:00:47.191428
+Input token: 251, Thinking token: 2055, Output token: 2020
+    Current Input: 18366, Current Ouput: 305686, Current Fee: 3.0798175000000003
+---
+Time Usage: 0:00:48.817268
+Input token: 246, Thinking token: 2081, Output token: 1989
+    Current Input: 18612, Current Ouput: 309756, Current Fee: 3.120825
+---
+Time Usage: 0:00:50.032522
+Input token: 245, Thinking token: 2197, Output token: 2033
+    Current Input: 18857, Current Ouput: 313986, Current Fee: 3.16343125
+---
+Time Usage: 0:00:47.371553
+Input token: 248, Thinking token: 2209, Output token: 1938
+    Current Input: 19105, Current Ouput: 318133, Current Fee: 3.2052112500000005
+---
+Time Usage: 0:00:53.330899
+Input token: 245, Thinking token: 2377, Output token: 2102
+    Current Input: 19350, Current Ouput: 322612, Current Fee: 3.2503075000000003
+---
+Time Usage: 0:00:47.124993
+Input token: 248, Thinking token: 1874, Output token: 2105
+    Current Input: 19598, Current Ouput: 326591, Current Fee: 3.2904075
+---
+Time Usage: 0:00:49.381302
+Input token: 248, Thinking token: 2057, Output token: 2024
+    Current Input: 19846, Current Ouput: 330672, Current Fee: 3.3315275000000004
+---
+Time Usage: 0:00:46.887945
+Input token: 246, Thinking token: 1955, Output token: 1773
+    Current Input: 20092, Current Ouput: 334400, Current Fee: 3.3691150000000003
+---
+Time Usage: 0:01:01.360693
+Input token: 263, Thinking token: 2009, Output token: 3365
+    Current Input: 20355, Current Ouput: 339774, Current Fee: 3.42318375
+---
+Time Usage: 0:00:49.882173
+Input token: 257, Thinking token: 2296, Output token: 2052
+    Current Input: 20612, Current Ouput: 344122, Current Fee: 3.466985
+---
+Time Usage: 0:01:05.488180
+Input token: 263, Thinking token: 2548, Output token: 2864
+    Current Input: 20875, Current Ouput: 349534, Current Fee: 3.52143375
+---
+Time Usage: 0:00:40.610934
+Input token: 262, Thinking token: 1638, Output token: 1945
+    Current Input: 21137, Current Ouput: 353117, Current Fee: 3.55759125
+---
+Time Usage: 0:00:44.886873
+Input token: 252, Thinking token: 1777, Output token: 2345
+    Current Input: 21389, Current Ouput: 357239, Current Fee: 3.5991262500000003
+---
+Time Usage: 0:00:45.744064
+Input token: 254, Thinking token: 2082, Output token: 1994
+    Current Input: 21643, Current Ouput: 361315, Current Fee: 3.64020375
+---
+Time Usage: 0:00:57.753099
+Input token: 249, Thinking token: 2229, Output token: 2808
+    Current Input: 21892, Current Ouput: 366352, Current Fee: 3.690885
+---
+Time Usage: 0:01:12.239505
+Input token: 255, Thinking token: 3184, Output token: 3325
+    Current Input: 22147, Current Ouput: 372861, Current Fee: 3.75629375
+---
+Time Usage: 0:01:04.919540
+Input token: 254, Thinking token: 2777, Output token: 3139
+    Current Input: 22401, Current Ouput: 378777, Current Fee: 3.8157712500000005
+---
+Time Usage: 0:00:50.203525
+Input token: 258, Thinking token: 1841, Output token: 2255
+    Current Input: 22659, Current Ouput: 382873, Current Fee: 3.8570537500000004
+---
+Time Usage: 0:00:42.651504
+Input token: 249, Thinking token: 1962, Output token: 2024
+    Current Input: 22908, Current Ouput: 386859, Current Fee: 3.897225
+---
+Time Usage: 0:00:48.344949
+Input token: 255, Thinking token: 2276, Output token: 2135
+    Current Input: 23163, Current Ouput: 391270, Current Fee: 3.9416537500000004
+---
+Time Usage: 0:00:46.358760
+Input token: 260, Thinking token: 1949, Output token: 2287
+    Current Input: 23423, Current Ouput: 395506, Current Fee: 3.9843387500000005
+---
+Time Usage: 0:01:04.055485
+Input token: 250, Thinking token: 2852, Output token: 2850
+    Current Input: 23673, Current Ouput: 401208, Current Fee: 4.04167125
+---
+Time Usage: 0:00:45.067146
+Input token: 254, Thinking token: 1919, Output token: 2169
+    Current Input: 23927, Current Ouput: 405296, Current Fee: 4.08286875
+---
+Time Usage: 0:01:02.471450
+Input token: 249, Thinking token: 2415, Output token: 3357
+    Current Input: 24176, Current Ouput: 411068, Current Fee: 4.1409
+---
+Time Usage: 0:00:46.328524
+Input token: 257, Thinking token: 1972, Output token: 2107
+    Current Input: 24433, Current Ouput: 415147, Current Fee: 4.18201125
+---
+Time Usage: 0:00:47.569831
+Input token: 252, Thinking token: 2067, Output token: 2276
+    Current Input: 24685, Current Ouput: 419490, Current Fee: 4.225756250000001
+---
+Time Usage: 0:00:56.908903
+Input token: 250, Thinking token: 1599, Output token: 3740
+    Current Input: 24935, Current Ouput: 424829, Current Fee: 4.279458750000001
+---
+Time Usage: 0:00:47.591295
+Input token: 256, Thinking token: 2105, Output token: 2215
+    Current Input: 25191, Current Ouput: 429149, Current Fee: 4.322978750000001
+
+----------------------------------------------------------
+
+
+---
+Time Usage: 0:00:29.158039
+Input token: 116, Thinking token: 1271, Output token: 552
+    Current Input: 116, Current Ouput: 1823, Current Fee: 0.018375000000000002
+---
+Time Usage: 0:00:20.736496
+Input token: 116, Thinking token: 1323, Output token: 502
+    Current Input: 116, Current Ouput: 1825, Current Fee: 0.018395
+
+
+----------------------------------------------------------
+
+
+---
+Time Usage: 0:00:43.648667
+Input token: 123, Thinking token: 1449, Output token: 511
+    Current Input: 239, Current Ouput: 3785, Current Fee: 0.03814875
+---
+Time Usage: 0:00:24.409945
+Input token: 127, Thinking token: 1514, Output token: 622
+    Current Input: 366, Current Ouput: 5921, Current Fee: 0.059667500000000005
+---
+Time Usage: 0:00:23.318663
+Input token: 127, Thinking token: 1435, Output token: 646
+    Current Input: 493, Current Ouput: 8002, Current Fee: 0.08063625
+---
+Time Usage: 0:00:21.941805
+Input token: 116, Thinking token: 1456, Output token: 443
+    Current Input: 609, Current Ouput: 9901, Current Fee: 0.09977125000000002
+
+
+----------------------------------------------------------
+
+
+---
+Time Usage: 0:00:24.777637
+Input token: 116, Thinking token: 1519, Output token: 535
+    Current Input: 116, Current Ouput: 2054, Current Fee: 0.020685000000000002
+
+    
+---
+Time Usage: 0:00:24.239656
+Input token: 123, Thinking token: 1225, Output token: 486
+    Current Input: 239, Current Ouput: 3765, Current Fee: 0.03794875
+---
+Time Usage: 0:00:23.362704
+Input token: 127, Thinking token: 1277, Output token: 647
+    Current Input: 366, Current Ouput: 5689, Current Fee: 0.0573475
+----------------------------------------------------------
+---
+Time Usage: 0:00:23.603986
+Input token: 116, Thinking token: 1625, Output token: 584
+    Current Input: 116, Current Ouput: 2209, Current Fee: 0.022235
+
+----------------------------------------------------------
+---
+Time Usage: 0:00:25.912867
+Input token: 116, Thinking token: 1335, Output token: 554
+    Current Input: 116, Current Ouput: 1889, Current Fee: 0.019035
+---
+Time Usage: 0:00:20.602672
+Input token: 123, Thinking token: 1412, Output token: 413
+    Current Input: 239, Current Ouput: 3714, Current Fee: 0.03743875000000001
+---
+Time Usage: 0:00:23.754370
+Input token: 127, Thinking token: 1370, Output token: 563
+    Current Input: 366, Current Ouput: 5647, Current Fee: 0.056927500000000006

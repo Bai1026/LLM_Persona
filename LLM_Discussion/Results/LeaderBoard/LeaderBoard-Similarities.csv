@@ -1,0 +1,7 @@
+Timestamp,Task,Type,Mode,Agent,Round,Model Name,Role Name,Data Num,Mean Fluency,STD Fluency,Mean Flexibility,STD Flexibility,Mean Originality,STD Originality,Mean Elaboration,STD Elaboration,File Name
+0916-2320 ,Similarities,1,,,,,,100,4.983,0.136,5.0,0.0,2.19,0.441,2.746,0.304,Similarities_qwen_1_1_Qwen_SingleRole_qwen_0916-2320_100
+0917-1116 ,Similarities,1,,,,,,100,12.817,4.841,6.44,4.743,2.16,0.833,1.57,0.619,Similarities_qwen_1_1_Qwen_MultiRole_qwen_0917-1116_100
+0918-0524 ,Similarities,1,,,,,,100,4.47,1.233,4.897,0.7,2.892,0.598,2.658,0.546,Similarities_llama_1_1_Llama_SingleRole_llama_0918-0524_100
+0918-2034 ,Similarities,1,,,,,,100,13.92,2.608,5.087,2.898,2.559,0.461,1.73,0.358,Similarities_llama_1_1_Llama_MultiRole_llama_0918-2034_100
+2025-09-17 04:53:34,Similarities,debate,roleplay,4,5,llama-3-1-8b-instruct,Environmentalist-CreativeProfessional-Futurist-Futurist,100,4.98,1.927,5.16,1.686,2.261,0.734,2.39,0.814,Similarities_multi_debate_roleplay_4_5_llama-3-1-8b-instruct_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-17-04-53-34_100
+2025-09-17 12:25:24,Similarities,debate,roleplay,4,5,qwen2-5-7b-instruct,Environmentalist-CreativeProfessional-Futurist-Futurist,100,4.983,0.258,5.015,0.185,2.372,0.482,2.628,0.361,Similarities_multi_debate_roleplay_4_5_qwen2-5-7b-instruct_Environmentalist-CreativeProfessional-Futurist-Futurist_multi_agent_2025-09-17-12-25-24_100
