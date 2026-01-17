@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BILLY: Steering Large Language Models via Merging Persona Vectors for Creative Generation</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="img/billie_2.png">
     <link rel="shortcut icon" type="image/png" href="img/billie_2.png">
     <link rel="apple-touch-icon" href="img/billie_2.png">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -19,13 +20,16 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Lighter gray background */
+            background-color: #f8fafc;
+            /* Lighter gray background */
         }
+
         .gradient-text {
             background: linear-gradient(to right, #4f46e5, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         .section-title {
             font-size: 2.25rem;
             font-weight: 800;
@@ -33,6 +37,7 @@
             text-align: center;
             margin-bottom: 2rem;
         }
+
         .card {
             background-color: white;
             border-radius: 0.75rem;
@@ -40,10 +45,12 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid #e5e7eb;
         }
+
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
+
         .btn {
             display: inline-block;
             padding: 0.75rem 1.5rem;
@@ -51,170 +58,200 @@
             font-weight: 600;
             text-align: center;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .btn-primary {
             background-color: #4f46e5;
             color: white;
         }
+
         .btn-primary:hover {
             background-color: #4338ca;
             transform: translateY(-2px);
         }
+
         .btn-secondary {
             background-color: white;
             color: #4f46e5;
             border: 1px solid #4f46e5;
         }
+
         .btn-secondary:hover {
             background-color: #eef2ff;
             transform: translateY(-2px);
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
+
+        th,
+        td {
             text-align: left;
             padding: 1rem;
             border-bottom: 1px solid #e5e7eb;
         }
+
         th {
             font-weight: 600;
             color: #111827;
         }
+
         tr:last-child td {
             border-bottom: none;
         }
     </style>
 </head>
 <!-- Initialize Alpine.js modal state -->
+
 <body class="text-gray-800" x-data="{ modalOpen: false, benchmarkModalOpen: false, metricsModalOpen: false }">
 
     <!-- Modal for Explanation -->
-    <div x-show="modalOpen" 
-         x-transition:enter="ease-out duration-300" 
-         x-transition:enter-start="opacity-0" 
-         x-transition:enter-end="opacity-100" 
-         x-transition:leave="ease-in duration-200" 
-         x-transition:leave-start="opacity-100" 
-         x-transition:leave-end="opacity-0" 
-         class="fixed inset-0 z-50 flex items-center justify-center p-4" 
-         style="display: none;">
-        
+    <div x-show="modalOpen" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
+
         <!-- Backdrop -->
         <div @click="modalOpen = false" class="fixed inset-0 bg-black/30 backdrop-blur-sm"></div>
-        
+
         <!-- Modal Content -->
         <div @click.away="modalOpen = false" class="relative bg-white rounded-lg shadow-xl max-w-lg w-full p-6 z-10">
-            <h4 class="text-lg font-semibold text-gray-900 mb-4">Why not directly use the positive activation vector?</h4>
+            <h4 class="text-lg font-semibold text-gray-900 mb-4">Why not directly use the positive activation vector?
+            </h4>
             <p class="text-gray-600 mb-3">
-                When given any text, the model's "brain" is primarily focused on fundamental, shared tasks like basic grammar, semantic understanding, and organizing vocabulary.
+                When given any text, the model's "brain" is primarily focused on fundamental, shared tasks like basic
+                grammar, semantic understanding, and organizing vocabulary.
             </p>
             <p class="text-gray-600 mb-4">
-                These tasks are common to both "positive" (persona) and "negative" (neutral) prompts, so they are considered "noise" for our purpose.
+                These tasks are common to both "positive" (persona) and "negative" (neutral) prompts, so they are
+                considered "noise" for our purpose.
             </p>
             <p class="text-gray-700 font-semibold">
-                We must perform the subtraction to filter out this noise. The resulting vector represents the <em>pure</em> shift in the model's internal state related <em>only</em> to adopting that specific persona.
+                We must perform the subtraction to filter out this noise. The resulting vector represents the
+                <em>pure</em> shift in the model's internal state related <em>only</em> to adopting that specific
+                persona.
             </p>
             <!-- Close Button -->
             <button @click="modalOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
             </button>
         </div>
     </div>
     <!-- End Modal -->
 
     <!-- Modal for Benchmark Selection -->
-    <div x-show="benchmarkModalOpen" 
-         x-transition:enter="ease-out duration-300" 
-         x-transition:enter-start="opacity-0" 
-         x-transition:enter-end="opacity-100" 
-         x-transition:leave="ease-in duration-200" 
-         x-transition:leave-start="opacity-100" 
-         x-transition:leave-end="opacity-0" 
-         class="fixed inset-0 z-50 flex items-center justify-center p-4" 
-         style="display: none;">
-        
+    <div x-show="benchmarkModalOpen" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
+
         <!-- Backdrop -->
         <div @click="benchmarkModalOpen = false" class="fixed inset-0 bg-black/30 backdrop-blur-sm"></div>
-        
+
         <!-- Modal Content -->
-        <div @click.away="benchmarkModalOpen = false" class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full p-6 z-10">
+        <div @click.away="benchmarkModalOpen = false"
+            class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full p-6 z-10">
             <h4 class="text-lg font-semibold text-gray-900 mb-4">Why these benchmarks?</h4>
             <div class="text-gray-600 space-y-3 text-sm">
                 <p>
-                    To evaluate the creativity of large language models (LLMs), we adopt a benchmark suite originally derived from human creativity tests, <strong>Wallach-Kogan Creativity Tests</strong> (Wallach, M. A., and Kogan, N., 1965).
+                    To evaluate the creativity of large language models (LLMs), we adopt a benchmark suite originally
+                    derived from human creativity tests, <strong>Wallach-Kogan Creativity Tests</strong> (Wallach, M.
+                    A., and Kogan, N., 1965).
                 </p>
                 <p>
-                    Rather than using the original tasks directly, we build upon a set of augmented benchmarks previously developed by Lu et al. (2024), which expanded the original tasks using GPT-4 to generate additional items.
+                    Rather than using the original tasks directly, we build upon a set of augmented benchmarks
+                    previously developed by Lu et al. (2024), which expanded the original tasks using GPT-4 to generate
+                    additional items.
                 </p>
                 <p>
-                    This makes our evaluation based on a pre-augmented dataset, ensuring a <strong>broader and more diverse set of tasks</strong> while maintaining alignment with established creativity tests.
+                    This makes our evaluation based on a pre-augmented dataset, ensuring a <strong>broader and more
+                        diverse set of tasks</strong> while maintaining alignment with established creativity tests.
                 </p>
             </div>
             <!-- Close Button -->
-            <button @click="benchmarkModalOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <button @click="benchmarkModalOpen = false"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
             </button>
         </div>
     </div>
     <!-- End Benchmark Modal -->
 
     <!-- Modal for Metrics Selection -->
-    <div x-show="metricsModalOpen" 
-         x-transition:enter="ease-out duration-300" 
-         x-transition:enter-start="opacity-0" 
-         x-transition:enter-end="opacity-100" 
-         x-transition:leave="ease-in duration-200" 
-         x-transition:leave-start="opacity-100" 
-         x-transition:leave-end="opacity-0" 
-         class="fixed inset-0 z-50 flex items-center justify-center p-4" 
-         style="display: none;">
-        
+    <div x-show="metricsModalOpen" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
+
         <!-- Backdrop -->
         <div @click="metricsModalOpen = false" class="fixed inset-0 bg-black/30 backdrop-blur-sm"></div>
-        
+
         <!-- Modal Content -->
-        <div @click.away="metricsModalOpen = false" class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full p-6 z-10">
+        <div @click.away="metricsModalOpen = false"
+            class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full p-6 z-10">
             <h4 class="text-lg font-semibold text-gray-900 mb-4">Why only Originality and Elaboration?</h4>
             <div class="text-gray-600 space-y-3 text-sm">
                 <p>
-                    The TTCT framework includes two other metrics: <strong>fluency</strong> and <strong>flexibility</strong>. However, as discussed in (Lu et al., 2024), these metrics are not suitable for assessing LLM creativity.
+                    The TTCT framework includes two other metrics: <strong>fluency</strong> and
+                    <strong>flexibility</strong>. However, as discussed in (Lu et al., 2024), these metrics are not
+                    suitable for assessing LLM creativity.
                 </p>
                 <p>
-                    The authors point out that while fluency and flexibility pose significant challenges for human subjects, they are <strong>trivial for LLMs</strong>, which can generate responses in any desired quantity or variety on demand.
+                    The authors point out that while fluency and flexibility pose significant challenges for human
+                    subjects, they are <strong>trivial for LLMs</strong>, which can generate responses in any desired
+                    quantity or variety on demand.
                 </p>
                 <p>
-                    Our preliminary study confirms this finding. Therefore, since these metrics do not serve as meaningful differentiators for LLM creativity, our evaluation will proceed using only <strong>originality</strong> and <strong>elaboration</strong>.
+                    Our preliminary study confirms this finding. Therefore, since these metrics do not serve as
+                    meaningful differentiators for LLM creativity, our evaluation will proceed using only
+                    <strong>originality</strong> and <strong>elaboration</strong>.
                 </p>
                 <div class="bg-blue-50 p-3 rounded border-l-4 border-blue-400 mt-4">
                     <p class="text-blue-800 font-semibold text-xs">
-                        Key Insight: We focus on metrics that genuinely challenge LLMs rather than those they can easily satisfy.
+                        Key Insight: We focus on metrics that genuinely challenge LLMs rather than those they can easily
+                        satisfy.
                     </p>
                 </div>
             </div>
             <!-- Close Button -->
             <button @click="metricsModalOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
             </button>
         </div>
     </div>
     <!-- End Metrics Modal -->
 
-<!-- <body class="text-gray-800"> -->
+    <!-- <body class="text-gray-800"> -->
     <!-- Header Section -->
     <header class="py-12 bg-white border-b">
         <div class="max-w-6xl mx-auto px-6 text-center">
             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">
                 <div class="flex items-center justify-center gap-x-4 mb-2">
                     <span class="gradient-text">BILLY</span>
-                    <img src="img/billie.png" alt="BILLY Mascot" class="w-12 h-12" onerror="this.onerror=null;this.src='https://placehold.co/80x80/EFEFEF/333333?text=billie.png';">
+                    <img src="img/billie.png" alt="BILLY Mascot" class="w-12 h-12"
+                        onerror="this.onerror=null;this.src='https://placehold.co/80x80/EFEFEF/333333?text=billie.png';">
                 </div>
-                Steering Large Language Models via<br class="hidden md:block"> Merging Persona Vectors for Creative Generation
+                Steering Large Language Models via<br class="hidden md:block"> Merging Persona Vectors for Creative
+                Generation
             </h1>
             <p class="mt-6 max-w-3xl mx-auto text-lg text-gray-600">
-                A training-free framework that captures the creative benefits of multi-LLM collaboration within a single model, drastically reducing computational costs and latency.
+                A training-free framework that captures the creative benefits of multi-LLM collaboration within a single
+                model, drastically reducing computational costs and latency.
             </p>
             <div class="mt-8">
                 <p class="text-md font-medium text-gray-800">
@@ -227,7 +264,7 @@
             </div>
             <div class="mt-10 flex flex-wrap justify-center gap-4">
                 <a href="#paper" class="btn btn-primary">Read Paper</a>
-                <a href="#code" class="btn btn-secondary">🚧 Get Code</a>
+                <a href="#code" class="btn btn-secondary">GitHub</a>
                 <a href="#bibtex" class="btn btn-secondary">Cite Us</a>
             </div>
         </div>
@@ -242,43 +279,73 @@
             <div class="card p-8 text-gray-700 leading-relaxed space-y-4">
                 <h3 class="text-xl font-bold text-gray-800 mb-3">The Promise of Creative AI</h3>
                 <p>
-                    Creativity is widely recognized as a cornerstone of human progress, driving innovation across domains and enabling major scientific breakthroughs. Recent research has explored the creativity of large language models (LLMs), viewing them as promising tools for applications such as story writing, design ideation, and scientific discovery, thereby augmenting human problem-solving and imagination.
+                    Creativity is widely recognized as a cornerstone of human progress, driving innovation across
+                    domains and enabling major scientific breakthroughs. Recent research has explored the creativity of
+                    large language models (LLMs), viewing them as promising tools for applications such as story
+                    writing, design ideation, and scientific discovery, thereby augmenting human problem-solving and
+                    imagination.
                 </p>
 
                 <h3 class="text-xl font-bold text-gray-800 mb-3">Multi-LLM Paradigms: Promise and Limitations</h3>
                 <p>
-                    Recent studies highlight the potential of the multi-LLM paradigm, which aims to simulate human collective intelligence by engaging multiple LLMs in iterative discussion to arrive at more comprehensive and well-balanced solutions. This paradigm allows systems to generate a broader range of ideas beyond what a single model can reach.
+                    Recent studies highlight the potential of the multi-LLM paradigm, which aims to simulate human
+                    collective intelligence by engaging multiple LLMs in iterative discussion to arrive at more
+                    comprehensive and well-balanced solutions. This paradigm allows systems to generate a broader range
+                    of ideas beyond what a single model can reach.
                 </p>
                 <p>
-                    In the context of creativity, these frameworks often assign diverse roles to LLMs and employ structured, multi-round interactions. For example, one LLM may act as a creative professional while another serves as an environmentalist, enabling the system to explore and integrate multiple perspectives through iterative exchanges.
+                    In the context of creativity, these frameworks often assign diverse roles to LLMs and employ
+                    structured, multi-round interactions. For example, one LLM may act as a creative professional while
+                    another serves as an environmentalist, enabling the system to explore and integrate multiple
+                    perspectives through iterative exchanges.
                 </p>
-                
+
                 <div class="bg-red-50 border border-red-200 rounded-lg p-4">
                     <p class="text-red-800 font-semibold mb-2">⚠️ The Challenge</p>
                     <p class="text-red-700 text-sm">
-                        Despite these advantages, multi-LLM frameworks face a major challenge: <strong>substantial computational cost and increased inference time</strong> associated with multi-LLM coordination. The iterative nature of multi-LLM dialogue substantially increases input and output tokens, making the process computationally costly and increasing inference latency, limiting scalability in real-world settings.
+                        Despite these advantages, multi-LLM frameworks face a major challenge: <strong>substantial
+                            computational cost and increased inference time</strong> associated with multi-LLM
+                        coordination. The iterative nature of multi-LLM dialogue substantially increases input and
+                        output tokens, making the process computationally costly and increasing inference latency,
+                        limiting scalability in real-world settings.
                         <br>
-                        Also, there is a chance that the models encounter <strong>process loss</strong>, where the benefits of multi-LLM interaction are offset by inefficiencies in communication and integration, leading to suboptimal outcomes.
+                        Also, there is a chance that the models encounter <strong>process loss</strong>, where the
+                        benefits of multi-LLM interaction are offset by inefficiencies in communication and integration,
+                        leading to suboptimal outcomes.
                     </p>
                 </div>
 
                 <h3 class="text-xl font-bold text-gray-800 mb-3">The BILLY Solution</h3>
                 <p>
-                    We therefore ask: <em>Without relying on multiple models carrying on a multi-round discussion, can a single LLM simulate diverse perspectives in an efficient manner?</em>
+                    We therefore ask: <em>Without relying on multiple models carrying on a multi-round discussion, can a
+                        single LLM simulate diverse perspectives in an efficient manner?</em>
                 </p>
                 <p>
-                    While prompting approaches exist (asking models to adopt multiple roles simultaneously), they depend heavily on the model's ability to integrate and coordinate multiple perspectives within a single response. In practice, LLMs may handle each persona separately but struggle to integrate them coherently.
+                    While prompting approaches exist (asking models to adopt multiple roles simultaneously), they depend
+                    heavily on the model's ability to integrate and coordinate multiple perspectives within a single
+                    response. In practice, LLMs may handle each persona separately but struggle to integrate them
+                    coherently.
                 </p>
                 <p>
-                    To address these challenges while retaining the creative advantages of multi-LLM interaction, we propose <strong class="text-indigo-600">BILLY: BlendIng persona vectors for Large Language model creativitY</strong>. Inspired by recent advances in extracting persona vectors and steering model behavior through activation engineering, BILLY extends these ideas by merging multiple persona vectors within a single LLM.
+                    To address these challenges while retaining the creative advantages of multi-LLM interaction, we
+                    propose <strong class="text-indigo-600">BILLY: BlendIng persona vectors for Large Language model
+                        creativitY</strong>. Inspired by recent advances in extracting persona vectors and steering
+                    model behavior through activation engineering, BILLY extends these ideas by merging multiple persona
+                    vectors within a single LLM.
                 </p>
 
                 <div class="bg-green-50 border border-green-200 rounded-lg p-4">
                     <h4 class="text-green-800 font-semibold mb-2">✨ Our Contributions</h4>
                     <ul class="text-green-700 text-sm space-y-2 list-disc list-inside ml-2">
-                        <li><strong>Enhanced Creativity:</strong> BILLY blends multiple persona vectors within a single LLM, generating diverse, multi-perspective creative responses that surpass both single-model prompting and multi-LLM approaches.</li>
-                        <li><strong>Efficiency and Simplicity:</strong> Entirely training-free, requiring no additional fine-tuning or multi-LLM communication, achieving superior creativity with substantially lower computational costs.</li>
-                        <li><strong>Interpretability via Persona Vectors:</strong> Operating directly in the latent activation space, BILLY offers an interpretable mechanism for understanding and steering creativity with fine-grained control.</li>
+                        <li><strong>Enhanced Creativity:</strong> BILLY blends multiple persona vectors within a single
+                            LLM, generating diverse, multi-perspective creative responses that surpass both single-model
+                            prompting and multi-LLM approaches.</li>
+                        <li><strong>Efficiency and Simplicity:</strong> Entirely training-free, requiring no additional
+                            fine-tuning or multi-LLM communication, achieving superior creativity with substantially
+                            lower computational costs.</li>
+                        <li><strong>Interpretability via Persona Vectors:</strong> Operating directly in the latent
+                            activation space, BILLY offers an interpretable mechanism for understanding and steering
+                            creativity with fine-grained control.</li>
                     </ul>
                 </div>
             </div>
@@ -292,19 +359,27 @@
                     Multi-LLM systems enhance creativity by simulating human collective intelligence, but suffer from high computational costs and inference latency. To address this, we propose <strong class="text-indigo-600">BILLY, Blending persona vectors for Large Language model creativity</strong>, a training-free framework.
                 </p> -->
                 <p>
-                    BILLY's core idea is to capture the benefits of multi-LLM collaboration—inducing diverse perspectives and specialized expertise—<strong class="text-indigo-600">within a single model</strong>. We achieve this by extracting and blending multiple distinct persona vectors directly in the model's activation space. During inference, this merged vector steers the generation process, enabling multi-perspective output without explicit multi-LLM communication.
+                    BILLY's core idea is to capture the benefits of multi-LLM collaboration—inducing diverse
+                    perspectives and specialized expertise—<strong class="text-indigo-600">within a single
+                        model</strong>. We achieve this by extracting and blending multiple distinct persona vectors
+                    directly in the model's activation space. During inference, this merged vector steers the generation
+                    process, enabling multi-perspective output without explicit multi-LLM communication.
                 </p>
                 <!-- <p>
                     Experiments show that BILLY surpasses both single-model prompting and traditional multi-LLM approaches on creativity-oriented benchmarks, while substantially reducing inference time and computational costs.
                 </p> -->
-                
+
                 <!-- Centered Image -->
                 <div class="flex justify-center mb-4">
-                    <img src="img/teaser.png" alt="BILLY Method Diagram" class="rounded-lg shadow-lg w-1/2 max-w-4xl" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/EFEFEF/333333?text=Teaser.pdf+Diagram';">
+                    <img src="img/teaser.png" alt="BILLY Method Diagram" class="rounded-lg shadow-lg w-1/2 max-w-4xl"
+                        onerror="this.onerror=null;this.src='https://placehold.co/1200x600/EFEFEF/333333?text=Teaser.pdf+Diagram';">
                 </div>
                 <p class="text-center text-gray-500 mt-4 text-sm">
-                    <strong class="text-indigo-600">BILLY (BlendIng persona vectors for Large Language model creativitY)</strong>. To enhance the creativity of a single LLM, we extract and fuse the persona vectors of a Creative Professional and an Environmentalist, steering a base model by this composite vector to generate outputs based on both domains.
-                    </p>
+                    <strong class="text-indigo-600">BILLY (BlendIng persona vectors for Large Language model
+                        creativitY)</strong>. To enhance the creativity of a single LLM, we extract and fuse the persona
+                    vectors of a Creative Professional and an Environmentalist, steering a base model by this composite
+                    vector to generate outputs based on both domains.
+                </p>
                 </p>
             </div>
         </section>
@@ -314,65 +389,79 @@
             <h2 class="section-title">Approach</h2>
             <div class="card p-8">
                 <p class="text-gray-600 mb-8 text-center max-w-4xl mx-auto">
-                    BILLY achieves multi-persona fusion through three stages: persona vector extraction, offline fusion, and inference-time steering.
+                    BILLY achieves multi-persona fusion through three stages: persona vector extraction, offline fusion,
+                    and inference-time steering.
                 </p>
-                
+
                 <div class="space-y-8">
                     <!-- Persona Vector Extraction -->
                     <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
                         <h3 class="text-xl font-bold text-blue-800 mb-4 flex items-center gap-2">
                             <span>🎭 Persona Vector Extraction</span>
-                            <button @click="modalOpen = true" class="w-6 h-6 rounded-full bg-blue-200 text-blue-700 text-sm font-bold flex items-center justify-center hover:bg-blue-300 transition-all focus:outline-none focus:ring-2 focus:ring-blue-400" title="Why use contrastive extraction?">
+                            <button @click="modalOpen = true"
+                                class="w-6 h-6 rounded-full bg-blue-200 text-blue-700 text-sm font-bold flex items-center justify-center hover:bg-blue-300 transition-all focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                title="Why use contrastive extraction?">
                                 ?
                             </button>
                         </h3>
                         <p class="text-gray-700 mb-4">
-                            A persona vector represents the characteristics of a specific persona (e.g., evil, humorous) as a directional vector within the model's activation space, capturing the shift in the model's activation states when it adopts a persona compared to when it responds neutrally.
+                            A persona vector represents the characteristics of a specific persona (e.g., evil, humorous)
+                            as a directional vector within the model's activation space, capturing the shift in the
+                            model's activation states when it adopts a persona compared to when it responds neutrally.
                         </p>
 
                         <div class="bg-white p-4 rounded border-l-4 border-blue-400">
                             <p class="text-sm text-gray-600 mb-2"><strong>Extraction Process:</strong></p>
                             <ol class="text-sm text-gray-600 list-decimal list-inside space-y-1">
                                 <li>Design <strong>contrastive system prompts</strong> (positive vs. negative)</li>
-                                <li>Employ an LLM judge to <strong>score the alignment</strong> of each response with the corresponding trait</li>
-                                <li><strong>Filter</strong> the responses with a threshold to ensure a clear distinction between the two corpora</li>
+                                <li>Employ an LLM judge to <strong>score the alignment</strong> of each response with
+                                    the corresponding trait</li>
+                                <li><strong>Filter</strong> the responses with a threshold to ensure a clear distinction
+                                    between the two corpora</li>
                             </ol>
                         </div>
                         <div class="mt-4 text-center">
                             <img src="img/formula_1.png" alt="Persona Vector Formula" class="mx-auto opacity-80">
-                            <p class="text-xs text-gray-500 mt-2">Persona Vector = Mean activation of positive set - Mean activation of negative set</p>
+                            <p class="text-xs text-gray-500 mt-2">Persona Vector = Mean activation of positive set -
+                                Mean activation of negative set</p>
                         </div>
                     </div>
-                    
+
                     <!-- Offline Fusion -->
                     <div class="bg-green-50 border border-green-200 rounded-lg p-6">
                         <h3 class="text-xl font-bold text-green-800 mb-4">⚡ Offline Fusion</h3>
                         <p class="text-gray-700 mb-4">
-                            Unlike multi-LLM systems that require costly online interaction between agents, our approach fuses these perspectives in an offline step. We compute a single composite steering vector by taking the average of N extracted persona vectors.
+                            Unlike multi-LLM systems that require costly online interaction between agents, our approach
+                            fuses these perspectives in an offline step. We compute a single composite steering vector
+                            by taking the average of N extracted persona vectors.
                         </p>
                         <div class="mt-4 text-center">
                             <img src="img/formula_2.png" alt="Fusion Formula" class="mx-auto opacity-80">
                             <p class="text-xs text-gray-500 mt-2">Merged Vector = Average of all persona vectors</p>
                         </div>
                     </div>
-                    
+
                     <!-- Inference-time Steering -->
                     <div class="bg-purple-50 border border-purple-200 rounded-lg p-6">
                         <h3 class="text-xl font-bold text-purple-800 mb-4">🎯 Inference-time Steering</h3>
                         <p class="text-gray-700 mb-4">
-                            The final stage applies the composite vector to steer the model's generation process. During a standard forward pass, we intervene at a chosen steering layer (layer 20 in our experiments) by adding our composite vector, scaled by a coefficient α.
+                            The final stage applies the composite vector to steer the model's generation process. During
+                            a standard forward pass, we intervene at a chosen steering layer (layer 20 in our
+                            experiments) by adding our composite vector, scaled by a coefficient α.
                         </p>
                         <div class="mt-4 text-center">
                             <img src="img/formula_3.png" alt="Steering Formula" class="mx-auto opacity-80">
-                            <p class="text-xs text-gray-500 mt-2">Steered Activation = Original Activation + α × Merged Vector</p>
+                            <p class="text-xs text-gray-500 mt-2">Steered Activation = Original Activation + α × Merged
+                                Vector</p>
                         </div>
                         <div class="bg-white p-4 rounded border-l-4 border-purple-400 mt-4">
                             <p class="text-sm text-gray-600">
-                                <strong>Key Advantage:</strong> This steering process requires only a single additive operation during each inference step and involves no additional training.
+                                <strong>Key Advantage:</strong> This steering process requires only a single additive
+                                operation during each inference step and involves no additional training.
                             </p>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </section>
@@ -383,7 +472,9 @@
             <div class="card p-8">
                 <h3 class="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2">
                     <span>Creativity Benchmarks</span>
-                    <button @click="benchmarkModalOpen = true" class="w-6 h-6 rounded-full bg-indigo-200 text-indigo-700 text-sm font-bold flex items-center justify-center hover:bg-indigo-300 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-400" title="Why these benchmarks?">
+                    <button @click="benchmarkModalOpen = true"
+                        class="w-6 h-6 rounded-full bg-indigo-200 text-indigo-700 text-sm font-bold flex items-center justify-center hover:bg-indigo-300 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        title="Why these benchmarks?">
                         ?
                     </button>
                 </h3>
@@ -399,17 +490,20 @@
                         <tbody>
                             <tr>
                                 <td class="font-semibold">AUT</td>
-                                <td>Evaluates divergent thinking by requiring the generation of numerous unconventional applications for an object.</td>
+                                <td>Evaluates divergent thinking by requiring the generation of numerous unconventional
+                                    applications for an object.</td>
                                 <td>What are some creative uses for a mug?</td>
                             </tr>
                             <tr>
                                 <td class="font-semibold">INSTANCES</td>
-                                <td>Measures the ability to produce a diverse set of examples that satisfy a given property.</td>
+                                <td>Measures the ability to produce a diverse set of examples that satisfy a given
+                                    property.</td>
                                 <td>Name 5 square things you can think of.</td>
                             </tr>
                             <tr>
                                 <td class="font-semibold">SIMILARITIES</td>
-                                <td>Assesses associative creativity by challenging participants to identify non-obvious connections between two concepts.</td>
+                                <td>Assesses associative creativity by challenging participants to identify non-obvious
+                                    connections between two concepts.</td>
                                 <td>Tell me 5 ways in which a brick and a stone are alike.</td>
                             </tr>
                             <tr>
@@ -422,50 +516,64 @@
                 </div>
                 <h3 class="text-2xl font-bold mt-12 mb-6 text-center flex items-center justify-center gap-2">
                     <span>Evaluation Metrics</span>
-                    <button @click="metricsModalOpen = true" class="w-6 h-6 rounded-full bg-purple-200 text-purple-700 text-sm font-bold flex items-center justify-center hover:bg-purple-300 transition-all focus:outline-none focus:ring-2 focus:ring-purple-400" title="Why only these metrics?">
+                    <button @click="metricsModalOpen = true"
+                        class="w-6 h-6 rounded-full bg-purple-200 text-purple-700 text-sm font-bold flex items-center justify-center hover:bg-purple-300 transition-all focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        title="Why only these metrics?">
                         ?
                     </button>
                 </h3>
                 <div class="grid md:grid-cols-2 gap-8">
                     <div class="bg-gray-50 p-6 rounded-lg border">
                         <h4 class="font-bold text-xl mb-2 text-indigo-700">Originality</h4>
-                        <p class="text-gray-600">Assesses the statistical rarity or unconventionality of a response. Ideas are scored based on novelty and divergence from common answers.</p>
+                        <p class="text-gray-600">Assesses the statistical rarity or unconventionality of a response.
+                            Ideas are scored based on novelty and divergence from common answers.</p>
                     </div>
                     <div class="bg-gray-50 p-6 rounded-lg border">
                         <h4 class="font-bold text-xl mb-2 text-indigo-700">Elaboration</h4>
-                        <p class="text-gray-600">Measures the level of detail and supportive information. It evaluates the ability to expand upon a core idea with depth and context.</p>
+                        <p class="text-gray-600">Measures the level of detail and supportive information. It evaluates
+                            the ability to expand upon a core idea with depth and context.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        
+
         <!-- Baselines Section -->
         <section id="baselines" class="mb-16 md:mb-24">
             <h2 class="section-title">Baselines</h2>
             <div class="card p-8">
                 <p class="text-gray-600 mb-8 text-center max-w-4xl mx-auto">
-                    We compare both single agent prompting methods and multi-agent systems as our baselines. All baseline prompts are detailed in Appendix A.
+                    We compare both single agent prompting methods and multi-agent systems as our baselines. All
+                    baseline prompts are detailed in Appendix A.
                 </p>
                 <div class="space-y-6">
                     <div class="border-l-4 border-indigo-500 pl-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Single Agent (SA)</h3>
-                        <p class="text-gray-600">A single LLM prompted to respond creatively, with the temperature set to 0.7, which is a commonly used value.</p>
+                        <p class="text-gray-600">A single LLM prompted to respond creatively, with the temperature set
+                            to 0.7, which is a commonly used value.</p>
                     </div>
-                    
+
                     <div class="border-l-4 border-purple-500 pl-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">SA with High-temperature Decoding (T=1.0)</h3>
-                        <p class="text-gray-600">The temperature is increased to 1.0 to stimulate higher levels of diversity. By allowing the model to explore a broader range of possible outputs, this setting encourages more diverse responses.</p>
+                        <p class="text-gray-600">The temperature is increased to 1.0 to stimulate higher levels of
+                            diversity. By allowing the model to explore a broader range of possible outputs, this
+                            setting encourages more diverse responses.</p>
                     </div>
-                    
+
                     <div class="border-l-4 border-green-500 pl-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">SA with Multi-Role Prompt (SA-MRP)</h3>
-                        <p class="text-gray-600">A multi-role prompting variant where the model is asked to respond from multiple professional perspectives, such as environmentalist, creative professional, and futurist, each with distinct expertise styles. This serves as a strong baseline to determine the performance limits of enhancing creativity through prompt engineering alone.</p>
+                        <p class="text-gray-600">A multi-role prompting variant where the model is asked to respond from
+                            multiple professional perspectives, such as environmentalist, creative professional, and
+                            futurist, each with distinct expertise styles. This serves as a strong baseline to determine
+                            the performance limits of enhancing creativity through prompt engineering alone.</p>
                     </div>
-                    
+
                     <div class="border-l-4 border-red-500 pl-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">LLM Discussion</h3>
-                        <p class="text-gray-600">A multi-LLM framework proposed by Lu et al. (2024), which organizes multiple LLM agents into a structured three-phase process—initiation, discussion, and convergence—with each agent role-played under distinct personas to diversify perspectives. Agents exchange ideas over several rounds and then consolidate them into final outputs.</p>
+                        <p class="text-gray-600">A multi-LLM framework proposed by Lu et al. (2024), which organizes
+                            multiple LLM agents into a structured three-phase process—initiation, discussion, and
+                            convergence—with each agent role-played under distinct personas to diversify perspectives.
+                            Agents exchange ideas over several rounds and then consolidate them into final outputs.</p>
                     </div>
                 </div>
             </div>
@@ -475,39 +583,54 @@
         <section id="results" class="mb-16 md:mb-24">
             <h2 class="section-title">Main Results</h2>
             <div class="card p-4">
-                <img src="img/main_result.png" alt="Main evaluation results table" class="rounded-lg shadow-lg w-full" onerror="this.onerror=null;this.src='https://placehold.co/1200x800/EFEFEF/333333?text=main_result.png';">
+                <img src="img/main_result.png" alt="Main evaluation results table" class="rounded-lg shadow-lg w-full"
+                    onerror="this.onerror=null;this.src='https://placehold.co/1200x800/EFEFEF/333333?text=main_result.png';">
                 <p class="text-center text-gray-500 mt-4 text-sm px-4 mb-4">
-                    We use <strong>Qwen-2.5-7B-Instruct, Llama-3.1-8B-Instruct, and Gemma-3-4B-it</strong> as our base models and employ <strong>GPT-4o-mini</strong> as the judge. The highest scores are in purple, second-highest in blue. BILLY's Originality scores surpass nearly all baselines across all benchmarks.
+                    We use <strong>Qwen-2.5-7B-Instruct, Llama-3.1-8B-Instruct, and Gemma-3-4B-it</strong> as our base
+                    models and employ <strong>GPT-4o-mini</strong> as the judge. The highest scores are in purple,
+                    second-highest in blue. BILLY's Originality scores surpass nearly all baselines across all
+                    benchmarks.
                 </p>
-                
+
                 <!-- Analysis Text -->
                 <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-6 mt-4">
                     <div class="text-gray-700 text-sm leading-relaxed space-y-3">
                         <p>
-                            Our primary experiments evaluate BILLY against several baselines by steering three distinct open-source models: <strong>Qwen-2.5-7B-Instruct, Llama-3.1-8B-Instruct, and Gemma-3-4B-it</strong>. The main results, aggregated across all four creativity benchmarks, are presented in the table above.
+                            Our primary experiments evaluate BILLY against several baselines by steering three distinct
+                            open-source models: <strong>Qwen-2.5-7B-Instruct, Llama-3.1-8B-Instruct, and
+                                Gemma-3-4B-it</strong>. The main results, aggregated across all four creativity
+                            benchmarks, are presented in the table above.
                         </p>
                         <p>
                             <strong class="text-indigo-800">Key Findings:</strong>
                         </p>
                         <ul class="list-disc list-inside space-y-2 ml-4">
                             <li>
-                                <strong>Consistent Originality Superiority:</strong> BILLY consistently outperforms all baseline methods in terms of Originality across four benchmarks, demonstrating the effectiveness of using internal representational control to elicit creative responses.
+                                <strong>Consistent Originality Superiority:</strong> BILLY consistently outperforms all
+                                baseline methods in terms of Originality across four benchmarks, demonstrating the
+                                effectiveness of using internal representational control to elicit creative responses.
                             </li>
                             <li>
-                                <strong>Outperforms Multi-Agent Systems:</strong> For both Qwen and Llama models, BILLY surpasses the strong but costly LLM Discussion, as well as various single-agent configurations.
+                                <strong>Outperforms Multi-Agent Systems:</strong> For both Qwen and Llama models, BILLY
+                                surpasses the strong but costly LLM Discussion, as well as various single-agent
+                                configurations.
                             </li>
                             <li>
-                                <strong>Prompt Control Limitations:</strong> While SA-MRP occasionally provides slight improvements over SA, its performance is inconsistent, reinforcing our hypothesis that prompt-based control is inherently less reliable than direct vector steering.
+                                <strong>Prompt Control Limitations:</strong> While SA-MRP occasionally provides slight
+                                improvements over SA, its performance is inconsistent, reinforcing our hypothesis that
+                                prompt-based control is inherently less reliable than direct vector steering.
                             </li>
                             <li>
-                                <strong>Model Size Considerations:</strong> The Gemma-3-4B-it model struggles with limitations in long-form, multi-round LLM Discussion tasks due to context instability, though BILLY still achieves the highest Originality scores.
+                                <strong>Model Size Considerations:</strong> The Gemma-3-4B-it model struggles with
+                                limitations in long-form, multi-round LLM Discussion tasks due to context instability,
+                                though BILLY still achieves the highest Originality scores.
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
-        
+
         <!-- Analysis Section -->
         <section id="analysis" class="mb-16 md:mb-24">
             <h2 class="section-title">Analysis</h2>
@@ -519,40 +642,51 @@
                     <!-- Efficiency -->
                     <div class="card p-4 flex flex-col">
                         <h3 class="text-2xl font-bold mb-4 text-center">Efficiency Analysis</h3>
-                        <img src="img/comparison.png" alt="Comparison of inference time and token cost" class="rounded-lg shadow-lg w-full" onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFEFEF/333333?text=comparison.png';">
-                        
+                        <img src="img/comparison.png" alt="Comparison of inference time and token cost"
+                            class="rounded-lg shadow-lg w-full"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFEFEF/333333?text=comparison.png';">
+
                         <!-- Performance Metrics -->
                         <div class="mt-4 bg-gray-50 p-4 rounded-lg border">
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="text-center">
                                     <h4 class="text-sm font-semibold text-gray-700 mb-2">BILLY (Ours)</h4>
                                     <div class="space-y-1">
-                                        <div class="text-xs text-gray-600">Inference Time: <span class="font-bold text-green-600">19s</span></div>
-                                        <div class="text-xs text-gray-600">Token Cost: <span class="font-bold text-green-600">0.3$/10k query</span></div>
+                                        <div class="text-xs text-gray-600">Inference Time: <span
+                                                class="font-bold text-green-600">19s</span></div>
+                                        <div class="text-xs text-gray-600">Token Cost: <span
+                                                class="font-bold text-green-600">0.3$/10k query</span></div>
                                         <!-- <div class="text-xs text-gray-600">Efficiency: <span class="font-bold text-blue-600">~95% reduction</span></div> -->
                                     </div>
                                 </div>
                                 <div class="text-center">
                                     <h4 class="text-sm font-semibold text-gray-700 mb-2">LLM Discussion</h4>
                                     <div class="space-y-1">
-                                        <div class="text-xs text-gray-600">Inference Time: <span class="font-bold text-red-500">513s (27.02 times)</span></div>
-                                        <div class="text-xs text-gray-600">Token Cost: <span class="font-bold text-red-500">25.5$/10k query (90.9 times)</span></div>
+                                        <div class="text-xs text-gray-600">Inference Time: <span
+                                                class="font-bold text-red-500">513s (27.02 times)</span></div>
+                                        <div class="text-xs text-gray-600">Token Cost: <span
+                                                class="font-bold text-red-500">25.5$/10k query (90.9 times)</span></div>
                                         <!-- <div class="text-xs text-gray-600">Multi-agent: <span class="font-bold text-orange-500">High overhead</span></div> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <p class="text-center text-gray-500 mt-4 text-sm px-4 flex-grow">
-                            Inference Time and Token Cost. BILLY demonstrates a significant reduction in both latency and token cost compared to the LLM Discussion baseline.
+                            Inference Time and Token Cost. BILLY demonstrates a significant reduction in both latency
+                            and token cost compared to the LLM Discussion baseline.
                         </p>
                     </div>
                     <!-- Qualitative Result -->
                     <div class="card p-4 flex flex-col">
                         <h3 class="text-2xl font-bold mb-4 text-center">Qualitative Result</h3>
-                        <img src="img/qualitative.png" alt="Qualitative comparison of persona fusion" class="rounded-lg shadow-lg w-full" onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFEFEF/333333?text=qualitative.png';">
+                        <img src="img/qualitative.png" alt="Qualitative comparison of persona fusion"
+                            class="rounded-lg shadow-lg w-full"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFEFEF/333333?text=qualitative.png';">
                         <p class="text-center text-gray-500 mt-4 text-sm px-4 flex-grow">
-                             A case study on the 'Reimagine the Hospital' task. The merged vector demonstrates a true conceptual fusion, reframing substantive concepts from the environmentalist with the visionary style of the creative vector.
+                            A case study on the 'Reimagine the Hospital' task. The merged vector demonstrates a true
+                            conceptual fusion, reframing substantive concepts from the environmentalist with the
+                            visionary style of the creative vector.
                         </p>
                     </div>
                 </div>
@@ -561,30 +695,39 @@
                 <div class="card p-4">
                     <h3 class="text-2xl font-bold mb-4 text-center">Analysis of Various Vector Compositions</h3>
                     <div class="flex justify-center mb-4">
-                        <img src="img/vec_combination.png" alt="Persona Vector Combinations Analysis" class="rounded-lg shadow-lg w-1/2 max-w-md" onerror="this.onerror=null;this.src='https://placehold.co/600x300/EFEFEF/333333?text=Figure+2%3A+Persona+Vector+Combinations+Analysis';">
+                        <img src="img/vec_combination.png" alt="Persona Vector Combinations Analysis"
+                            class="rounded-lg shadow-lg w-1/2 max-w-md"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x300/EFEFEF/333333?text=Figure+2%3A+Persona+Vector+Combinations+Analysis';">
                     </div>
                     <p class="text-center text-gray-500 mt-4 text-sm px-4 mb-4">
-                        Persona Vector Combinations Analysis. Based on the default 4 vectors, we modify the combination of persona vectors from one to seven.
+                        Persona Vector Combinations Analysis. Based on the default 4 vectors, we modify the combination
+                        of persona vectors from one to seven.
                     </p>
-                    
+
                     <!-- Analysis Text -->
                     <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-4">
                         <div class="text-gray-700 text-sm leading-relaxed space-y-3">
                             <p>
-                                To investigate the relationship between the quantity of fused personas and creativity, we vary the number of merged vectors from one to seven. The results are presented in Figure 2 with the specific persona vector combinations detailed in Section D.
+                                To investigate the relationship between the quantity of fused personas and creativity,
+                                we vary the number of merged vectors from one to seven. The results are presented in
+                                Figure 2 with the specific persona vector combinations detailed in Section D.
                             </p>
                             <p>
                                 <strong class="text-blue-800">Key Findings:</strong>
                             </p>
                             <ul class="list-disc list-inside space-y-2 ml-4">
                                 <li>
-                                    <strong>Creative Professional Dominance:</strong> Any vector merge with the creative professional persona results in exceptionally high creative performance.
+                                    <strong>Creative Professional Dominance:</strong> Any vector merge with the creative
+                                    professional persona results in exceptionally high creative performance.
                                 </li>
                                 <li>
-                                    <strong>Diminishing Returns:</strong> While increasing the number of persona vectors from one (1-CRE) to three yields a noticeable improvement, further additions from four to seven vectors do not produce additional significant gains.
+                                    <strong>Diminishing Returns:</strong> While increasing the number of persona vectors
+                                    from one (1-CRE) to three yields a noticeable improvement, further additions from
+                                    four to seven vectors do not produce additional significant gains.
                                 </li>
                                 <li>
-                                    <strong>Non-Additive Benefits:</strong> This suggests that the primary benefit of BILLY is not simply additive—quality of composition matters more than quantity.
+                                    <strong>Non-Additive Benefits:</strong> This suggests that the primary benefit of
+                                    BILLY is not simply additive—quality of composition matters more than quantity.
                                 </li>
                             </ul>
                         </div>
@@ -594,66 +737,93 @@
                 <!-- Interpretability -->
                 <div class="card p-4">
                     <h3 class="text-2xl font-bold mb-4 text-center">Projection Analysis</h3>
-                    <img src="img/projection.png" alt="Projection analysis of activation steering" class="rounded-lg shadow-lg w-full" onerror="this.onerror=null;this.src='https://placehold.co/1200x400/EFEFEF/333333?text=projection.png';">
+                    <img src="img/projection.png" alt="Projection analysis of activation steering"
+                        class="rounded-lg shadow-lg w-full"
+                        onerror="this.onerror=null;this.src='https://placehold.co/1200x400/EFEFEF/333333?text=projection.png';">
                     <p class="text-center text-gray-500 mt-4 text-sm px-4 mb-4">
-                        Projection of activation changes onto persona vectors. Vector steering with BILLY (green) shows superior control over prompting (red). Merged vectors successfully co-activate both personas, unlike single vectors.
+                        Projection of activation changes onto persona vectors. Vector steering with BILLY (green) shows
+                        superior control over prompting (red). Merged vectors successfully co-activate both personas,
+                        unlike single vectors.
                     </p>
-                    
+
                     <!-- Analysis Text -->
                     <div class="bg-blue-50 border border-purple-200 rounded-lg p-6 mt-4">
                         <div class="text-gray-700 text-sm leading-relaxed space-y-4">
                             <p>
-                                To verify how effectively our method aligns model representations with target personas, we analyze the projection of <strong>activation changes per layer Δa(l)</strong> in Equation (4) onto <strong>layer-specific persona vectors</strong>.
+                                To verify how effectively our method aligns model representations with target personas,
+                                we analyze the projection of <strong>activation changes per layer Δa(l)</strong> in
+                                Equation (4) onto <strong>layer-specific persona vectors</strong>.
                             </p>
-                            
+
                             <p>
-                                The core idea is to measure the change in the model's activations caused by our steering vector and then calculate how much of the change occurred along the intended persona's direction.
+                                The core idea is to measure the change in the model's activations caused by our steering
+                                vector and then calculate how much of the change occurred along the intended persona's
+                                direction.
                             </p>
-                            
+
                             <p>
                                 <strong class="text-blue-800">Analysis Process:</strong>
                             </p>
-                            
+
                             <div class="bg-white p-4 rounded border-l-4 border-blue-400 mb-3">
-                                <p class="text-sm text-gray-600 mb-2"><strong>Step 1: Define Activation Difference Vector</strong></p>
+                                <p class="text-sm text-gray-600 mb-2"><strong>Step 1: Define Activation Difference
+                                        Vector</strong></p>
                                 <p class="text-xs text-gray-600 mb-2">
-                                    First, we define the activation difference vector, Δa(l), for each layer l. This vector is the difference between the steered activations a(l)_steered and the original activations a(l)_original from a standard forward pass without steering:
+                                    First, we define the activation difference vector, Δa(l), for each layer l. This
+                                    vector is the difference between the steered activations a(l)_steered and the
+                                    original activations a(l)_original from a standard forward pass without steering:
                                 </p>
                                 <div class="text-center mb-2">
-                                    <img src="img/formula_4.png" alt="Activation Difference Formula" class="mx-auto opacity-80 max-w-xs">
+                                    <img src="img/formula_4.png" alt="Activation Difference Formula"
+                                        class="mx-auto opacity-80 max-w-xs">
                                 </div>
-                                <p class="text-xs text-gray-500 text-center">Equation (4): Activation difference calculation</p>
+                                <p class="text-xs text-gray-500 text-center">Equation (4): Activation difference
+                                    calculation</p>
                             </div>
-                            
+
                             <div class="bg-white p-4 rounded border-l-4 border-blue-400 mb-3">
-                                <p class="text-sm text-gray-600 mb-2"><strong>Step 2: Calculate Projection Value</strong></p>
+                                <p class="text-sm text-gray-600 mb-2"><strong>Step 2: Calculate Projection
+                                        Value</strong></p>
                                 <p class="text-xs text-gray-600 mb-2">
-                                    Second, to quantify the alignment of this change with a specific persona, we project the activation difference vector Δa(l) onto that persona's predefined, layer-specific unit persona vector. The resulting projection value, Projection(l)_persona, is calculated via the dot product:
+                                    Second, to quantify the alignment of this change with a specific persona, we project
+                                    the activation difference vector Δa(l) onto that persona's predefined,
+                                    layer-specific unit persona vector. The resulting projection value,
+                                    Projection(l)_persona, is calculated via the dot product:
                                 </p>
                                 <div class="text-center mb-2">
-                                    <img src="img/formula_5.png" alt="Projection Calculation Formula" class="mx-auto opacity-80 max-w-xs">
+                                    <img src="img/formula_5.png" alt="Projection Calculation Formula"
+                                        class="mx-auto opacity-80 max-w-xs">
                                 </div>
-                                <p class="text-xs text-gray-500 text-center">Equation (5): Projection value calculation</p>
+                                <p class="text-xs text-gray-500 text-center">Equation (5): Projection value calculation
+                                </p>
                                 <p class="text-xs text-gray-600 mt-2">
-                                    where v(l)_persona is the persona vector for a given persona at layer l. A higher positive projection value indicates that our steering intervention more strongly shifted the model's activations along that persona's semantic axis.
+                                    where v(l)_persona is the persona vector for a given persona at layer l. A higher
+                                    positive projection value indicates that our steering intervention more strongly
+                                    shifted the model's activations along that persona's semantic axis.
                                 </p>
                             </div>
-                            
+
                             <p>
                                 <strong class="text-blue-800">Key Findings:</strong>
                             </p>
                             <ul class="list-disc list-inside space-y-2 ml-4">
                                 <li>
-                                    <strong>Vector Steering Superiority:</strong> While prompting fails to consistently induce all intended personas (negative projections on vENV), BILLY consistently achieves positive projections on both vCRE and vENV.
+                                    <strong>Vector Steering Superiority:</strong> While prompting fails to consistently
+                                    induce all intended personas (negative projections on vENV), BILLY consistently
+                                    achieves positive projections on both vCRE and vENV.
                                 </li>
                                 <!-- <li>
                                     <strong>Complex Interaction Effects:</strong> BILLY (CRE + ENV) successfully co-activates both personas, but the effect is non-linear—the environmentalist vector provides substantive content that the creative vector reframes for richer output.
                                 </li> -->
                                 <li>
-                                    <strong>Superior Controllability:</strong> Direct latent space manipulation enables more reliable and interpretable multi-faceted persona generation compared to prompting approaches.
+                                    <strong>Superior Controllability:</strong> Direct latent space manipulation enables
+                                    more reliable and interpretable multi-faceted persona generation compared to
+                                    prompting approaches.
                                 </li>
                                 <li>
-                                    <strong>Selective Persona Control:</strong> Individual vectors (BILLY-CRE, BILLY-ENV) precisely control their intended semantic concepts with minimal cross-activation.
+                                    <strong>Selective Persona Control:</strong> Individual vectors (BILLY-CRE,
+                                    BILLY-ENV) precisely control their intended semantic concepts with minimal
+                                    cross-activation.
                                 </li>
                             </ul>
                         </div>
@@ -667,13 +837,20 @@
             <h2 class="section-title">Conclusion</h2>
             <div class="card p-8 text-lg text-gray-700 leading-relaxed space-y-4 max-w-4xl mx-auto">
                 <p>
-                    We introduce <strong class="text-indigo-600">BILLY</strong>, an efficient activation steering method that enhances LLM creativity while avoiding the high inference time and costs of multi-agent systems.
+                    We introduce <strong class="text-indigo-600">BILLY</strong>, an efficient activation steering method
+                    that enhances LLM creativity while avoiding the high inference time and costs of multi-agent
+                    systems.
                 </p>
                 <p>
-                    Extensive experiments on four benchmarks show that our method BILLY matches or surpasses strong creative baselines with <strong class="text-green-600">significantly reduced inference time and costs (>95% reduction)</strong>.
+                    Extensive experiments on four benchmarks show that our method BILLY matches or surpasses strong
+                    creative baselines with <strong class="text-green-600">significantly reduced inference time and
+                        costs (>95% reduction)</strong>.
                 </p>
                 <p>
-                    Furthermore, our qualitative and projection analyses show that different persona vectors influence distinct aspects of generation (style vs. content), and that BILLY offers <strong class="text-purple-600">superior controllability and interpretability</strong> compared to simple prompting methods.
+                    Furthermore, our qualitative and projection analyses show that different persona vectors influence
+                    distinct aspects of generation (style vs. content), and that BILLY offers <strong
+                        class="text-purple-600">superior controllability and interpretability</strong> compared to
+                    simple prompting methods.
                 </p>
             </div>
         </section>
@@ -683,7 +860,9 @@
             <h2 class="section-title">Limitations & Future Work</h2>
             <div class="card p-8 text-lg text-gray-700 leading-relaxed space-y-4 max-w-4xl mx-auto">
                 <p>
-                    While BILLY demonstrates the power of persona vector merging, our current approach uses simple averaging for vector composition. We recognize that developing a more sophisticated framework for composition is a key direction for future research.
+                    While BILLY demonstrates the power of persona vector merging, our current approach uses simple
+                    averaging for vector composition. We recognize that developing a more sophisticated framework for
+                    composition is a key direction for future research.
                 </p>
                 <p>
                     Future work could explore advanced composition techniques, such as:
@@ -694,7 +873,8 @@
                     <li>Investigating the non-linear interactions that occur when multiple vectors are combined.</li>
                 </ul>
                 <p>
-                    Such advancements would support the development of more generalizable and robustly controllable models capable of complex, multi-faceted reasoning.
+                    Such advancements would support the development of more generalizable and robustly controllable
+                    models capable of complex, multi-faceted reasoning.
                 </p>
             </div>
         </section>
@@ -704,24 +884,24 @@
             <h2 class="section-title">How to Cite</h2>
             <div class="card p-6">
                 <h3 id="paper" class="text-2xl font-bold mb-4 text-center">📄 Paper</h3>
-                <p class="text-center mb-6"><a href="https://arxiv.org/abs/2510.10157" class="text-indigo-600 hover:underline font-semibold">[https://arxiv.org/abs/2510.10157]</a></p>
-                
-                <h3 id="code" class="text-2xl font-bold mb-4 text-center">💻 Code</h3>
-                <p class="text-center mb-6"><a href="#" class="text-indigo-600 hover:underline font-semibold">[🚧 Not Organized Yet 🚧]</a></p>
+                <p class="text-center mb-6"><a href="https://arxiv.org/abs/2510.10157"
+                        class="text-indigo-600 hover:underline font-semibold">[https://arxiv.org/abs/2510.10157]</a></p>
+
+                <h3 id="code" class="text-2xl font-bold mb-4 text-center">💻 GitHub</h3>
+                <p class="text-center mb-6"><a href="https://github.com/bai1026/LLM_Persona"
+                        class="text-indigo-600 hover:underline font-semibold">[https://github.com/bai1026/LLM_Persona]</a>
+                </p>
 
                 <h3 class="text-xl font-semibold mb-2">BibTeX</h3>
-                <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto"><code>@misc{pai2025billysteeringlargelanguage,
-      title={BILLY: Steering Large Language Models via Merging Persona Vectors for Creative Generation}, 
-      author={Tsung-Min Pai and Jui-I Wang and Li-Chun Lu and Shao-Hua Sun and Hung-Yi Lee and Kai-Wei Chang},
-      year={2025},
-      eprint={2510.10157},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2510.10157}, 
+                <pre class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto"><code>@inproceedings{pai2025billysteeringlargelanguage,
+  title={BILLY: Steering Large Language Models via Merging Persona Vectors for Creative Generation}, 
+  author={Tsung-Min Pai and Jui-I Wang and Li-Chun Lu and Shao-Hua Sun and Hung-Yi Lee and Kai-Wei Chang},
+  booktitle={Conference of the European Chapter of the Association for Computational Linguistics},
+  year={2026}
 }</code></pre>
             </div>
         </section>
-        
+
     </main>
 
     <!-- Footer -->
@@ -732,5 +912,5 @@
     </footer>
 
 </body>
-</html>
 
+</html>
