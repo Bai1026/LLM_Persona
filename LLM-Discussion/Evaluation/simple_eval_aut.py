@@ -69,12 +69,12 @@ def evaluate_response(model, content, criterion, num_samples=3):
     
     # 建構完整的prompt
     full_prompt = prompt + f"\n\nThe response to evaluate is:\n{content}"
-    full_prompt += """
-    Please focus on the answers that is specify. 
-    For instance: I would love to share these answer with you guys. **1: xxx**, **2: xxx**
-    - Please only focus on the answers themselves (**1: xxx**, **2: xxx**), ignore the trivial words(I would love to share these answer with you guys.)
-    - Could be more demanding.
-    """
+    # full_prompt += """
+    # Please focus on the answers that is specify. 
+    # For instance: I would love to share these answer with you guys. **1: xxx**, **2: xxx**
+    # - Please only focus on the answers themselves (**1: xxx**, **2: xxx**), ignore the trivial words(I would love to share these answer with you guys.)
+    # - Could be more demanding.
+    # """
     
     messages = [{"role": "user", "content": full_prompt}]
     
@@ -240,35 +240,37 @@ def simple_eval(input_file):
     return averages, all_results
 
 if __name__ == "__main__":
-    # 測試用檔案
-    input_file_path = './Main_Results/AUT/'
-    finding_list = [
-        # '1vec_1',
-        # '1vec_2',
-        # '2vec',
-        # '3vec',
-        # '4vec',
-        # '5vec',
-        # '6vec',
-        # '7vec',
-
-        # 'llama_vector',
-        # 'llama_single',
-        # 'llama_multi',
-        # 'qwen_vector',
-        # 'qwen_single',
-        # 'qwen_multi',
-        # 'gemma_vector',
-        'gemma_single',
-        'gemma_multi',
-    ]
-
-    for finding in finding_list:
-        input_file = input_file_path + finding + '.json'
-
+    # 指定要評估的資料夾
+    input_file_path = './Main_Results/Rebuttal/Llama_Rebuttal/more'
+    
+    # 確認資料夾是否存在
+    if not os.path.exists(input_file_path):
+        print(f"資料夾不存在: {input_file_path}")
+        exit(1)
+    
+    # 取得資料夾中所有的 JSON 檔案
+    json_files = []
+    for file in os.listdir(input_file_path):
+        if file.endswith('.json') and not file.endswith('_simple_eval_results.json'):
+            json_files.append(os.path.join(input_file_path, file))
+    
+    if not json_files:
+        print(f"在 {input_file_path} 中找不到任何 JSON 檔案")
+        exit(1)
+    
+    print(f"找到 {len(json_files)} 個 JSON 檔案準備評估:")
+    for file in json_files:
+        print(f"  - {os.path.basename(file)}")
+    print()
+    
+    # 評估每個檔案
+    for input_file in json_files:
+        print(f"\n{'='*60}")
+        print(f"正在評估: {os.path.basename(input_file)}")
+        print(f"{'='*60}")
+        
         if os.path.exists(input_file):
             simple_eval(input_file)
-            
         else:
-            print(f"測試檔案 {input_file} 不存在")
+            print(f"檔案不存在: {input_file}")
     

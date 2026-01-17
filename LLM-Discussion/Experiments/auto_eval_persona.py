@@ -15,7 +15,7 @@ def auto_eval_persona():
     parser.add_argument("-v", "--gpt_version", default="4", choices=["3", "4"], help="GPT 版本")
     parser.add_argument("--no_eval", action="store_true", help="只產生結果，不進行評估")
     parser.add_argument("--baseline", action="store_true", help="使用 Pure OpenAI API 模式作為 baseline")
-    parser.add_argument("-m", "--model", choices=["qwen", "llama", "gemma"], help="使用指定模型 (qwen 或 llama 或 gemma)")
+    parser.add_argument("-m", "--model", choices=["qwen", "llama", "gemma", "llama2", "qwen2", "gemma2"], help="使用指定模型 (qwen 或 llama 或 gemma)")
     parser.add_argument("--openai_model", default="gpt-4", help="OpenAI 模型名稱 (當使用 baseline 模式時)")
     
     args = parser.parse_args()
@@ -52,7 +52,7 @@ def auto_eval_persona():
             "--model", args.openai_model
         ]
     
-    elif args.model == "gemma":
+    elif args.model == "gemma2":
         # 使用 Persona API 模式 - 2nd file
         generate_cmd = [
             sys.executable, "persona_conversation2.py",
@@ -84,6 +84,9 @@ def auto_eval_persona():
     if not args.no_eval:
         generate_cmd.append("-e")  # 啟用評估模式
     
+    if args.no_eval:
+        print("ℹ️  已啟用 no_eval 模式，僅產生結果檔案，不進行評估。")
+
     print(f"🔧 執行命令: {' '.join(generate_cmd)}")
     
     # 執行命令，不設定超時限制

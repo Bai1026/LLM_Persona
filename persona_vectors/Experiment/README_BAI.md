@@ -106,6 +106,8 @@ python auto_eval_persona.py \
   -v 4
 ```
 
+- if no eval: add `--no_eval`
+
 - Scientific
 
 ```bash

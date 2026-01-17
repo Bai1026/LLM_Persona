@@ -99,7 +99,7 @@ def chat_api():
         response = chatbot.generate_response(user_input, max_tokens)
         
         # Role Prompt
-        ROLE_PROMPT = True
+        ROLE_PROMPT = False
         role_prompt = """
 You need to think and answer this question from three different professional perspectives:
 
