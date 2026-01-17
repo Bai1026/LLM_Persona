@@ -1,0 +1,52 @@
+[
+  {
+    "item": "Fork",
+    "uses": [],
+    "Agent": "PersonaAPI"
+  },
+  {
+    "item": "Jar",
+    "uses": [],
+    "Agent": "PersonaAPI"
+  },
+  {
+    "item": "Mirror",
+    "uses": [],
+    "Agent": "PersonaAPI"
+  },
+  {
+    "item": "Mug",
+    "uses": [],
+    "Agent": "PersonaAPI"
+  },
+  {
+    "item": "Needle",
+    "uses": [],
+    "Agent": "PersonaAPI"
+  },
+  {
+    "item": "Paper",
+    "uses": [],
+    "Agent": "PersonaAPI"
+  },
+  {
+    "item": "Ring",
+    "uses": [],
+    "Agent": "PersonaAPI"
+  },
+  {
+    "item": "Scarf",
+    "uses": [],
+    "Agent": "PersonaAPI"
+  },
+  {
+    "item": "Screwdriver",
+    "uses": [],
+    "Agent": "PersonaAPI"
+  },
+  {
+    "item": "Sheet",
+    "uses": [],
+    "Agent": "PersonaAPI"
+  }
+]

@@ -1,0 +1,16 @@
+[
+    {
+        "name": "environmentalist",
+        "vector_path": "../persona_vectors/Llama-3.1-8B-Instruct/multi_role/environmentalist_response_avg_diff.pt",
+        "layer_idx": 15,
+        "coeff": 2.0,
+        "positions": "all"
+    },
+    {
+        "name": "creative", 
+        "vector_path": "../persona_vectors/Llama-3.1-8B-Instruct/multi_role/creative_professional_response_avg_diff.pt",
+        "layer_idx": 20,
+        "coeff": 1.5,
+        "positions": "response"
+    }
+]

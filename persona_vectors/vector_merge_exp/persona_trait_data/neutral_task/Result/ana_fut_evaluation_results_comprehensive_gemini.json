@@ -1,0 +1,101 @@
+{
+  "evaluation_mode": "comprehensive",
+  "detailed_scores": {
+    "conversation_1": {
+      "analytical": 25.0,
+      "creative": 20.0,
+      "environmental": 30.0,
+      "futurist": 25.0
+    },
+    "conversation_2": {
+      "analytical": 30.0,
+      "creative": 20.0,
+      "environmental": 5.0,
+      "futurist": 45.0
+    },
+    "conversation_3": {
+      "analytical": 35.0,
+      "creative": 25.0,
+      "environmental": 5.0,
+      "futurist": 35.0
+    },
+    "conversation_4": {
+      "analytical": 30.0,
+      "creative": 25.0,
+      "environmental": 5.0,
+      "futurist": 40.0
+    },
+    "conversation_5": {
+      "analytical": 25.0,
+      "creative": 30.0,
+      "environmental": 5.0,
+      "futurist": 40.0
+    },
+    "conversation_6": {
+      "analytical": 37.5,
+      "creative": 25.0,
+      "environmental": 12.5,
+      "futurist": 25.0
+    },
+    "conversation_7": {
+      "analytical": 53.333333333333336,
+      "creative": 26.666666666666668,
+      "environmental": 13.333333333333334,
+      "futurist": 6.666666666666667
+    },
+    "conversation_8": {
+      "analytical": 30.0,
+      "creative": 20.0,
+      "environmental": 15.0,
+      "futurist": 35.0
+    },
+    "conversation_9": {
+      "analytical": 25.0,
+      "creative": 25.0,
+      "environmental": 30.0,
+      "futurist": 20.0
+    },
+    "conversation_10": {
+      "analytical": 30.0,
+      "creative": 20.0,
+      "environmental": 35.0,
+      "futurist": 15.0
+    },
+    "conversation_11": {
+      "analytical": 25.0,
+      "creative": 20.0,
+      "environmental": 5.0,
+      "futurist": 50.0
+    },
+    "conversation_12": {
+      "analytical": 30.0,
+      "creative": 20.0,
+      "environmental": 25.0,
+      "futurist": 25.0
+    }
+  },
+  "trait_averages": {
+    "creative": 23.055555555555557,
+    "analytical": 31.319444444444443,
+    "futurist": 30.13888888888889,
+    "environmental": 15.48611111111111
+  },
+  "trait_ranking": [
+    [
+      "analytical",
+      31.319444444444443
+    ],
+    [
+      "futurist",
+      30.13888888888889
+    ],
+    [
+      "creative",
+      23.055555555555557
+    ],
+    [
+      "environmental",
+      15.48611111111111
+    ]
+  ]
+}

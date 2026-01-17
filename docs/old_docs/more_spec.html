@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>擴展消融實驗架構規格</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Experimental Slate -->
+    <!-- Application Structure Plan: A multi-column, non-interactive layout for direct side-by-side comparison of an expanded set of ablation study architectures. This static, clear layout is optimal for a technical "cheat sheet" where the primary user goal is to compare detailed specifications like agent I/O parameters without user interaction. The combinations are logically grouped to isolate the effect of each agent type. -->
+    <!-- Visualization & Content Choices: The core visualization is the structured layout itself. Each architecture is in a card with consistent sections: Concept, Agents, Hypothesis, and a highly detailed Input/Output table. This tabular format is the clearest way to present the technical specifications, explicitly listing each agent's input parameters and output values as requested, using code tags for clarity. No charts are needed. All diagrams are conceptual lists, confirming NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F1F5F9; /* Slate 100 */
+            color: #334155; /* Slate 700 */
+        }
+        .architecture-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: all 0.3s ease;
+            border-top-width: 4px;
+            margin-bottom: 2rem;
+        }
+        .architecture-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .io-table th, .io-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #E2E8F0; /* Slate 200 */
+            vertical-align: top;
+        }
+        .io-table th {
+            background-color: #F8FAFC; /* Slate 50 */
+        }
+        .io-table code {
+            background-color: #E2E8F0;
+            color: #475569;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+        .card-content {
+            flex-grow: 1;
+        }
+        .section-title {
+            grid-column: 1 / -1;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #CBD5E1;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <header class="text-center mb-10">
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-800">擴展消融實驗 (Ablation Study) 架構規格</h1>
+        <p class="mt-2 text-lg text-slate-600">即時推論模式下的多種代理人組合與 I/O 詳細規格</p>
+    </header>
+
+    <main class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+
+        <!-- Section 1: Baseline -->
+        <div class="section-title">
+            <h2 class="text-2xl font-bold text-slate-600">第一組：基準與提示工程專家</h2>
+            <p class="text-slate-500">驗證「主動建構高品質提示」相較於「暴力拼接原始資料」的價值。</p>
+        </div>
+
+        <!-- Architecture A (1 Agent) -->
+        <div class="architecture-card bg-white rounded-lg shadow-md border-slate-400">
+            <div class="p-6 card-content">
+                <h2 class="text-xl font-bold text-slate-700 mb-1">實驗 A: 單一代理人</h2>
+                <p class="text-slate-500 font-medium mb-4">基準模型 (Baseline)</p>
+                <p class="text-sm text-slate-600 mb-4">最基礎的 ICL，直接使用 CoSER 未經優化的完整提示進行一次性生成。</p>
+                <p class="text-sm font-semibold"><strong>要驗證的假設：</strong>無。此為所有比較的性能底線。</p>
+            </div>
+            <div class="bg-slate-50 p-6">
+                <h3 class="font-semibold text-lg mb-3">I/O 規格</h3>
+                <table class="w-full text-sm io-table">
+                    <thead><tr><th>代理人</th><th>輸入 (Input)</th><th>輸出 (Output)</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-medium">演員 (A)</td>
+                            <td><strong>messages</strong>: <code>List[Dict]</code><br><span class="text-xs text-slate-500">(由 CoSER 的 <code>get_character_prompt</code> 生成的未優化提示)</span></td>
+                            <td><code>final_utterance</code>: <code>String</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Architecture A+C (2 Agents) -->
+        <div class="architecture-card bg-white rounded-lg shadow-md border-green-500">
+            <div class="p-6 card-content">
+                <h2 class="text-xl font-bold text-green-700 mb-1">實驗 A+C: 演員 + 角色建構器</h2>
+                <p class="text-green-500 font-medium mb-4">專注於角色 (Persona-Focused)</p>
+                <p class="text-sm text-slate-600 mb-4">驗證僅優化「角色描述」部分對角色扮演忠實度的影響。</p>
+                <p class="text-sm font-semibold"><strong>要驗證的假設：</strong>高品質的角色提示能顯著提升角色忠實度，即使場景上下文未經優化。</p>
+            </div>
+            <div class="bg-slate-50 p-6">
+                <h3 class="font-semibold text-lg mb-3">I/O 規格</h3>
+                <table class="w-full text-sm io-table">
+                    <thead><tr><th>代理人</th><th>輸入 (Input)</th><th>輸出 (Output)</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-medium">角色建構器 (C)</td>
+                            <td><strong>character_profile, experiences, motivation, dialogue_history</strong></td>
+                            <td><code>dynamic_persona_prompt</code>: <code>String</code></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">演員 (A)</td>
+                            <td><strong>messages</strong>: <code>List[Dict]</code><br><span class="text-xs text-slate-500">(System Prompt 中用 C 的輸出替換了原始角色描述部分)</span></td>
+                            <td><code>final_utterance</code>: <code>String</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Architecture A+C+D (3 Agents) -->
+        <div class="architecture-card bg-white rounded-lg shadow-md border-purple-500">
+            <div class="p-6 card-content">
+                <h2 class="text-xl font-bold text-purple-700 mb-1">實驗 A+C+D: 演員 + 雙專家</h2>
+                <p class="text-purple-500 font-medium mb-4">完整提示工程</p>
+                <p class="text-sm text-slate-600 mb-4">驗證同時優化「角色描述」和「場景上下文」所能達到的最佳一次性生成效果。</p>
+                <p class="text-sm font-semibold"><strong>要驗證的假設：</strong>完整的提示工程能最大化一次性生成的品質，是所有迭代精煉模型的強力基線。</p>
+            </div>
+            <div class="bg-slate-50 p-6">
+                <h3 class="font-semibold text-lg mb-3">I/O 規格</h3>
+                <table class="w-full text-sm io-table">
+                    <thead><tr><th>代理人</th><th>輸入 (Input)</th><th>輸出 (Output)</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-medium">角色建構器 (C)</td>
+                            <td><strong>character_profile, experiences, motivation, dialogue_history</strong></td>
+                            <td><code>dynamic_persona_prompt</code>: <code>String</code></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">情境編織者 (D)</td>
+                            <td><strong>scenario, plot_summary, dialogue_history</strong></td>
+                            <td><code>compressed_context_prompt</code>: <code>String</code></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">演員 (A)</td>
+                            <td><strong>messages</strong>: <code>List[Dict]</code><br><span class="text-xs text-slate-500">(System Prompt 由 C 和 D 的輸出全新組裝而成)</span></td>
+                            <td><code>final_utterance</code>: <code>String</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 2: Iterative Refinement -->
+        <div class="section-title">
+            <h2 class="text-2xl font-bold text-slate-600">第二組：迭代精煉專家</h2>
+            <p class="text-slate-500">引入「評論家」，驗證「即時對抗式精煉」在不同品質的初始提示上的價值。</p>
+        </div>
+
+        <!-- Architecture A+B (2 Agents) -->
+        <div class="architecture-card bg-white rounded-lg shadow-md border-blue-500">
+            <div class="p-6 card-content">
+                <h2 class="text-xl font-bold text-blue-700 mb-1">實驗 A+B: 演員 + 評論家</h2>
+                <p class="text-blue-500 font-medium mb-4">基礎對抗式精煉 (GAN-Lite)</p>
+                <p class="text-sm text-slate-600 mb-4">在最差的初始提示（暴力拼接）上進行迭代，驗證「評論家」的基礎能力。</p>
+                <p class="text-sm font-semibold"><strong>要驗證的假設：</strong>即使初始提示品質不佳，迭代精煉也能顯著提升輸出品質。</p>
+            </div>
+            <div class="bg-slate-50 p-6">
+                <h3 class="font-semibold text-lg mb-3">I/O 規格</h3>
+                <table class="w-full text-sm io-table">
+                    <thead><tr><th>代理人</th><th>輸入 (Input)</th><th>輸出 (Output)</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-medium">演員 (A)</td>
+                            <td><strong>messages</strong>: <code>List[Dict]</code><br><span class="text-xs text-slate-500">(後續迭代中會被附加 <code>structured_feedback</code>)</span></td>
+                            <td><code>candidate_utterance</code>: <code>String</code></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">評論家 (B)</td>
+                            <td><strong>utterance_to_judge, character_profile, scenario, motivation</strong></td>
+                            <td><code>structured_feedback</code>: <code>String</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Architecture A+C+B (3 Agents) -->
+        <div class="architecture-card bg-white rounded-lg shadow-md border-teal-500">
+            <div class="p-6 card-content">
+                <h2 class="text-xl font-bold text-teal-700 mb-1">實驗 A+C+B: 演員 + 角色建構器 + 評論家</h2>
+                <p class="text-teal-500 font-medium mb-4">角色導向的精煉</p>
+                <p class="text-sm text-slate-600 mb-4">在高保真度的角色提示上進行迭代，專注於修正與角色相關的細微偏差。</p>
+                <p class="text-sm font-semibold"><strong>要驗證的假設：</strong>高品質的角色提示能讓「評論家」提供更精準、更深入的反饋，從而更有效地提升角色扮演的細膩度。</p>
+            </div>
+            <div class="bg-slate-50 p-6">
+                <h3 class="font-semibold text-lg mb-3">I/O 規格</h3>
+                <table class="w-full text-sm io-table">
+                    <thead><tr><th>代理人</th><th>輸入 (Input)</th><th>輸出 (Output)</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-medium">角色建構器 (C)</td>
+                            <td><strong>character_profile, experiences, motivation...</strong></td>
+                            <td><code>dynamic_persona_prompt</code>: <code>String</code></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">演員 (A)</td>
+                            <td><strong>messages</strong>: <code>List[Dict]</code><br><span class="text-xs text-slate-500">(初始提示包含 C 的輸出)</span></td>
+                            <td><code>candidate_utterance</code>: <code>String</code></td>
+                        </tr>
+                        <tr>
+                            <td class="font-medium">評論家 (B)</td>
+                            <td><strong>utterance_to_judge, intended_persona</strong> (即 <code>dynamic_persona_prompt</code>), <strong>scenario...</strong></td>
+                            <td><code>structured_feedback</code>: <code>String</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Architecture A+B+C+D(+) (Full Model) -->
+        <div class="architecture-card bg-white rounded-lg shadow-md border-red-500">
+            <div class="p-6 card-content">
+                <h2 class="text-xl font-bold text-red-700 mb-1">實驗 A+B+C+D(+): 完整模型</h2>
+                <p class="text-red-500 font-medium mb-4">完整即時推論方案</p>
+                <p class="text-sm text-slate-600 mb-4">將高品質提示建構與對抗式精煉相結合，代表了能力最強的即時推論方案。</p>
+                <p class="text-sm font-semibold"><strong>要驗證的假設：</strong>高品質的初始提示與迭代精煉相結合，能產生 1+1>2 的效果，達到所有即時推論方案中的最佳性能。</p>
+            </div>
+            <div class="bg-slate-50 p-6">
+                <h3 class="font-semibold text-lg mb-3">I/O 規格</h3>
+                <p class="text-xs text-slate-500 mb-2">此架構的 I/O 是上述實驗的組合，由主實驗腳本按順序調用。</p>
+                <ol class="list-decimal list-inside text-slate-600 space-y-1 text-sm">
+                    <li>C 和 D 並行工作，生成高品質提示組件。</li>
+                    <li>腳本組裝成初始的 `messages` 列表。</li>
+                    <li>進入 A 和 B 的精煉迴圈。</li>
+                </ol>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>

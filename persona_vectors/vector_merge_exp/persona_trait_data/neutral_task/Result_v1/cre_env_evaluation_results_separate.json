@@ -1,0 +1,101 @@
+{
+  "evaluation_mode": "separate",
+  "detailed_scores": {
+    "conversation_1": {
+      "analytical": 75.0,
+      "creative": 90.0,
+      "environmental": 100.0,
+      "futurist": 90.0
+    },
+    "conversation_2": {
+      "analytical": 20.0,
+      "creative": 90.0,
+      "environmental": 0.0,
+      "futurist": 95.0
+    },
+    "conversation_3": {
+      "analytical": 10.0,
+      "creative": 95.0,
+      "environmental": 20.0,
+      "futurist": 90.0
+    },
+    "conversation_4": {
+      "analytical": 5.0,
+      "creative": 100.0,
+      "environmental": 25.0,
+      "futurist": 85.0
+    },
+    "conversation_5": {
+      "analytical": 0.0,
+      "creative": 100.0,
+      "environmental": 15.0,
+      "futurist": 95.0
+    },
+    "conversation_6": {
+      "analytical": 20.0,
+      "creative": 100.0,
+      "environmental": 70.0,
+      "futurist": 40.0
+    },
+    "conversation_7": {
+      "analytical": 5.0,
+      "creative": 100.0,
+      "environmental": 60.0,
+      "futurist": 0.0
+    },
+    "conversation_8": {
+      "analytical": 10.0,
+      "creative": 95.0,
+      "environmental": 70.0,
+      "futurist": 85.0
+    },
+    "conversation_9": {
+      "analytical": 20.0,
+      "creative": 95.0,
+      "environmental": 100.0,
+      "futurist": 95.0
+    },
+    "conversation_10": {
+      "analytical": 20.0,
+      "creative": 95.0,
+      "environmental": 40.0,
+      "futurist": 40.0
+    },
+    "conversation_11": {
+      "analytical": 5.0,
+      "creative": 100.0,
+      "environmental": 0.0,
+      "futurist": 20.0
+    },
+    "conversation_12": {
+      "analytical": 0.0,
+      "creative": 95.0,
+      "environmental": 85.0,
+      "futurist": 90.0
+    }
+  },
+  "trait_averages": {
+    "futurist": 68.75,
+    "environmental": 48.75,
+    "creative": 96.25,
+    "analytical": 15.833333333333334
+  },
+  "trait_ranking": [
+    [
+      "creative",
+      96.25
+    ],
+    [
+      "futurist",
+      68.75
+    ],
+    [
+      "environmental",
+      48.75
+    ],
+    [
+      "analytical",
+      15.833333333333334
+    ]
+  ]
+}

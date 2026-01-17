@@ -1,0 +1,118 @@
+{
+  "evaluation_mode": "comprehensive",
+  "detailed_scores": {
+    "conversation_1": {
+      "analytical": 35.0,
+      "creative": 10.0,
+      "environmental": 30.0,
+      "futurist": 20.0,
+      "empathetic": 5.0
+    },
+    "conversation_2": {
+      "analytical": 45.0,
+      "creative": 15.0,
+      "environmental": 5.0,
+      "futurist": 35.0,
+      "empathetic": 0.0
+    },
+    "conversation_3": {
+      "analytical": 65.0,
+      "creative": 10.0,
+      "environmental": 0.0,
+      "futurist": 20.0,
+      "empathetic": 5.0
+    },
+    "conversation_4": {
+      "analytical": 55.0,
+      "creative": 10.0,
+      "environmental": 0.0,
+      "futurist": 30.0,
+      "empathetic": 5.0
+    },
+    "conversation_5": {
+      "analytical": 30.0,
+      "creative": 15.0,
+      "environmental": 0.0,
+      "futurist": 35.0,
+      "empathetic": 20.0
+    },
+    "conversation_6": {
+      "analytical": 45.0,
+      "creative": 20.0,
+      "environmental": 10.0,
+      "futurist": 10.0,
+      "empathetic": 15.0
+    },
+    "conversation_7": {
+      "analytical": 65.0,
+      "creative": 5.0,
+      "environmental": 0.0,
+      "futurist": 5.0,
+      "empathetic": 25.0
+    },
+    "conversation_8": {
+      "analytical": 40.0,
+      "creative": 5.0,
+      "environmental": 15.0,
+      "futurist": 35.0,
+      "empathetic": 5.0
+    },
+    "conversation_9": {
+      "analytical": 30.0,
+      "creative": 15.0,
+      "environmental": 40.0,
+      "futurist": 10.0,
+      "empathetic": 5.0
+    },
+    "conversation_10": {
+      "analytical": 45.0,
+      "creative": 25.0,
+      "environmental": 15.0,
+      "futurist": 5.0,
+      "empathetic": 10.0
+    },
+    "conversation_11": {
+      "analytical": 30.0,
+      "creative": 10.0,
+      "environmental": 0.0,
+      "futurist": 40.0,
+      "empathetic": 20.0
+    },
+    "conversation_12": {
+      "analytical": 40.0,
+      "creative": 10.0,
+      "environmental": 35.0,
+      "futurist": 15.0,
+      "empathetic": 0.0
+    }
+  },
+  "trait_averages": {
+    "creative": 12.5,
+    "environmental": 12.5,
+    "futurist": 21.666666666666668,
+    "empathetic": 9.583333333333334,
+    "analytical": 43.75
+  },
+  "trait_ranking": [
+    [
+      "analytical",
+      43.75
+    ],
+    [
+      "futurist",
+      21.666666666666668
+    ],
+    [
+      "creative",
+      12.5
+    ],
+    [
+      "environmental",
+      12.5
+    ],
+    [
+      "empathetic",
+      9.583333333333334
+    ]
+  ]
+}

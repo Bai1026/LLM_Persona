@@ -1,0 +1,101 @@
+{
+  "evaluation_mode": "separate",
+  "detailed_scores": {
+    "conversation_1": {
+      "analytical": 10.0,
+      "creative": 10.0,
+      "environmental": 100.0,
+      "futurist": 45.0
+    },
+    "conversation_2": {
+      "analytical": 55.0,
+      "creative": 15.0,
+      "environmental": 100.0,
+      "futurist": 0.0
+    },
+    "conversation_3": {
+      "analytical": 10.0,
+      "creative": 70.0,
+      "environmental": 100.0,
+      "futurist": 10.0
+    },
+    "conversation_4": {
+      "analytical": 45.0,
+      "creative": 20.0,
+      "environmental": 95.0,
+      "futurist": 90.0
+    },
+    "conversation_5": {
+      "analytical": 90.0,
+      "creative": 35.0,
+      "environmental": 95.0,
+      "futurist": 90.0
+    },
+    "conversation_6": {
+      "analytical": 35.0,
+      "creative": 90.0,
+      "environmental": 100.0,
+      "futurist": 90.0
+    },
+    "conversation_7": {
+      "analytical": 75.0,
+      "creative": 35.0,
+      "environmental": 80.0,
+      "futurist": 0.0
+    },
+    "conversation_8": {
+      "analytical": 5.0,
+      "creative": 0.0,
+      "environmental": 100.0,
+      "futurist": 0.0
+    },
+    "conversation_9": {
+      "analytical": 10.0,
+      "creative": 75.0,
+      "environmental": 100.0,
+      "futurist": 65.0
+    },
+    "conversation_10": {
+      "analytical": 85.0,
+      "creative": 25.0,
+      "environmental": 100.0,
+      "futurist": 70.0
+    },
+    "conversation_11": {
+      "analytical": 60.0,
+      "creative": 20.0,
+      "environmental": 100.0,
+      "futurist": 30.0
+    },
+    "conversation_12": {
+      "analytical": 30.0,
+      "creative": 15.0,
+      "environmental": 100.0,
+      "futurist": 20.0
+    }
+  },
+  "trait_averages": {
+    "creative": 34.166666666666664,
+    "analytical": 42.5,
+    "futurist": 42.5,
+    "environmental": 97.5
+  },
+  "trait_ranking": [
+    [
+      "environmental",
+      97.5
+    ],
+    [
+      "analytical",
+      42.5
+    ],
+    [
+      "futurist",
+      42.5
+    ],
+    [
+      "creative",
+      34.166666666666664
+    ]
+  ]
+}
