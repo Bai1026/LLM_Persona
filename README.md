@@ -1,4 +1,5 @@
-# This folder is for all of the experiments for EMNLP 2025
+# Official Implementation of "BILLY: Steering Large Language Models via Merging Persona Vectors for Creative Generation"
+[![GitHub stars](https://img.shields.io/github/stars/bai1026/LLM_Persona?style=social)]
 
 <div align="center">
 
