@@ -40,16 +40,6 @@ python generate_multi_role_vectors.py
 
 ## After getting the character persona vector
 
-### Run the interactive chat
-
-```bash
-python interactive_chat.py \
-    --model "Qwen/Qwen2.5-7B-Instruct" \
-    --vector_path "persona_vectors/Qwen2.5-7B-Instruct/multi_role/empathetic_counselor_response_avg_diff.pt" \
-    --layer 20 \
-    --coef 2.0
-```
-
 ### Run the persona api for evaluation
 
 ```bash
@@ -73,26 +63,27 @@ python Experiment/persona_api.py \
 ```
 
 - this merge 4 characters' vector then evaluate them.
-- This is also the LLM-Dicussion benchmark evaluation setting.
 
-- if wanna run Llama
+- For `Llama-3.1-8B-Instruct`
   - also need to change the folder path in `multi_persona_handler.py` line 101
 
-```bash
-python Experiment/persona_api.py --model meta-llama/Llama-3.1-8B-Instruct --vector_paths creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt --fusion_method weighted_average --layer 20 --coef 2.0
-```
+  ```bash
+  python Experiment/persona_api.py --model meta-llama/Llama-3.1-8B-Instruct --vector_paths creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt --fusion_method weighted_average --layer 20 --coef 2.0
+  ```
 
-- gemma-4b-it
-
-```bash
-python Experiment/persona_api.py --model google/gemma-3-4b-it --vector_paths creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt --fusion_method weighted_average --layer 20 --coef 2.0
-```
-
+- For `gemma-3-4b-it`
+  ```bash
+  python Experiment/persona_api.py --model google/gemma-3-4b-it --vector_paths creative_professional_response_avg_diff.pt environmentalist_response_avg_diff.pt futurist_response_avg_diff.pt futurist_response_avg_diff.pt --fusion_method weighted_average --layer 20 --coef 2.0
+  ```
 ---
 
-## Evaluation using LLM-Discussion Benchmark
+## Collaborating with LLM-Discussion
 
-- First: `cd Experiments`
+### Generate dataset with persona api
+
+```bash
+...
+```
 
 ### Auto evaluate after generating dataset
 
@@ -183,3 +174,5 @@ python auto_grade_final.py \
   -v 4 \
   -o y
 `````
+
+- For further details, please refer to [`LLM_Discussion`](../../LLM_Discussion)

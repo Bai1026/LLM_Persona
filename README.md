@@ -172,7 +172,7 @@ python llm_human_correlation.py
 For detailed experimental configurations, hyperparameters, and reproducibility instructions, please refer to the README files in each respective folder:
 
 - **Persona Vector Experiments:** [`persona_vectors/README.md`](persona_vectors/README.md)
-- **LLM Discussion Setup:** [`LLM-Discussion/README.md`](LLM-Discussion/README.md)
+- **LLM Discussion Setup:** [`LLM_Discussion/README.md`](LLM_Discussion/README.md)
 - **Human Evaluation Details:** [`BILLY/Rebuttal/README.md`](BILLY/Rebuttal/README.md) *(if available)*
 
 ---
