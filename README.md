@@ -38,16 +38,16 @@ This repository contains the official implementation of **BILLY** (Behavior Inte
 
 ```
 LLM_Persona/
-├── persona_vectors/          # Main persona vector experiments
-├── LLM-Discussion/           # Multi-agent discussion experiments  
-├── BILLY/Rebuttal/          # Human evaluation data and analysis
+├── Persona_Vectors/          # Main persona vector experiments
+├── LLM_Discussion/           # Multi-agent discussion experiments  
+├── Human_Evaluation          # Human evaluation data and analysis
 ├── docs/                     # Project website files
 └── others/                   # Utility scripts (API clients, token counters)
 ```
 
 ### 🎯 Main Experimental Folders
 
-#### 1. **`persona_vectors/`** - Persona Vector Experiments
+#### 1. **`Persona_Vectors/`** - Persona Vector Experiments
 
 This folder contains all model-related experiments including:
 
@@ -60,11 +60,11 @@ This folder contains all model-related experiments including:
 - LLaMA series
 - Other instruction-tuned models
 
-📖 **See detailed documentation:** [`persona_vectors/README.md`](persona_vectors/README.md)
+📖 **See detailed documentation:** [`Persona_Vectors/experiment/README.md`](Persona_Vectors/experiment/README.md)
 
 ---
 
-#### 2. **`LLM-Discussion/`** - Multi-Agent Discussion Framework
+#### 2. **`LLM_Discussion/`** - Multi-Agent Discussion Framework
 
 Independent multi-agent discussion system for creative generation tasks.
 
@@ -73,11 +73,11 @@ Independent multi-agent discussion system for creative generation tasks.
 - Requires API server setup for model inference
 - Standalone experiment pipeline
 
-📖 **See detailed documentation:** [`LLM-Discussion/README.md`](LLM-Discussion/README.md)
+📖 **See detailed documentation:** [`LLM_Discussion/README.md`](LLM_Discussion/README.md)
 
 ---
 
-#### 3. **`BILLY/Rebuttal/`** - Human Evaluation & Analysis
+#### 3. **`Human_Evaluation`** - Human Evaluation & Analysis
 
 Contains human evaluation data and statistical analysis scripts:
 
@@ -92,7 +92,7 @@ Contains human evaluation data and statistical analysis scripts:
 - `llm_human_correlation.py` - LLM-human score correlation
 - `merge_xlsx.py` - Data preprocessing and merging
 
-**Data Files:** Available in `BILLY/Rebuttal/data/`
+**Data Files:** Available in `Human_Evaluationdata/`
 
 ---
 
