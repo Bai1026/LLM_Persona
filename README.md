@@ -38,7 +38,7 @@ This repository contains the official implementation of **BILLY** (Behavior Inte
 
 ```
 LLM_Persona/
-├── Persona_Vectors/          # Main persona vector experiments
+├── Persona_Vector/          # Main persona vector experiments
 ├── LLM_Discussion/           # Multi-agent discussion experiments  
 ├── Human_Evaluation          # Human evaluation data and analysis
 ├── docs/                     # Project website files
@@ -47,7 +47,7 @@ LLM_Persona/
 
 ### 🎯 Main Experimental Folders
 
-#### 1. **`Persona_Vectors/`** - Persona Vector Experiments
+#### 1. **`Persona_Vector/`** - Persona Vector Experiments
 
 This folder contains all model-related experiments including:
 
@@ -60,7 +60,7 @@ This folder contains all model-related experiments including:
 - LLaMA series
 - Other instruction-tuned models
 
-📖 **See detailed documentation:** [`Persona_Vectors/experiment/README.md`](Persona_Vectors/experiment/README.md)
+📖 **See detailed documentation:** [`Persona_Vector/experiment/README.md`](Persona_Vector/experiment/README.md)
 
 ---
 
@@ -111,7 +111,7 @@ Contains human evaluation data and statistical analysis scripts:
 pip install -r requirements.txt
 
 # For persona vector experiments
-cd persona_vectors
+cd Persona_Vector
 pip install -r requirements.txt
 
 # For LLM Discussion experiments
@@ -126,7 +126,7 @@ pip install -r requirements.txt
 ### 1. Run Persona Vector Experiments
 
 ```bash
-cd persona_vectors
+cd Persona_Vector
 
 # Generate persona vectors
 python generate_multi_role_vectors.py
@@ -171,7 +171,7 @@ python llm_human_correlation.py
 
 For detailed experimental configurations, hyperparameters, and reproducibility instructions, please refer to the README files in each respective folder:
 
-- **Persona Vector Experiments:** [`Persona_Vectors/experiment/README.md`](Persona_Vectors/experiment/README.md)
+- **Persona Vector Experiments:** [`Persona_Vector/experiment/README.md`](Persona_Vector/experiment/README.md)
 - **LLM Discussion Setup:** [`LLM_Discussion/README.md`](LLM_Discussion/README.md)
 - **Human Evaluation:** [`Human_Evaluation`](Human_Evaluation) *(if available)*
 
