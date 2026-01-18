@@ -60,6 +60,23 @@ This folder contains all model-related experiments including:
 - LLaMA series
 - Other instruction-tuned models
 
+**Environment Setup:**
+
+Before running experiments, configure your API credentials:
+
+```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Edit .env and fill in your credentials:
+# Required:
+OPENAI_API_KEY=your_openai_api_key_here    # Get from: https://platform.openai.com/api-keys
+HF_TOKEN=your_hf_token_here                # Get from: https://huggingface.co/settings/tokens
+
+# Optional:
+WANDB_PROJECT=persona-vectors              # Default: persona-vectors
+```
+
 📖 **See detailed documentation:** [`Persona_Vector/experiment/README.md`](Persona_Vector/experiment/README.md)
 
 ---
