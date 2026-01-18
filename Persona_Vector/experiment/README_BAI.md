@@ -69,14 +69,14 @@ python generate_multi_role_vectors.py
 
 ### Single Persona API
 
-Launch API service using a single persona vector:
+Launch API service using a single persona vector (Qwen for instance):
 
 ```bash
 cd experiment
 
 # Example: Using academic researcher persona
 python persona_api.py \
-  --vector_paths persona_vectors/academic_researcher_response_avg_diff.pt \
+  --vector_paths persona_vectors/Qwen2.5-7B-Instruct/academic_researcher_response_avg_diff.pt \
   --layer 20 \
   --coef 2.0
 ```
@@ -90,9 +90,9 @@ Combine multiple persona vectors using fusion strategies to create hybrid person
 ```bash
 python persona_api.py \
   --model Qwen/Qwen2.5-7B-Instruct \
-  --vector_paths creative_professional_response_avg_diff.pt \
-                 environmentalist_response_avg_diff.pt \
-                 futurist_response_avg_diff.pt \
+  --vector_paths persona_vectors/Qwen2.5-7B-Instruct/creative_professional_response_avg_diff.pt \
+                 persona_vectors/Qwen2.5-7B-Instruct/environmentalist_response_avg_diff.pt \
+                 persona_vectors/Qwen2.5-7B-Instruct/futurist_response_avg_diff.pt \
   --fusion_method weighted_average \
   --layer 20 \
   --coef 2.0 \
@@ -104,9 +104,9 @@ python persona_api.py \
 ```bash
 python persona_api.py \
   --model meta-llama/Llama-3.1-8B-Instruct \
-  --vector_paths creative_professional_response_avg_diff.pt \
-                 environmentalist_response_avg_diff.pt \
-                 futurist_response_avg_diff.pt \
+  --vector_paths persona_vectors/Llama-3.1-8B-Instruct/creative_professional_response_avg_diff.pt \
+                 persona_vectors/Llama-3.1-8B-Instruct/environmentalist_response_avg_diff.pt \
+                 persona_vectors/Llama-3.1-8B-Instruct/futurist_response_avg_diff.pt \
   --fusion_method weighted_average \
   --layer 20 \
   --coef 2.0 \
@@ -118,9 +118,9 @@ python persona_api.py \
 ```bash
 python persona_api.py \
   --model google/gemma-3-4b-it \
-  --vector_paths creative_professional_response_avg_diff.pt \
-                 environmentalist_response_avg_diff.pt \
-                 futurist_response_avg_diff.pt \
+  --vector_paths persona_vectors/gemma-3-4b-it/creative_professional_response_avg_diff.pt \
+                 persona_vectors/gemma-3-4b-it/environmentalist_response_avg_diff.pt \
+                 persona_vectors/gemma-3-4b-it/futurist_response_avg_diff.pt \
   --fusion_method weighted_average \
   --layer 20 \
   --coef 2.0 \
@@ -146,7 +146,7 @@ To run the model as a **single agent without persona steering**, simply set `--c
 ```bash
 python persona_api.py \
   --model meta-llama/Llama-3.1-8B-Instruct \
-  --vector_paths persona_vectors/creative_professional_response_avg_diff.pt \
+  --vector_paths persona_vectors/Llama-3.1-8B-Instruct/creative_professional_response_avg_diff.pt \
   --layer 20 \
   --coef 0 \
   --port 5000
@@ -351,7 +351,7 @@ Use `interactive_chat.py` for interactive testing:
 ```bash
 python interactive_chat.py \
   --model Qwen/Qwen2.5-7B-Instruct \
-  --vector_path persona_vectors/creative_professional_response_avg_diff.pt \
+  --vector_path persona_vectors/Qwen2.5-7B-Instruct/creative_professional_response_avg_diff.pt \
   --layer 20 \
   --coef 2.0
 ```
