@@ -881,6 +881,60 @@
                             </ul>
                         </div>
                     </div>
+
+                    <!-- Hyperparameter Sensitivity Analysis -->
+                    <div class="card p-4 mt-12">
+                        <h3 class="text-2xl font-bold mb-4 text-center">Hyperparameter Sensitivity Analysis</h3>
+
+                        <!-- Introductory Text -->
+                        <div class="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-6">
+                            <div class="text-gray-700 text-sm leading-relaxed space-y-3">
+                                <p>
+                                    Our experiments adopted default settings of persona vectors steering as Chen et al.
+                                    (2025), where <strong>layer=20</strong>, and <strong>α=2.0</strong>. We further
+                                    conduct a more comprehensive study across 4 layers (12-24) and 7 α values (0.1–5.0)
+                                    on all tested models, which are shown in Table 15 and Table 16. Below are the
+                                    observations:
+                                </p>
+                                <ul class="list-disc list-inside space-y-2 ml-4">
+                                    <li>
+                                        <strong>Sensitivity to layer:</strong> Across all models, Layer 20 consistently
+                                        yields near-optimal performance, confirming it as a robust cross-model choice.
+                                    </li>
+                                    <li>
+                                        <strong>Sensitivity to α:</strong> Models exhibit high stability within the
+                                        range of 1.0 ≤ α ≤ 2.5. Our chosen α = 2.0 falls within this optimal window,
+                                        whereas extreme values (α = 0.1 or α = 5) lead to performance degradation.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Originality & Elaboration Ablation Figures -->
+                        <div class="grid lg:grid-cols-2 gap-8 my-8">
+                            <!-- Originality Ablation -->
+                            <div class="card p-4 flex flex-col">
+                                <h3 class="text-xl font-bold mb-4 text-gray-800 text-center">Originality Scores</h3>
+                                <img src="img/ori_ablation.png" alt="Originality Ablation Study"
+                                    class="rounded-lg shadow-lg w-full"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFEFEF/333333?text=ori_ablation.png';">
+                                <p class="text-center text-gray-500 mt-4 text-sm px-4 flex-grow">
+                                    Originality scores across different models, layers, and α values.
+                                </p>
+                            </div>
+
+                            <!-- Elaboration Ablation -->
+                            <div class="card p-4 flex flex-col">
+                                <h3 class="text-xl font-bold mb-4 text-gray-800 text-center">Elaboration Scores</h3>
+                                <img src="img/ela_ablation.png" alt="Elaboration Ablation Study"
+                                    class="rounded-lg shadow-lg w-full"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFEFEF/333333?text=ela_ablation.png';">
+                                <p class="text-center text-gray-500 mt-4 text-sm px-4 flex-grow">
+                                    Elaboration scores across different models, layers, and α values.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
