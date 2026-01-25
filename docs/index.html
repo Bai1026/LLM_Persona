@@ -631,6 +631,61 @@
             </div>
         </section>
 
+        <section id="human-evaluation" class="mb-16 md:mb-24">
+            <h2 class="section-title">Human Evaluation & Correlation</h2>
+            <div class="card p-8">
+                <div class="grid lg:grid-cols-2 gap-12 items-start">
+                    <div class="space-y-4">
+                        <img src="img/human_eval.png" alt="Table 3: Human Evaluation Results"
+                            class="rounded-lg shadow-lg w-full"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x600/EFEFEF/333333?text=Table+3+Human+Evaluation';">
+                        <p class="text-center text-gray-500 text-sm">
+                            The highest scores are highlighted in purple, while the
+                            second-highest are in blue. Across all benchmarks, BILLY (Ours)
+                            consistently achieves the strongest Originality and Elaboration scores.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <img src="img/correlation.png" alt="Table 4: Correlation Between Human and LLM Judges"
+                            class="rounded-lg shadow-lg w-full"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x300/EFEFEF/333333?text=Table+4+Correlation';">
+                        <p class="text-center text-gray-500 text-sm">
+                            Spearman and Pearson correlations between LLM-based evaluations
+                            and average human evaluations for Originality and Elaboration.
+                        </p>
+
+                        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-6 mt-4">
+                            <div class="text-gray-700 text-sm leading-relaxed space-y-3">
+                                <p>
+                                    Human evaluation is conducted on a subset of methods due to practical constraints.
+                                    Overall, the trends are consistent with our LLM-based evaluation.
+                                </p>
+                                <p>
+                                    <strong>BILLY achieves the highest average scores</strong> in both Originality and
+                                    Elaboration, outperforming the SA and LLM Discussion methods. These results suggest
+                                    that
+                                    direct activation steering provides a more effective and stable mechanism for
+                                    eliciting
+                                    creative responses.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-gray-700 text-sm leading-relaxed border-t pt-6">
+                    <p>
+                        We also calculated the Spearman’s Rank Correlation Coefficient and Pearson Correlation
+                        Coefficient between our LLM-Judge and human raters. The results indicate a <strong>strong
+                            positive correlation for Originality (0.73 Spearman)</strong>. While the correlation for
+                        Elaboration is more moderate, this aligns with observations reported in the LLM-Discussion (Lu
+                        et al., 2024).
+                    </p>
+                </div>
+            </div>
+        </section>
+
         <!-- Analysis Section -->
         <section id="analysis" class="mb-16 md:mb-24">
             <h2 class="section-title">Analysis</h2>
